@@ -1,0 +1,44 @@
+@import "partials/bootstrap";
+
+.table {
+  font-size:1.5em;
+}
+.table>tbody>tr>td{
+    vertical-align: middle;
+}
+img{
+  margin-right: 5px;
+  width:48px;
+  height:48px;
+}
+
+.play-buttons {
+  a:nth-child(1){
+    margin-right: 5px;
+  }
+}
+
+.player-form {
+  label{
+    font-weight:normal;
+    font-size:0.8em;
+    margin-right: 10px;
+  }
+  .form-group {
+    margin-right: 20px;
+  }
+}
+
+
+.content {
+  opacity: 0; transition: opacity 1s ease-in;
+}
+
+.loaded {
+  opacity: 1;
+}
+
+@media screen and (max-width: 800px) {
+  .hide_sm { display:none; }
+
+}

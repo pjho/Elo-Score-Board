@@ -1,0 +1,5 @@
+node_modules/
+dist/
+app.config.json
+
+.DS_Store

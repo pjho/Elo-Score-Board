@@ -1,0 +1,15 @@
+Elo ScoreBoard
+====
+A simple scoreboard implementing the [Elo ranking system](https://en.wikipedia.org/wiki/Elo_rating_system).
+
+---
+
+###Getting Started###
+
+1. Clone this Repo
+2. Create an account at [FireBase](https://www.firebase.com/) and create a new Firebase App
+3. Copy `app.config.json.sample.txt` to `app.config.json`
+4. Update the `firebaseUrl` setting to point to your new Firebase App's url.
+5. > `npm install`
+6. > `gulp`
+
