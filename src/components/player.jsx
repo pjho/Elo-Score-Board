@@ -4,21 +4,18 @@ import PlayButtons from './play-buttons';
 import EditButtons from './edit-buttons';
 import EditPlayerForm from './player-form';
 import conf from '../../app.config.json';
+import { Link } from 'react-router';
 
 module.exports = React.createClass( {
 
   getInitialState(){
     return {
-      editMode: false
+      editPlayerMode: false
     }
   },
 
-  componentWillMount() {
-
-  },
-
   render() {
-    return this.state.editMode ? this.displayEditUserForm() : this.displayUser();
+    return this.state.editPlayerMode ? this.displayEditUserForm() : this.displayUser();
   },
 
   displayUser() {
@@ -56,14 +53,14 @@ module.exports = React.createClass( {
   actionButtons() {
     return (
       this.props.editMode
-        ? <EditButtons id={this.props.id} handleDelete={this.deleteUser} handleEdit ={this.handleEditMode} />
+        ? <EditButtons id={this.props.id} active={this.state.editPlayerMode} handleDelete={this.deleteUser} handleEdit ={this.handleEditMode} />
         : <PlayButtons  onPlay={this.props.onPlay} id={this.props.id} currentGame={this.props.currentGame} />
      );
   },
 
   handleEditMode() {
     this.setState({
-      editMode: ! this.state.editMode
+      editPlayerMode: ! this.state.editPlayerMode
     });
   },
 
@@ -79,6 +76,6 @@ module.exports = React.createClass( {
     let fbPath = [conf.firebaseUrl, 'players', this.props.id].join('/');
     let fireBase = new Firebase( fbPath );
     fireBase.update(user);
-    this.setState({ editMode: false })
+    this.setState({ editPlayerMode: false })
   }
 });

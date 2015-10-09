@@ -42,14 +42,14 @@ module.exports = React.createClass({
           <th>Player</th>
           <th className="hide_sm">League</th>
           <th>Score</th>
-          <th className="text-right">
+          <th className="text-right action-buttons">
             {!!this.props.params.leagueName &&
               <Link to="/" className='btn btn-sm btn-default'>
                 <Icon type="menu-left" /> All Leagues
               </Link>
             }
             <a href="#" className='btn btn-sm btn-default' onClick={this.toggleEditMode}>
-              { this.state.editMode ? "done" : "edit" }
+              { this.state.editMode ? "done" : <Icon type="edit" /> }
             </a>
           </th>
         </tr>

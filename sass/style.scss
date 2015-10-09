@@ -12,9 +12,12 @@ img{
   height:48px;
 }
 
-.play-buttons {
-  a:nth-child(1){
-    margin-right: 5px;
+.action-buttons {
+  .btn{
+    margin-left: 5px;
+    &:first-child{
+      margin-left: 0;
+    }
   }
 }
 

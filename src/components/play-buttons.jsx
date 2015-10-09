@@ -28,7 +28,7 @@ module.exports = React.createClass( {
     }
 
     return (
-      <div className="play-buttons">
+      <div className="action-buttons">
         <a href="#" className={winClasses} onClick={ this.handleWin.bind(this, isWinner) }>Winner</a>
         <a href="#" className={loseClasses} onClick={ this.handleLose.bind(this, isLoser) }>Loser</a>
       </div>
