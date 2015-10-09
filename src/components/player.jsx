@@ -29,7 +29,9 @@ module.exports = React.createClass( {
             <img src={this.props.image} alt={this.props.name} className="img-circle img-thumbnail" />
             {this.props.name}
         </td>
-        <td className="hide_sm"><a href="#">{this.props.league}</a></td>
+        <td className="hide_sm">
+          <Link to={`/league/${encodeURI(this.props.league)}`}>{this.props.league}</Link>
+        </td>
         <td>{this.props.score}</td>
         <td className="text-right">
           { this.actionButtons() }

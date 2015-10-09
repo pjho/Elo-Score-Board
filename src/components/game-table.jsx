@@ -1,16 +1,18 @@
 import React from 'react';
-
 import ReactFire from 'reactfire';
 import Firebase from 'firebase';
-import Player from './components/player';
-import AddPlayerForm from './components/player-form';
-import conf from '../app.config.json';
+import Player from './player';
+import AddPlayerForm from './player-form';
+import Icon from './icon';
+import conf from '../../app.config.json';
 import _ from 'lodash';
 import Elo from 'elo-rank';
+import { Link } from 'react-router'
+
 
 const EloRank = Elo(24);
 
-var App = React.createClass({
+module.exports = React.createClass({
 
   mixins: [ ReactFire ],
 
@@ -41,6 +43,11 @@ var App = React.createClass({
           <th className="hide_sm">League</th>
           <th>Score</th>
           <th className="text-right">
+            {!!this.props.params.leagueName &&
+              <Link to="/" className='btn btn-sm btn-default'>
+                <Icon type="menu-left" /> All Leagues
+              </Link>
+            }
             <a href="#" className='btn btn-sm btn-default' onClick={this.toggleEditMode}>
               { this.state.editMode ? "done" : "edit" }
             </a>
@@ -55,19 +62,19 @@ var App = React.createClass({
           </td>
         </tr>
       }
-      {
-        this.state.players.map( (player, index) =>
-          <Player key={player.id}
-                  {...player}
-                  rank={index + 1}
-                  editMode={this.state.editMode}
-                  onPlay={this.handleGamePlay}
-                  currentGame={{winner: this.state.winner, loser: this.state.loser }} />
-        )
-      }
+      { this.state.players.filter(this.playerLeagueFilter).map(this.playerComponentMap) }
       </tbody>
     </table>
     );
+  },
+
+  playerLeagueFilter(player) {
+    return ! this.props.params.leagueName || player.league === this.props.params.leagueName;
+  },
+
+  playerComponentMap(player, index) {
+    return <Player key={player.id} {...player} rank={index + 1} editMode={this.state.editMode}
+            onPlay={this.handleGamePlay} currentGame={{winner: this.state.winner, loser: this.state.loser }} />
   },
 
   handleGamePlay(type, player) {
