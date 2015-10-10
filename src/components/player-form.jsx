@@ -10,12 +10,13 @@ module.exports = React.createClass( {
   },
 
   handleSubmit(e) {
+    //TODO: Validation
     e.preventDefault();
     var player = {
       name: this.refs.name.getDOMNode().value,
       image: this.refs.image.getDOMNode().value,
       league: this.refs.league.getDOMNode().value,
-      score: this.refs.score.getDOMNode().value
+      score: parseInt(this.refs.score.getDOMNode().value)
     };
 
     if(this.props.method === 'add'){
