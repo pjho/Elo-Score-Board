@@ -8,9 +8,9 @@ var notifier = require('node-notifier');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
-var uglifyify = require('uglifyify');
-
-var browserSync = require('browser-sync');
+var uglify = require('gulp-uglify');
+var buffer = require('vinyl-buffer');
+var browserSync = require('browser-sync')
 
 var notify = function(error) {
   var message = 'In: ';
@@ -35,9 +35,10 @@ var notify = function(error) {
   notifier.notify({title: title, message: message});
 };
 
+
 var bundler = watchify(browserify({
   entries: ['./src/app.jsx'],
-  transform: [babelify, uglifyify],
+  transform: [babelify],
   extensions: ['.jsx'],
   debug: true,
   cache: {},
@@ -46,18 +47,18 @@ var bundler = watchify(browserify({
 }));
 
 function bundle() {
-  return bundler
-    .bundle()
+  return bundler.bundle()
     .on('error', notify)
     .pipe(source('main.js'))
+    .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest('./dist/'))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(browserSync.stream());
 }
-bundler.on('update', bundle)
 
-gulp.task('build', function() {
-  bundle()
-});
+bundler.on('update', bundle);
+gulp.task('js', function() { bundle(); });
+
 
 gulp.task('serve', function() {
     browserSync({
@@ -80,7 +81,7 @@ gulp.task('copy', function () {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('default', ['build', 'copy', 'serve', 'sass', 'watch']);
+gulp.task('default', ['js', 'copy', 'serve', 'sass', 'watch']);
 
 gulp.task('watch', function () {
   gulp.watch('./sass/**/*.scss', ['sass']);
