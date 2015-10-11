@@ -48,7 +48,7 @@ module.exports = React.createClass({
                 <Icon type="menu-left" /> All Leagues
               </Link>
             }
-            <a href="#" className='btn btn-sm btn-default' onClick={this.toggleEditMode}>
+            <a className='btn btn-sm btn-default' onClick={this.toggleEditMode}>
               { this.state.editMode ? "done" : <Icon type="edit" /> }
             </a>
           </th>
