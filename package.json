@@ -1,5 +1,5 @@
 {
-  "name": "Elo Score Board",
+  "name": "EloScoreBoard",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

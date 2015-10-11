@@ -1,21 +1,28 @@
 import React from 'react';
+import _validate from '../utils/validator'
 import _ from 'lodash';
 
 module.exports = React.createClass( {
 
   getInitialState(){
     return {
-      editMode: true
+      errors: {
+        name: null,
+        image: null,
+        league: null,
+        score: null
+      },
+      valid: true
     }
   },
 
   handleSubmit(e) {
-    //TODO: Validation
     e.preventDefault();
-    var player = {
-      name: this.refs.name.getDOMNode().value,
-      image: this.refs.image.getDOMNode().value,
-      league: this.refs.league.getDOMNode().value,
+
+    let player = {
+      name: _.trim(this.refs.name.getDOMNode().value),
+      image: _.trim(this.refs.image.getDOMNode().value),
+      league: _.trim(this.refs.league.getDOMNode().value),
       score: parseInt(this.refs.score.getDOMNode().value)
     };
 
@@ -23,32 +30,69 @@ module.exports = React.createClass( {
       player.wins = 0;
       player.losses = 0;
     }
-    this.props.submitCallback(player);
-    this.refs.playerForm.getDOMNode().reset();
+
+    let isValid = this.validate(player);
+
+    if(isValid){
+      this.props.submitCallback(player);
+      this.refs.playerForm.getDOMNode().reset();
+    }
+  },
+
+
+  validate(player) {
+
+    let imgRule = {
+      pattern: /^https?:\/\/.+\.(png|jpg|jpeg|gif)$/i,
+      message: "must be an absolute Url"
+    };
+
+    let errors = {
+      name : _validate.string( player.name, 1, 100 ).messages[0] || null,
+      image : _validate.string( player.image, 1, 300, imgRule ).messages[0] || null,
+      league : _validate.string( player.league, 1, 100 ).messages[0] || null,
+      score : _validate.int(player.score,0,100000).messages[0] || null
+    };
+
+    let isValid = errors.name === null  && errors.image === null  && errors.league === null && errors.score === null ;
+    this.setState({
+      errors: errors,
+      valid: isValid
+    });
+
+    // isValid needs to be returned to previous function because of the time it
+    // takes to set state & the caller function needs a response immediately
+    return isValid;
   },
 
   render() {
     return (
-      <form ref="playerForm" className="player-form form form-inline" onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="player-name">Name</label>
-          <input ref="name" type="text" className="form-control" id="player-name"  defaultValue={this.props.name || ''}/>
+      <form ref="playerForm" className={"player-form form form-inline " + (!this.state.valid ? "has-errors" : "") } onSubmit={this.handleSubmit}>
+
+        <div className={ "form-group " + this.errorClass('name') }>
+          <label className="control-label" htmlFor="player-name">Name</label>
+          <input ref="name" type="text" className="form-control" id="player-name"  defaultValue={this.props.name || ''} />
+          { this.errorMessage('name') }
         </div>
 
-        <div className="form-group">
-          <label htmlFor="player-name">Image Url</label>
+        <div className={ "form-group " + this.errorClass('image') }>
+          <label className="control-label" htmlFor="player-name">Image Url</label>
           <input ref="image" type="text" className="form-control" id="player-image" placeholder="http://..."  defaultValue={this.props.image || ''}/>
+          { this.errorMessage('image') }
         </div>
 
-        <div className="form-group">
-          <label htmlFor="player-name">League</label>
+        <div className={ "form-group " + this.errorClass('league') }>
+          <label className="control-label" htmlFor="player-name">League</label>
           <input ref="league" type="text" className="form-control" id="player-league"  defaultValue={this.props.league || ''} />
+          { this.errorMessage('league') }
         </div>
 
-        <div className="form-group">
-          <label htmlFor="player-name">Initial Score</label>
+        <div className={ "form-group " + this.errorClass('score') }>
+          <label className="control-label" htmlFor="player-name">Initial Score</label>
           <input ref="score" type="text" className="form-control" id="player-score" defaultValue={this.props.score || '1600'} />
+          { this.errorMessage('score') }
         </div>
+
         <div className="form-group">
           <button type="submit" className="btn btn-primary">
             {_.capitalize(this.props.method) + " Player"}
@@ -56,5 +100,15 @@ module.exports = React.createClass( {
         </div>
       </form>
     );
+  },
+
+  errorClass(type) {
+    return this.state.errors[type] === null ? "" : "has-error";
+  },
+
+  errorMessage(type){
+    if(this.state.errors[type] !== null){
+      return <span className="help-block">{_.capitalize(type) + ' ' + this.state.errors[type] }</span>
+    }
   }
 });

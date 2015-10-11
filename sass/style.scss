@@ -30,6 +30,15 @@ img{
   .form-group {
     margin-right: 20px;
   }
+  .help-block{
+    font-size:13px;
+  }
+
+  &.has-errors{
+    .form-group {
+      vertical-align: top;
+    }
+  }
 }
 
 
