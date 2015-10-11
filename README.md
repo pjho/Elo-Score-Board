@@ -42,3 +42,9 @@ To setup serverside validation rules enter the following JSON rule set under the
 }
 
 ```
+
+---
+
+### ToDo ###
+* Fix Routing Bug to stop state change causing re-render of route
+* Basic authentication
