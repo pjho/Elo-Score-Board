@@ -7,6 +7,7 @@ var babelify = require('babelify')
 var notifier = require('node-notifier');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
+var minifyCss = require('gulp-minify-css');
 var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
@@ -72,6 +73,7 @@ gulp.task('sass', function () {
   gulp.src('./sass/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('style.css'))
+    .pipe(minifyCss())
     .pipe(gulp.dest('./dist/'))
     .pipe(browserSync.reload({stream: true}));
 });
