@@ -115,7 +115,10 @@ module.exports = React.createClass({
         loserOldScore: loser.score
       }
 
-      if(confirm("So you're saying " + winner.name + " " + verbs[_.random(0, verbs.length - 1)] + " " + loser.name + "?")) {
+      if(winner.league != loser.league){
+        alert('Players leagues do not match');
+      }
+      else if(confirm("So you're saying " + winner.name + " " + verbs[_.random(0, verbs.length - 1)] + " " + loser.name + "?")) {
         this.fireBase.update(results);
         this.fireBaseHistory.push(history);
       }
