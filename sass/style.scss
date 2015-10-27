@@ -14,14 +14,19 @@ img.img-thumbnail {
 .action-buttons {
   .btn{
     margin-left: 5px;
-    width: 70px;
     &:first-child{
       margin-left: 0;
+    }
+  }
+}
+
+.play-buttons .btn {
+    min-width: 70px;
+    &:first-child{
       @media screen and (max-width: 485px) {
         margin-bottom: 5px;
       }
     }
-  }
 }
 
 /* Add / Update form overrides */
