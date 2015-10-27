@@ -14,34 +14,7 @@ A simple scoreboard implementing the [Elo ranking system](https://en.wikipedia.o
 6. > `gulp`
 
 ### FireBase ###
-To setup serverside validation rules enter the following JSON rule set under the `Security & Rules` section of your Firebase dashboard.
-
-```json
-
-{
-  "rules": {
-    ".write": false,
-    ".read": false,
-
-    "players": {
-      ".read": true,
-      ".write": true,
-
-      "$playersId": {
-        ".validate": "newData.hasChildren(['name', 'image', 'league', 'score', 'wins', 'losses'])",
-        "$other": { ".validate": false },
-        "name":   { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
-        "image":  { ".validate": "newData.isString() && newData.val().matches(/^https?:\\/\\/.+\\.(png|jpg|jpeg|gif)$/i) && newData.val().length < 300" },
-        "league": { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
-        "score":  { ".validate": "newData.isNumber()" },
-        "wins":   { ".validate": "newData.isNumber()" },
-        "losses": { ".validate": "newData.isNumber()" }
-      }
-    }
-  }
-}
-
-```
+To setup serverside validation rules enter firebase.config.json rule set under the `Security & Rules` section of your Firebase dashboard.
 
 ---
 

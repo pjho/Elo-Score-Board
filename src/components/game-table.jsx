@@ -29,6 +29,8 @@ module.exports = React.createClass({
   componentWillMount() {
     // https://www.firebase.com/docs/web/libraries/react/api.html
     let fbPath = [conf.firebaseUrl, 'players'].join('/');
+    let fbPathHistory = [conf.firebaseUrl, 'history'].join('/');
+    this.fireBaseHistory = new Firebase(fbPathHistory);
     this.fireBase = new Firebase(fbPath);
     this.loadData(); // should update to bindAsObject/Array
   },
@@ -103,8 +105,22 @@ module.exports = React.createClass({
         losses: 1 + loser.losses
       });
 
-      if(confirm("So you're saying " + winner.name + " " + verbs[_.random(0, verbs.length - 1)] + " " + loser.name + "?")) {
+      let history ={
+        dateTime: new Date().getTime(),
+        winner: winner.id,
+        winnerOldScore: winner.score,
+        winnerNewScore: results[winner.id].score,
+        loserNewScore: results[loser.id].score,
+        loser: loser.id,
+        loserOldScore: loser.score
+      }
+
+      if(winner.league != loser.league){
+        alert('Players leagues do not match');
+      }
+      else if(confirm("So you're saying " + winner.name + " " + verbs[_.random(0, verbs.length - 1)] + " " + loser.name + "?")) {
         this.fireBase.update(results);
+        this.fireBaseHistory.push(history);
       }
       this.setState({ winner: null, loser: null });
     }
@@ -157,7 +173,9 @@ module.exports = React.createClass({
 
     return {
       winner: winner,
-      loser: loser
+      loser: loser,
+      winnerGain: (expectedScoreWinner - winner.score),
+      loserLose: (loser.score - expectedScoreLoser),
     };
   }
 });
