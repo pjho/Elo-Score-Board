@@ -93,7 +93,6 @@ module.exports = React.createClass({
       let loser = _.find(this.state.players, (player) => player.id === this.state.loser);
       let gameResult = this.scoreGame( winner.score, loser.score );
       let results = {};
-      let verbs = ["beat","blitzed","smashed","totally annihilated","destroyed"];
 
       results[winner.id] = _.assign( _.omit(winner,'id'), {
         score: gameResult.winner,
@@ -115,13 +114,15 @@ module.exports = React.createClass({
         loserOldScore: loser.score
       }
 
-      if(winner.league != loser.league){
-        alert('Players leagues do not match');
+      if(winner.league != loser.league) {
+        alert('Player\'s leagues do not match.');
       }
-      else if(confirm("So you're saying " + winner.name + " " + verbs[_.random(0, verbs.length - 1)] + " " + loser.name + "?")) {
+
+      else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
         this.fireBase.update(results);
         this.fireBaseHistory.push(history);
       }
+
       this.setState({ winner: null, loser: null });
     }
 

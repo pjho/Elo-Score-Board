@@ -19,5 +19,8 @@ To setup serverside validation rules enter firebase.config.json rule set under t
 ---
 
 ### ToDo ###
-* Basic authentication
-* Player Details
+* Basic Authentication
+* Player Details View
+* Improve Player Stats
+* Game Stats View
+* UI to change league in mobile view

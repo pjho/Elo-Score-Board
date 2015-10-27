@@ -4,7 +4,7 @@
 .table { font-size:1.5em; }
 .table>tbody>tr>td{ vertical-align: middle; }
 
-img{
+img.img-thumbnail {
   margin-right: 5px;
   width:48px;
   height:48px;
@@ -14,8 +14,12 @@ img{
 .action-buttons {
   .btn{
     margin-left: 5px;
+    width: 70px;
     &:first-child{
       margin-left: 0;
+      @media screen and (max-width: 485px) {
+        margin-bottom: 5px;
+      }
     }
   }
 }
