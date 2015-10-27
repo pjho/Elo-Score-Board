@@ -31,6 +31,7 @@
         "image":  { ".validate": "newData.isString() && newData.val().matches(/^https?:\\/\\/.+\\.(png|jpg|jpeg|gif)$/i) && newData.val().length < 300" },
         "league": { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
         "score":  { ".validate": "newData.isNumber()" },
+        "streak": { ".validate": "newData.isNumber()" },
         "wins":   { ".validate": "newData.isNumber()" },
         "losses": { ".validate": "newData.isNumber()" }
       }

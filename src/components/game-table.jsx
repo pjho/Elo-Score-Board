@@ -44,6 +44,7 @@ module.exports = React.createClass({
           <th>Player</th>
           <th className="hide_sm">League</th>
           <th>Score</th>
+          <th>Streak</th>
           <th className="text-right action-buttons">
             {!!this.props.params.leagueName &&
               <Link to="/" className='btn btn-sm btn-default'>
@@ -96,12 +97,14 @@ module.exports = React.createClass({
 
       results[winner.id] = _.assign( _.omit(winner,'id'), {
         score: gameResult.winner,
-        wins: 1 + winner.wins
+        wins: 1 + winner.wins,
+        streak: winner.streak + 1 || 1
       });
 
       results[loser.id] = _.assign( _.omit(loser,'id'), {
         score: gameResult.loser,
-        losses: 1 + loser.losses
+        losses: 1 + loser.losses,
+        streak: 0
       });
 
       let history ={
