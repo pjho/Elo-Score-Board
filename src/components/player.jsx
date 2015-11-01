@@ -30,6 +30,7 @@ module.exports = React.createClass( {
           <Link to={`/league/${encodeURI(this.props.league)}`}>{this.props.league}</Link>
         </td>
         <td>{this.props.score}</td>
+        <td>{this.props.streak || 0}</td>
         <td className="text-right">
           { this.actionButtons() }
         </td>

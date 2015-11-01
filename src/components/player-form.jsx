@@ -10,7 +10,8 @@ module.exports = React.createClass( {
         name: null,
         image: null,
         league: null,
-        score: null
+        score: null,
+        streak: null
       },
       valid: true
     }
@@ -29,6 +30,7 @@ module.exports = React.createClass( {
     if(this.props.method === 'add'){
       player.wins = 0;
       player.losses = 0;
+      player.streak = 0;
     }
 
     let isValid = this.validate(player);
