@@ -10,8 +10,7 @@ module.exports = React.createClass( {
         name: null,
         image: null,
         league: null,
-        score: null,
-        streak: null
+        score: null
       },
       valid: true
     }
@@ -31,6 +30,10 @@ module.exports = React.createClass( {
       player.wins = 0;
       player.losses = 0;
       player.streak = 0;
+      player.topScore = player.score;
+      player.bottomScore = player.score;
+      player.bestStreak = 0;
+      player.worstStreak = 0;
     }
 
     let isValid = this.validate(player);

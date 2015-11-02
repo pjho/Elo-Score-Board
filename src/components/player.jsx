@@ -4,6 +4,7 @@ import PlayButtons from './play-buttons';
 import EditButtons from './edit-buttons';
 import EditPlayerForm from './player-form';
 import conf from '../../app.config.json';
+
 import { Link } from 'react-router';
 
 module.exports = React.createClass( {
@@ -19,18 +20,33 @@ module.exports = React.createClass( {
   },
 
   displayUser() {
+
+    const { rank, name, image, league, score, topScore,
+            bottomScore, streak, bestStreak, worstStreak} = this.props;
+
+    // let streak = this.props.streak || false;
     return (
       <tr>
-        <td className="hide_sm">{this.props.rank}</td>
+        <td className="hide_sm">
+          {rank}
+        </td>
         <td>
-            <img src={this.props.image} alt={this.props.name} className="img-circle img-thumbnail" />
-            {this.props.name}
+          <img src={image} alt={name} className="img-circle img-thumbnail" />
+          {name}
         </td>
         <td className="hide_sm">
-          <Link to={`/league/${encodeURI(this.props.league)}`}>{this.props.league}</Link>
+          <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
         </td>
-        <td>{this.props.score}</td>
-        <td>{this.props.streak || 0}</td>
+        <td className="playerScore tc">
+          <sup>{topScore || '-'}</sup>
+          <span>{score}</span>
+          <sub>{bottomScore || '-'}</sub>
+        </td>
+        <td className={ "playerStreak hide_sm tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
+          <sup>{bestStreak ? "+" + bestStreak : '-'}</sup>
+          <span>{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
+          <sub>{worstStreak ? worstStreak : '-'}</sub>
+        </td>
         <td className="text-right">
           { this.actionButtons() }
         </td>
@@ -41,7 +57,7 @@ module.exports = React.createClass( {
   displayEditUserForm () {
     return (
       <tr>
-        <td colSpan="4">
+        <td colSpan="5">
           <EditPlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
         </td>
         <td className="text-right">

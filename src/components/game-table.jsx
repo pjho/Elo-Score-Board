@@ -40,11 +40,21 @@ module.exports = React.createClass({
     <table className={"elo-ranking-table table table-striped " + ( this.state.loaded ? "loaded" : "") }>
       <thead>
         <tr>
-          <th className="hide_sm">Rank</th>
-          <th>Player</th>
-          <th className="hide_sm">League</th>
-          <th>Score</th>
-          <th>Streak</th>
+          <th className="hide_sm">
+            Rank
+          </th>
+          <th>
+            Player
+          </th>
+          <th className="hide_sm">
+            League
+          </th>
+          <th className="tc">
+            Score
+          </th>
+          <th className="hide_sm tc">
+            Streak
+          </th>
           <th className="text-right action-buttons">
             {!!this.props.params.leagueName &&
               <Link to="/" className='btn btn-sm btn-default'>
@@ -60,7 +70,7 @@ module.exports = React.createClass({
       <tbody>
       { this.state.editMode &&
         <tr className="warning">
-          <td colSpan="5">
+          <td colSpan="6">
             <AddPlayerForm submitCallback={this.addNewPlayer} method="add" />
           </td>
         </tr>
@@ -87,47 +97,53 @@ module.exports = React.createClass({
   },
 
   processGame() {
-
     // only do the stuff if we have a winner and a loser.
-    if(this.state.winner && this.state.loser) {
-      let winner = _.find(this.state.players, (player) => player.id === this.state.winner);
-      let loser = _.find(this.state.players, (player) => player.id === this.state.loser);
-      let gameResult = this.scoreGame( winner.score, loser.score );
-      let results = {};
+    if( ! this.state.winner || ! this.state.loser) { return; }
 
-      results[winner.id] = _.assign( _.omit(winner,'id'), {
-        score: gameResult.winner,
-        wins: 1 + winner.wins,
-        streak: winner.streak + 1 || 1
-      });
+    let winner = _.find(this.state.players, (player) => player.id === this.state.winner);
+    let loser = _.find(this.state.players, (player) => player.id === this.state.loser);
+    let gameResult = this.scoreGame( winner.score, loser.score );
+    let results = {};
 
-      results[loser.id] = _.assign( _.omit(loser,'id'), {
-        score: gameResult.loser,
-        losses: 1 + loser.losses,
-        streak: 0
-      });
+    // Update Winner Statistics
+    results[winner.id] = _.assign( _.omit(winner,'id'), {
+      score: gameResult.winner,
+      wins: winner.wins + 1,
+      streak: ( winner.streak >= 0 ? winner.streak + 1 : 1) || 1,
+      bestStreak: ( Math.max( winner.streak + 1,  winner.bestStreak) ) || 1,
+      topScore: ( Math.max(gameResult.winner, winner.topScore) ) || gameResult.winner
+    });
 
-      let history ={
-        dateTime: new Date().getTime(),
-        winner: winner.id,
-        winnerOldScore: winner.score,
-        winnerNewScore: results[winner.id].score,
-        loserNewScore: results[loser.id].score,
-        loser: loser.id,
-        loserOldScore: loser.score
-      }
+    // Update Loser Statistics
+    results[loser.id] = _.assign( _.omit(loser,'id'), {
+      score: gameResult.loser,
+      losses: loser.losses + 1,
+      streak: ( loser.streak <= 0 ? loser.streak - 1 : -1 ) || 0,
+      worstStreak: ( Math.min(loser.streak - 1, loser.worstStreak) ) || -1,
+      bottomScore: ( Math.min(gameResult.loser, loser.bottomScore ) ) || gameResult.loser
+    });
 
-      if(winner.league != loser.league) {
-        alert('Player\'s leagues do not match.');
-      }
-
-      else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
-        this.fireBase.update(results);
-        this.fireBaseHistory.push(history);
-      }
-
-      this.setState({ winner: null, loser: null });
+    // Update Game Statistics
+    let history = {
+      dateTime: new Date().getTime(),
+      winner: winner.id,
+      winnerOldScore: winner.score,
+      winnerNewScore: results[winner.id].score,
+      loserNewScore: results[loser.id].score,
+      loser: loser.id,
+      loserOldScore: loser.score
     }
+
+    if(winner.league != loser.league) {
+      alert('Player\'s leagues do not match.');
+    }
+
+    else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
+      this.fireBase.update(results);
+      this.fireBaseHistory.push(history);
+    }
+
+    this.setState({ winner: null, loser: null });
 
   },
 

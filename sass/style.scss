@@ -50,6 +50,26 @@ img.img-thumbnail {
   }
 }
 
+.playerStreak,
+.playerScore {
+  sup, sub {
+    font-size:0.6em;
+    position: static;
+    top:0;
+    text-align: center;
+    opacity:0.3;
+    margin: 3px;
+    display:block;
+    color:#333;
+  }
+}
+
+
+.tc { text-align: center; }
+
+.playerStreak--positive { color: #16a085;}
+.playerStreak--negative { color: #c0392b;}
+
 /* Small Screen Override */
 @media screen and (max-width: 800px) {
   .hide_sm { display:none; }
