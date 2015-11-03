@@ -54,21 +54,26 @@ img.img-thumbnail {
 .playerScore {
   sup, sub {
     font-size:0.6em;
-    position: static;
-    top:0;
+    position: relative;
+    top:-2px;
     text-align: center;
     opacity:0.3;
-    margin: 3px;
-    display:block;
+    margin: 0 5px;
+    // display:block;
     color:#333;
+    @media screen and (max-width: 800px) {
+      top:0px;
+      margin: 3px 0px;
+      display:block;
+    }
   }
 }
 
 
 .tc { text-align: center; }
 
-.playerStreak--positive { color: #16a085;}
-.playerStreak--negative { color: #c0392b;}
+.playerStreak--positive { @extend .text-success; }
+.playerStreak--negative { @extend .text-danger; }
 
 /* Small Screen Override */
 @media screen and (max-width: 800px) {

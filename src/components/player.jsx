@@ -38,14 +38,14 @@ module.exports = React.createClass( {
           <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
         </td>
         <td className="playerScore tc">
-          <sup>{topScore || '-'}</sup>
+          <sup>{topScore}</sup>
           <span>{score}</span>
-          <sub>{bottomScore || '-'}</sub>
+          <sub>{bottomScore}</sub>
         </td>
         <td className={ "playerStreak hide_sm tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
-          <sup>{bestStreak ? "+" + bestStreak : '-'}</sup>
+          <sup>{bestStreak ? "+" + bestStreak : ''}</sup>
           <span>{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
-          <sub>{worstStreak ? worstStreak : '-'}</sub>
+          <sub>{worstStreak ? worstStreak : ''}</sub>
         </td>
         <td className="text-right">
           { this.actionButtons() }
