@@ -29,8 +29,6 @@ module.exports = React.createClass({
   componentWillMount() {
     // https://www.firebase.com/docs/web/libraries/react/api.html
     let fbPath = [conf.firebaseUrl, 'players'].join('/');
-    let fbPathHistory = [conf.firebaseUrl, 'history'].join('/');
-    this.fireBaseHistory = new Firebase(fbPathHistory);
     this.fireBase = new Firebase(fbPath);
     this.loadData(); // should update to bindAsObject/Array
   },
@@ -143,7 +141,16 @@ module.exports = React.createClass({
 
     else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
       this.fireBase.update(results);
-      this.fireBaseHistory.push(history);
+
+      let winnerUrl = [conf.firebaseUrl, 'history', winner.id].join('/');
+      let fireBaseWinnerHistory = new Firebase(winnerUrl);
+
+      fireBaseWinnerHistory.push(history);
+
+      let loserUrl = [conf.firebaseUrl, 'history', loser.id].join('/');
+      let fireBaseLoserHistory = new Firebase(loserUrl);
+
+      fireBaseLoserHistory.push(history);
     }
 
     this.setState({ winner: null, loser: null });
