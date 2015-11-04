@@ -52,8 +52,11 @@ module.exports = React.createClass({
           <th className="tc">
             Score
           </th>
-          <th className="hide_sm tc">
+          <th className="tc">
             Streak
+          </th>
+          <th className="tc">
+            Wins
           </th>
           <th className="text-right action-buttons">
             {!!this.props.params.leagueName &&
@@ -70,7 +73,7 @@ module.exports = React.createClass({
       <tbody>
       { this.state.editMode &&
         <tr className="warning">
-          <td colSpan="6">
+          <td colSpan="7">
             <AddPlayerForm submitCallback={this.addNewPlayer} method="add" />
           </td>
         </tr>

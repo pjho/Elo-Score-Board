@@ -21,7 +21,7 @@ module.exports = React.createClass( {
 
   displayUser() {
 
-    const { rank, name, image, league, score, topScore,
+    const { rank, name, image, league, score, topScore, wins, losses,
             bottomScore, streak, bestStreak, worstStreak} = this.props;
 
     // let streak = this.props.streak || false;
@@ -42,10 +42,16 @@ module.exports = React.createClass( {
           <span>{score}</span>
           <sub>{bottomScore}</sub>
         </td>
-        <td className={ "playerStreak hide_sm tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
+        <td className={ "playerStreak tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
           <sup>{bestStreak ? "+" + bestStreak : ''}</sup>
           <span>{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
           <sub>{worstStreak ? worstStreak : ''}</sub>
+        </td>
+        <td className="playerRatio tc">
+            { wins + losses > 9
+              ? <span>{ Math.round(wins / (wins + losses) * 100) || 0 }</span>
+              : '-'
+            }
         </td>
         <td className="text-right">
           { this.actionButtons() }
@@ -57,7 +63,7 @@ module.exports = React.createClass( {
   displayEditUserForm () {
     return (
       <tr>
-        <td colSpan="5">
+        <td colSpan="4">
           <EditPlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
         </td>
         <td className="text-right">
