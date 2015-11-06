@@ -8,16 +8,18 @@
       ".write": true,
       
       "$playersId": {
-        "$historyId": {
-          ".validate": "newData.hasChildren(['dateTime', 'winner', 'winnerOldScore', 'winnerNewScore', 'loser', 'loserOldScore', 'loserNewScore'])",
-          "$other":         { ".validate": false },
-          "dateTime":       { ".validate": "newData.isNumber()" },
-          "winner":         { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
-          "winnerOldScore": { ".validate": "newData.isNumber()" },
-          "winnerNewScore": { ".validate": "newData.isNumber()" },
-          "loser":          { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
-          "loserOldScore":  { ".validate": "newData.isNumber()" },
-          "loserNewScore":  { ".validate": "newData.isNumber()" }
+        "$monthYear" :{
+          "$historyId": {
+            ".validate": "newData.hasChildren(['dateTime', 'winner', 'winnerOldScore', 'winnerNewScore', 'loser', 'loserOldScore', 'loserNewScore'])",
+            "$other":         { ".validate": false },
+            "dateTime":       { ".validate": "newData.isNumber()" },
+            "winner":         { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
+            "winnerOldScore": { ".validate": "newData.isNumber()" },
+            "winnerNewScore": { ".validate": "newData.isNumber()" },
+            "loser":          { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
+            "loserOldScore":  { ".validate": "newData.isNumber()" },
+            "loserNewScore":  { ".validate": "newData.isNumber()" }
+          }
         }
       }
     },

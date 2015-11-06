@@ -142,14 +142,14 @@ module.exports = React.createClass({
     else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
       this.fireBase.update(results);
 
-      let winnerUrl = [conf.firebaseUrl, 'history', winner.id].join('/');
-      let fireBaseWinnerHistory = new Firebase(winnerUrl);
+      let date = [new Date().getFullYear(), new Date().getMonth()].join('_');
 
+      let winnerUrl = [conf.firebaseUrl, 'history', winner.id, date].join('/');
+      let fireBaseWinnerHistory = new Firebase(winnerUrl);
       fireBaseWinnerHistory.push(history);
 
-      let loserUrl = [conf.firebaseUrl, 'history', loser.id].join('/');
+      let loserUrl = [conf.firebaseUrl, 'history', loser.id, date].join('/');
       let fireBaseLoserHistory = new Firebase(loserUrl);
-
       fireBaseLoserHistory.push(history);
     }
 
