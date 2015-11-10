@@ -22,7 +22,7 @@ module.exports = React.createClass( {
   displayUser() {
 
     const { rank, name, image, league, score, topScore, wins, losses,
-            bottomScore, streak, bestStreak, worstStreak} = this.props;
+            id, bottomScore, streak, bestStreak, worstStreak} = this.props;
 
     // let streak = this.props.streak || false;
     return (
@@ -31,8 +31,10 @@ module.exports = React.createClass( {
           {rank}
         </td>
         <td>
-          <img src={image} alt={name} className="img-circle img-thumbnail" />
-          {name}
+          <Link to={`/player/${id}`}>
+            <img src={image} alt={name} className="img-circle img-thumbnail" />
+            {name}
+          </Link>
         </td>
         <td className="hide_sm">
           <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
