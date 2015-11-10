@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from './icon'
+import Icon from '../common/icon'
 module.exports = React.createClass( {
 
   render() {

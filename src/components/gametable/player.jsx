@@ -3,7 +3,7 @@ import Firebase from 'firebase';
 import PlayButtons from './play-buttons';
 import EditButtons from './edit-buttons';
 import EditPlayerForm from './player-form';
-import conf from '../../app.config.json';
+import conf from '../../../app.config.json';
 
 import { Link } from 'react-router';
 

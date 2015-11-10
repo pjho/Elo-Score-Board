@@ -1,6 +1,6 @@
 import React from 'react';
-import { Router, Route } from 'react-router'
-import GameTable from './components/game-table'
+import { Router, Route } from 'react-router';
+import GameTable from './components/GameTable';
 
 const NoMatch = React.createClass({
   render() { return <div>Route not Found</div>; }
