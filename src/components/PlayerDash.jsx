@@ -6,7 +6,8 @@ import PlayerCard from './playerdash/player-card';
 import Icon from './common/icon';
 import conf from '../../app.config.json';
 import _ from 'lodash';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
+import EloGraph from './playerdash/elo-graph';
 
 module.exports = React.createClass({
 
@@ -33,9 +34,14 @@ module.exports = React.createClass({
     return (
       <div className="Player">
       { player &&
+        <div>
           <div className="col-md-3">
             <PlayerCard {...player} />
           </div>
+          <div className="col-md-9">
+            <EloGraph {...player} />
+          </div>
+        </div>
       }
       { !player &&
           "Player not found."
