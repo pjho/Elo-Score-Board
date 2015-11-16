@@ -2,6 +2,7 @@ import React from 'react';
 import ReactFire from 'reactfire';
 import Firebase from 'firebase';
 import Player from './gametable/player';
+import PlayerCard from './playerdash/player-card';
 import Icon from './common/icon';
 import conf from '../../app.config.json';
 import _ from 'lodash';
@@ -31,14 +32,17 @@ module.exports = React.createClass({
     const player = _.find(this.state.players, p => p.id == this.props.params.playerId);
     return (
       <div className="Player">
-        { player
-          ? JSON.stringify(player)
-          : "not found"
-        }
+      { player &&
+          <div className="col-md-3">
+            <PlayerCard {...player} />
+          </div>
+      }
+      { !player &&
+          "Player not found."
+      }
       </div>
     );
   },
-
 
   loadData() {
     this.fireBase.on('value', (rawItems) => {
@@ -51,12 +55,8 @@ module.exports = React.createClass({
         items.push(item);
       });
 
-      sorted = _.sortBy(items, (item) => {
-        return -item.score;
-      });
-
       this.setState({
-        players: sorted,
+        players: items,
         loaded: true
       });
 
