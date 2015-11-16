@@ -1,20 +1,11 @@
-var percent = function(wins, losses){
-   if(wins + losses > 9){
-    return (Math.round(wins / (wins + losses) * 100) || 0)
-   }
-   else{
-    return NaN;
-   }
+var percent = function(portion, total){
+  return Math.round(portion / total * 100);
   }
 
   var percentOfPlayerWins = function(wins, losses){
-  	var num = percent(wins, losses);
-
-    if (isNaN(num)){
-			return '-';
-		} else{
-			return num + '%';
-		} 
+  	let total = wins + losses;
+    let winPercent = percent(wins, total); // returns number, NaN or Infinity/-Infinity
+    return total > 9 && !!winPercent && isFinite(winPercent) ? winPercent + '%' : '-'; // Ensures we have a sensible result
   }
 
 module.exports = {
