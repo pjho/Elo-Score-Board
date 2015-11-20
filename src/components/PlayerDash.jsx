@@ -82,30 +82,24 @@ module.exports = React.createClass({
         items.push(item);
       });
 
-      var data = [];
       var getDataPoint = function getDataPoint(id, item){
+        var utcToDate = function utcToDate(utc){
+          return new Date(utc);
+        }
+
         if(item.loser == id){
-          return [item.dateTime, item.loserNewScore];
+          return [utcToDate(item.dateTime), item.loserNewScore];
         }
         else if(item.winner == id){
-          return [item.dateTime, item.winnerNewScore];
+          return [utcToDate(item.dateTime), item.winnerNewScore];
         }
       }
 
-
+      var data = [];
 
       items.forEach( (item) => {
         data.push(getDataPoint(this.props.params.playerId, item));
       });
-
-      var shouldlooklike = [
-        [1447219256248,1600],
-        [1447219256249,1610],
-        [1447219256250,1620],
-        [1447219256251,1640],
-        [1447219256252,1656],
-        [1447219256253,1634],
-        [1447219256254,1665]];
 
       this.setState({
         graphdata: data,
@@ -113,7 +107,6 @@ module.exports = React.createClass({
       });
     });
   }
-
 });
 
 
