@@ -1,6 +1,6 @@
 import React from 'react';
 import utils from '../../utils/utilities.js';
-import CardLine from './player-card-table-line';
+import CardLine from './table-line';
 import { Link } from 'react-router';
 
 module.exports = React.createClass( {
