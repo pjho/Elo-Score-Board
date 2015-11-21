@@ -1,18 +1,17 @@
 import React from 'react';
 import ReactFire from 'reactfire';
-import Firebase from 'firebase';
-import Player from './player';
-import AddPlayerForm from './player-form';
-import Icon from './icon';
-import conf from '../../app.config.json';
+import { Player } from './gametable/player';
+import { PlayerForm } from './gametable/player-form';
+import { Icon } from './common/icon';
 import _ from 'lodash';
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
+import FirebaseLib from '../utils/FirebaseLib.js';
 
 
 const EloRank = Elo(24);
 
-module.exports = React.createClass({
+export const GameTable =  React.createClass({
 
   mixins: [ ReactFire ],
 
@@ -27,9 +26,7 @@ module.exports = React.createClass({
   },
 
   componentWillMount() {
-    // https://www.firebase.com/docs/web/libraries/react/api.html
-    let fbPath = [conf.firebaseUrl, 'players'].join('/');
-    this.fireBase = new Firebase(fbPath);
+    this.firebase = new FirebaseLib();
     this.loadData(); // should update to bindAsObject/Array
   },
 
@@ -72,7 +69,7 @@ module.exports = React.createClass({
       { this.state.editMode &&
         <tr className="warning">
           <td colSpan="7">
-            <AddPlayerForm submitCallback={this.addNewPlayer} method="add" />
+            <PlayerForm submitCallback={this.addNewPlayer} method="add" />
           </td>
         </tr>
       }
@@ -140,17 +137,10 @@ module.exports = React.createClass({
     }
 
     else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
-      this.fireBase.update(results);
+      this.firebase.updateResults(results);
 
-      let date = [new Date().getFullYear(), new Date().getMonth()].join('_');
-
-      let winnerUrl = [conf.firebaseUrl, 'history', winner.id, date].join('/');
-      let fireBaseWinnerHistory = new Firebase(winnerUrl);
-      fireBaseWinnerHistory.push(history);
-
-      let loserUrl = [conf.firebaseUrl, 'history', loser.id, date].join('/');
-      let fireBaseLoserHistory = new Firebase(loserUrl);
-      fireBaseLoserHistory.push(history);
+      this.firebase.pushHistory(winner, history);
+      this.firebase.pushHistory(loser, history);
     }
 
     this.setState({ winner: null, loser: null });
@@ -165,11 +155,11 @@ module.exports = React.createClass({
   },
 
   addNewPlayer(newPlayer) {
-    this.fireBase.push(newPlayer);
+    this.firebase.newPlayer(newPlayer);
   },
 
   loadData() {
-    this.fireBase.on('value', (rawItems) => {
+    this.firebase.dataOn('value', (rawItems) => {
       var items = [];
       var sorted = [];
 

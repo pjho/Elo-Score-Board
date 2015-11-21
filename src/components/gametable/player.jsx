@@ -1,13 +1,13 @@
 import React from 'react';
 import Firebase from 'firebase';
-import PlayButtons from './play-buttons';
-import EditButtons from './edit-buttons';
-import EditPlayerForm from './player-form';
-import conf from '../../app.config.json';
+import { PlayButtons } from './play-buttons';
+import { EditButtons } from './edit-buttons';
+import { PlayerForm } from './player-form';
+import conf from '../../../app.config.json';
 
 import { Link } from 'react-router';
 
-module.exports = React.createClass( {
+export const Player = React.createClass({
 
   getInitialState(){
     return {
@@ -22,7 +22,7 @@ module.exports = React.createClass( {
   displayUser() {
 
     const { rank, name, image, league, score, topScore, wins, losses,
-            bottomScore, streak, bestStreak, worstStreak} = this.props;
+            id, bottomScore, streak, bestStreak, worstStreak} = this.props;
 
     // let streak = this.props.streak || false;
     return (
@@ -31,8 +31,10 @@ module.exports = React.createClass( {
           {rank}
         </td>
         <td>
-          <img src={image} alt={name} className="img-circle img-thumbnail" />
-          {name}
+          <Link to={`/player/${id}`}>
+            <img src={image} alt={name} className="img-circle img-thumbnail" />
+            {name}
+          </Link>
         </td>
         <td className="hide_sm">
           <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
@@ -64,7 +66,7 @@ module.exports = React.createClass( {
     return (
       <tr>
         <td colSpan="4">
-          <EditPlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
+          <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
         </td>
         <td className="text-right">
           { this.actionButtons() }
