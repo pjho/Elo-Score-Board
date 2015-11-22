@@ -88,10 +88,10 @@ module.exports = React.createClass({
         }
 
         if(item.loser == id){
-          return [utcToDate(item.dateTime), item.loserNewScore];
+          return [utcToDate(item.dateTime), item.loserNewScore, 'Winner: ' + item.winner];
         }
         else if(item.winner == id){
-          return [utcToDate(item.dateTime), item.winnerNewScore];
+          return [utcToDate(item.dateTime), item.winnerNewScore, 'Loser: ' + item.loser];
         }
       }
 

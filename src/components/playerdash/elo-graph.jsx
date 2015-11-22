@@ -8,7 +8,7 @@ module.exports = React.createClass( {
 
   getInitialState() {
     return {
-      LineGraphInfo: {
+      AnnotationChart: {
         rows:[],
         columns:[],
         chartType: ""
@@ -17,31 +17,35 @@ module.exports = React.createClass( {
   },
 
   componentWillMount() {
-    var LineGraphInfo =  {
+    var AnnotationChart =  {
       rows : this.props.graph,
       columns : [
       {
-        label : "datetime",
-        type: "date"
+        label : "date time",
+        type: "datetime"
       },
       {
         label : "Elo Rating",
         type: "number"
+      },{
+        label: "Opponent",
+        type: "string"
       }
+
       ],
-      options : {title: "Elo Rating", hAxis: {title: 'Date', format: 'h:d/M/yy'}, vAxis: {title: 'Elo Rating'}},
-      chartType : "LineChart",
+      options : {title: "Elo Rating", hAxis: {title: 'Date' }, vAxis: {title: 'Elo Rating', format:'####'}},
+      chartType : "AnnotationChart",
       div_id: "elo_line_graph"
     };
 
     this.setState({
-      'LineGraphInfo': LineGraphInfo
+      'AnnotationChart': AnnotationChart
     });
   },
 
   render() {
     return (
-      <Chart chartType={this.state.LineGraphInfo.chartType} width={"100%"} height={"600px"} rows={this.props.graph} columns={this.state.LineGraphInfo.columns} options = {this.state.LineGraphInfo.options} graph_id={this.state.LineGraphInfo.div_id}  />
+      <Chart chartType={this.state.AnnotationChart.chartType} width={"100%"} height={"600px"} rows={this.props.graph} columns={this.state.AnnotationChart.columns} options = {this.state.AnnotationChart.options} graph_id={this.state.AnnotationChart.div_id}  />
       );
   }
 });
