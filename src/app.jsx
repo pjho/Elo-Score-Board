@@ -13,8 +13,8 @@ ReactDOM.render(
   <Router>
     <Route path="/" component={GameTable}>
       <Route path="league/:leagueName" component={GameTable} />
-      <Route path="/player/:playerId" component={PlayerDash} />
     </Route>
+    <Route path="player/:playerId" component={PlayerDash} />
     <Route path="*" component={NoMatch}/>
   </Router>
 , document.getElementById('app-container'));
