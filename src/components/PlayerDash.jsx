@@ -27,6 +27,10 @@ export const PlayerDash = React.createClass({
     this.loadData(); // should update to bindAsObject/Array
   },
 
+  componentWillUnmount: function() {
+    this.fireBase.off();
+  },
+
   render() {
     // console.log(this.state.players);
     const player = _.find(this.state.players, p => p.id == this.props.params.playerId);

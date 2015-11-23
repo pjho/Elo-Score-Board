@@ -27,6 +27,11 @@ function fireBaseWrapper(){
   this.dataOn = function(eventType, callBack){
     this.fireBase.on(eventType, callBack);
   };
+
+  this.unload = function() {
+    this.fireBase.off();
+    this.fireBaseHistory.off();
+  };
 }
 
 module.exports = fireBaseWrapper;
