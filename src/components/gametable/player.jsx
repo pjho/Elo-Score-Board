@@ -1,13 +1,13 @@
 import React from 'react';
 import Firebase from 'firebase';
-import PlayButtons from './play-buttons';
-import EditButtons from './edit-buttons';
-import EditPlayerForm from './player-form';
+import { PlayButtons } from './play-buttons';
+import { EditButtons } from './edit-buttons';
+import { PlayerForm } from './player-form';
 import conf from '../../../app.config.json';
 
 import { Link } from 'react-router';
 
-module.exports = React.createClass( {
+export const Player = React.createClass({
 
   getInitialState(){
     return {
@@ -66,7 +66,7 @@ module.exports = React.createClass( {
     return (
       <tr>
         <td colSpan="4">
-          <EditPlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
+          <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
         </td>
         <td className="text-right">
           { this.actionButtons() }

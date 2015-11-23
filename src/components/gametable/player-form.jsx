@@ -2,7 +2,7 @@ import React from 'react';
 import _validate from '../../utils/validator'
 import _ from 'lodash';
 
-module.exports = React.createClass( {
+export const PlayerForm = React.createClass({
 
   getInitialState(){
     return {
@@ -20,10 +20,10 @@ module.exports = React.createClass( {
     e.preventDefault();
 
     let player = {
-      name: _.trim(this.refs.name.getDOMNode().value),
-      image: _.trim(this.refs.image.getDOMNode().value),
-      league: _.trim(this.refs.league.getDOMNode().value),
-      score: parseInt(this.refs.score.getDOMNode().value)
+      name: _.trim(this.refs.name.value),
+      image: _.trim(this.refs.image.value),
+      league: _.trim(this.refs.league.value),
+      score: parseInt(this.refs.score.value)
     };
 
     if(this.props.method === 'add'){
@@ -40,7 +40,7 @@ module.exports = React.createClass( {
 
     if(isValid){
       this.props.submitCallback(player);
-      this.refs.playerForm.getDOMNode().reset();
+      this.refs.playerForm.reset();
     }
   },
 
