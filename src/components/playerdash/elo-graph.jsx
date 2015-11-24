@@ -27,9 +27,6 @@ module.exports = React.createClass( {
       {
         label : "Elo Rating",
         type: "number"
-      },{
-        label: "Opponent",
-        type: "string"
       }
 
       ],
