@@ -1,9 +1,9 @@
 import React from 'react';
 import utils from '../../utils/utilities.js';
-import CardLine from './table-line';
+import { TableLine as CardLine } from './table-line';
 import { Link } from 'react-router';
 
-module.exports = React.createClass( {
+export const PlayerCard = React.createClass({
 
   render() {
     const { name, image, league, score, topScore, wins, losses,

@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactFire from 'reactfire';
-import Player from './gametable/player';
-import PlayerCard from './playerdash/player-card';
-import Icon from './common/icon';
+import Firebase from 'firebase';
+import { Player } from './gametable/player';
+import { PlayerCard } from './playerdash/player-card';
+import { Icon } from './common/icon';
 import conf from '../../app.config.json';
 import _ from 'lodash';
 import { Link } from 'react-router';
 import EloGraph from './playerdash/elo-graph';
 import FirebaseLib from '../utils/FirebaseLib.js';
 
-module.exports = React.createClass({
+export const PlayerDash = React.createClass({
 
   mixins: [ ReactFire ],
 

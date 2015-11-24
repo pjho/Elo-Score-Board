@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactFire from 'reactfire';
-import Player from './gametable/player';
-import AddPlayerForm from './gametable/player-form';
-import Icon from './common/icon';
+import { Player } from './gametable/player';
+import { PlayerForm } from './gametable/player-form';
+import { Icon } from './common/icon';
 import _ from 'lodash';
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
@@ -11,7 +11,7 @@ import FirebaseLib from '../utils/FirebaseLib.js';
 
 const EloRank = Elo(24);
 
-module.exports = React.createClass({
+export const GameTable =  React.createClass({
 
   mixins: [ ReactFire ],
 
@@ -69,7 +69,7 @@ module.exports = React.createClass({
       { this.state.editMode &&
         <tr className="warning">
           <td colSpan="7">
-            <AddPlayerForm submitCallback={this.addNewPlayer} method="add" />
+            <PlayerForm submitCallback={this.addNewPlayer} method="add" />
           </td>
         </tr>
       }

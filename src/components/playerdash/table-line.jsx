@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router';
 
-module.exports = React.createClass( {
+export const TableLine = React.createClass({
 
   render() {
     return (
