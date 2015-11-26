@@ -47,8 +47,8 @@ export const PlayerDash = React.createClass({
         "Player loading..."
       }
       { graphData &&
-          <div className="col-md-9">
-        <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+        <div className="col-md-9">
+          <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
         </div>
       }
       { !graphData &&
