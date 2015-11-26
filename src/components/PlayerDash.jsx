@@ -40,14 +40,14 @@ export const PlayerDash = React.createClass({
       <div className="Player">
       { player &&
         <div className="col-md-3">
-        <PlayerCard {...player} />
+          <PlayerCard {...player} />
         </div>
       }
       { !player &&
         "Player loading..."
       }
       { graphData &&
-        <div className="col-md-9">
+          <div className="col-md-9">
         <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
         </div>
       }

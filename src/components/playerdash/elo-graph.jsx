@@ -40,13 +40,14 @@ module.exports = React.createClass( {
     };
 
     return (
-      <Chart chartType={AnnotationChart.chartType} 
+    <Chart chartType={AnnotationChart.chartType} 
       width={"100%"} 
       height={"600px"} 
       rows={AnnotationChart.rows} 
       columns={AnnotationChart.columns} 
       options = {AnnotationChart.options} 
-      graph_id={AnnotationChart.div_id}  />
-      );
+      graph_id={AnnotationChart.div_id}  
+    />
+    );
   }
 });
