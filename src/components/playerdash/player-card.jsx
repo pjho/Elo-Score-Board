@@ -1,7 +1,6 @@
 import React from 'react';
 import utils from '../../utils/utilities.js';
 import { TableLine as CardLine } from './table-line';
-import { Link } from 'react-router';
 
 export const PlayerCard = React.createClass({
 
@@ -14,7 +13,10 @@ export const PlayerCard = React.createClass({
           <table className="table">
             <thead>
               <tr>
-                <th><img src={image} className="img-circle img-thumbnail" />{name}</th>
+                <th colSpan='2'>
+                  <img src={image} className="img-circle img-thumbnail" />
+                  {name}
+                </th>
               </tr>
             </thead>
             <tbody>

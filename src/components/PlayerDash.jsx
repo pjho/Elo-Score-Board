@@ -1,17 +1,15 @@
 import React from 'react';
 import ReactFire from 'reactfire';
 import Firebase from 'firebase';
-import { Player } from './gametable/player';
 import { PlayerCard } from './playerdash/player-card';
-import { Icon } from './common/icon';
+import { EloGraph } from './playerdash/elo-graph';
+import { History } from 'react-router';
 import conf from '../../app.config.json';
 import _ from 'lodash';
-import EloGraph from './playerdash/elo-graph';
 import FirebaseLib from '../utils/FirebaseLib.js';
 
 export const PlayerDash = React.createClass({
-
-  mixins: [ ReactFire ],
+  mixins: [ ReactFire, History ],
 
   getInitialState() {
     return {
@@ -28,7 +26,7 @@ export const PlayerDash = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.fireBase.off();
+    this.firebase.unload();
   },
 
   render() {
@@ -38,22 +36,26 @@ export const PlayerDash = React.createClass({
 
     return (
       <div className="Player">
-      { player &&
-        <div className="col-md-3">
-          <PlayerCard {...player} />
+        <div className="UtilHeader">
+          <button className="back btn btn-default" onClick={this.history.goBack}>&larr; Back</button>
         </div>
-      }
-      { !player &&
-        "Player loading..."
-      }
-      { graphData &&
-        <div className="col-md-9">
-          <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
-        </div>
-      }
-      { !graphData &&
-        "Graph loading..."
-      }
+
+        { player &&
+          <div className="PlayerCard col-md-3">
+            <PlayerCard {...player} />
+          </div>
+        }
+        { !player &&
+          "Player loading..."
+        }
+        { graphData &&
+          <div className="EloGraph col-md-9">
+            <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+          </div>
+        }
+        { !graphData &&
+          "Graph loading..."
+        }
       </div>
       );
   },

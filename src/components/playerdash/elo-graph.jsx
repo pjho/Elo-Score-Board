@@ -1,7 +1,7 @@
 import React from 'react';
 import {Chart} from 'react-google-charts';
 
-module.exports = React.createClass( {
+export const EloGraph = React.createClass({
 
   render() {
     let items = [];
