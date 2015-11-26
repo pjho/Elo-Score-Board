@@ -1,24 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router';
-import FirebaseLib from '../../utils/FirebaseLib.js';
-var Chart = require('react-google-charts').Chart;
-
+import {Chart} from 'react-google-charts';
 
 module.exports = React.createClass( {
 
-  getInitialState() {
-    return {
-      AnnotationChart: {
-        rows:[],
-        columns:[],
-        chartType: ""
-      }
-    }
-  },
+  render() {
+    let items = [];
 
-  componentWillMount() {
-    var AnnotationChart =  {
-      rows : this.props.graph,
+    this.props.graph.forEach( (rawItem) => {
+      let item = rawItem.val();
+      item.id = rawItem.key();
+      items.push(item);
+    });
+
+    let data = items.map( (item) => {
+      let score = item.winner == this.props.playerId ? item.loserNewScore : item.winnerNewScore;
+      let date = new Date(item.dateTime)
+      return [date, score];
+    });
+
+    let AnnotationChart =  {
+      rows : data,
       columns : [
       {
         label : "date time",
@@ -27,22 +28,25 @@ module.exports = React.createClass( {
       {
         label : "Elo Rating",
         type: "number"
-      }
-
-      ],
-      options : {title: "Elo Rating", hAxis: {title: 'Date' }, vAxis: {title: 'Elo Rating', format:'####'}},
+      }],
+      options : {
+        title: "Elo Rating", 
+        hAxis: {title: 'Date' }, 
+        vAxis: {title: 'Elo Rating', 
+        format:'####'}
+      },
       chartType : "AnnotationChart",
       div_id: "elo_line_graph"
     };
 
-    this.setState({
-      'AnnotationChart': AnnotationChart
-    });
-  },
-
-  render() {
     return (
-      <Chart chartType={this.state.AnnotationChart.chartType} width={"100%"} height={"600px"} rows={this.props.graph} columns={this.state.AnnotationChart.columns} options = {this.state.AnnotationChart.options} graph_id={this.state.AnnotationChart.div_id}  />
+      <Chart chartType={AnnotationChart.chartType} 
+      width={"100%"} 
+      height={"600px"} 
+      rows={AnnotationChart.data} 
+      columns={AnnotationChart.columns} 
+      options = {AnnotationChart.options} 
+      graph_id={AnnotationChart.div_id}  />
       );
   }
 });

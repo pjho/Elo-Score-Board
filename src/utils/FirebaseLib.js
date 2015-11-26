@@ -28,11 +28,11 @@ function fireBaseWrapper(){
     this.fireBase.on(eventType, callBack);
   };
 
-  this.getEloDateForCurrentMonth = function(playerId, eventType, callBack){
-    let date = [new Date().getFullYear(), new Date().getMonth()].join('_');
+  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack){
+    let now = new Date();
+    let date = [now.getFullYear(), now.getMonth()].join('_');
 
     let playerUrl = [conf.firebaseUrl, 'history', playerId, date].join('/');
-    // alert(playerUrl);
     let fireBasePlayerHistory = new Firebase(playerUrl);
     fireBasePlayerHistory.on(eventType, callBack);
   };

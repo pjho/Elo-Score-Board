@@ -6,7 +6,6 @@ import { PlayerCard } from './playerdash/player-card';
 import { Icon } from './common/icon';
 import conf from '../../app.config.json';
 import _ from 'lodash';
-import { Link } from 'react-router';
 import EloGraph from './playerdash/elo-graph';
 import FirebaseLib from '../utils/FirebaseLib.js';
 
@@ -17,16 +16,15 @@ export const PlayerDash = React.createClass({
   getInitialState() {
     return {
       players: [],
-      graphdata: [],
+      graphData: [],
       loaded: false
     }
   },
 
   componentWillMount() {
     this.firebase = new FirebaseLib();
-    // We are likely to want to read all player data e.g. top adversary, last 10 matches etc
-    // So leaving this here for now. Woould be nicer to have a store where this data is kept without requesting again
-    this.loadData(); // should update to bindAsObject/Array
+    this.loadGraphData();
+    this.loadPlayersData();
   },
 
   componentWillUnmount: function() {
@@ -34,9 +32,9 @@ export const PlayerDash = React.createClass({
   },
 
   render() {
-    // console.log(this.state.players);
-    const player = _.find(this.state.players, p => p.id == this.props.params.playerId);
-    const thedata = this.state.graphdata;
+    let { players, graphData } = this.state;
+
+    const player = _.find(players, p => p.id == this.props.params.playerId);
 
     return (
       <div className="Player">
@@ -48,25 +46,25 @@ export const PlayerDash = React.createClass({
       { !player &&
         "Player loading..."
       }
-      { thedata &&
+      { graphData &&
         <div className="col-md-9">
-        <EloGraph graph={thedata} />
+        <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
         </div>
       }
-      { !thedata &&
+      { !graphData &&
         "Graph loading..."
       }
       </div>
       );
   },
 
-  loadData() {
+  loadPlayersData(){
     this.firebase.dataOn('value', (rawItems) => {
-      var items = [];
-      var sorted = [];
+      let items = [];
+      let sorted = [];
 
       rawItems.forEach( (rawItem) => {
-        var item = rawItem.val();
+        let item = rawItem.val();
         item.id = rawItem.key();
         items.push(item);
       });
@@ -77,41 +75,18 @@ export const PlayerDash = React.createClass({
       });
 
     });
+  },
 
-    this.firebase.getEloDateForCurrentMonth(this.props.params.playerId, 'value',(rawItems) => {
-      var items = [];
-
-      rawItems.forEach( (rawItem) => {
-        var item = rawItem.val();
-        item.id = rawItem.key();
-        items.push(item);
-      });
-
-      var getDataPoint = function getDataPoint(id, item){
-        var utcToDate = function utcToDate(utc){
-          return new Date(utc);
-        }
-
-        if(item.loser == id){
-          return [utcToDate(item.dateTime), item.loserNewScore];
-        }
-        else if(item.winner == id){
-          return [utcToDate(item.dateTime), item.winnerNewScore];
-        }
-      }
-
-      var data = [];
-
-      items.forEach( (item) => {
-        data.push(getDataPoint(this.props.params.playerId, item));
-      });
+  loadGraphData(){
+    this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value',(rawItems) => {
 
       this.setState({
-        graphdata: data,
+        graphData: rawItems,
         loaded: true
       });
     });
   }
+
 });
 
 
