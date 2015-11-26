@@ -36,6 +36,11 @@ function fireBaseWrapper(){
     let fireBasePlayerHistory = new Firebase(playerUrl);
     fireBasePlayerHistory.on(eventType, callBack);
   };
+
+  this.unload = function() {
+    this.fireBase.off();
+    this.fireBaseHistory.off();
+  };
 }
 
 module.exports = fireBaseWrapper;

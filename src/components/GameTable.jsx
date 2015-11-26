@@ -30,6 +30,10 @@ export const GameTable =  React.createClass({
     this.loadData(); // should update to bindAsObject/Array
   },
 
+  componentWillUnmount: function() {
+    this.firebase.unload();
+  },
+
   render() {
     return (
     <table className={"elo-ranking-table table table-striped " + ( this.state.loaded ? "loaded" : "") }>

@@ -20,10 +20,10 @@ export const PlayerForm = React.createClass({
     e.preventDefault();
 
     let player = {
-      name: _.trim(this.refs.name.value),
-      image: _.trim(this.refs.image.value),
-      league: _.trim(this.refs.league.value),
-      score: parseInt(this.refs.score.value)
+      name: _.trim(this.refs.name.getDOMNode().value),
+      image: _.trim(this.refs.image.getDOMNode().value),
+      league: _.trim(this.refs.league.getDOMNode().value),
+      score: parseInt(this.refs.score.getDOMNode().value)
     };
 
     if(this.props.method === 'add'){
@@ -40,7 +40,7 @@ export const PlayerForm = React.createClass({
 
     if(isValid){
       this.props.submitCallback(player);
-      this.refs.playerForm.reset();
+      this.refs.playerForm.getDOMNode().reset();
     }
   },
 
