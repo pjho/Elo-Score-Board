@@ -13,7 +13,7 @@ module.exports = React.createClass( {
     });
 
     let data = items.map( (item) => {
-      let score = item.winner == this.props.playerId ? item.loserNewScore : item.winnerNewScore;
+      let score = item.winner == this.props.playerId ? item.winnerNewScore : item.loserNewScore;
       let date = new Date(item.dateTime)
       return [date, score];
     });
@@ -43,7 +43,7 @@ module.exports = React.createClass( {
       <Chart chartType={AnnotationChart.chartType} 
       width={"100%"} 
       height={"600px"} 
-      rows={AnnotationChart.data} 
+      rows={AnnotationChart.rows} 
       columns={AnnotationChart.columns} 
       options = {AnnotationChart.options} 
       graph_id={AnnotationChart.div_id}  />
