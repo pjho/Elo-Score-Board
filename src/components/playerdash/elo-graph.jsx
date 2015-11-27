@@ -30,24 +30,27 @@ export const EloGraph = React.createClass({
         type: "number"
       }],
       options : {
-        title: "Elo Rating", 
-        hAxis: {title: 'Date' }, 
-        vAxis: {title: 'Elo Rating', 
+        title: "Elo Rating",
+        hAxis: {title: 'Date' },
+        vAxis: {title: 'Elo Rating',
         format:'####'}
       },
       chartType : "AnnotationChart",
       div_id: "elo_line_graph"
     };
 
+    let winWidth = window.innerWidth;
+    let graphHeight = winWidth > 800 ? 600 : winWidth > 485 ? 350 : 260;
+
     return (
-    <Chart chartType={AnnotationChart.chartType} 
-      width={"100%"} 
-      height={"600px"} 
-      rows={AnnotationChart.rows} 
-      columns={AnnotationChart.columns} 
-      options = {AnnotationChart.options} 
-      graph_id={AnnotationChart.div_id}  
-    />
+      <Chart chartType={AnnotationChart.chartType}
+        width={"100%"}
+        height={graphHeight + "px"}
+        rows={AnnotationChart.rows}
+        columns={AnnotationChart.columns}
+        options = {AnnotationChart.options}
+        graph_id={AnnotationChart.div_id}
+      />
     );
   }
 });
