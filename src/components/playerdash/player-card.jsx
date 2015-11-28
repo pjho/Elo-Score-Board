@@ -1,9 +1,8 @@
 import React from 'react';
 import utils from '../../utils/utilities.js';
-import CardLine from './table-line';
-import { Link } from 'react-router';
+import { TableLine as CardLine } from './table-line';
 
-module.exports = React.createClass( {
+export const PlayerCard = React.createClass({
 
   render() {
     const { name, image, league, score, topScore, wins, losses,
@@ -14,7 +13,10 @@ module.exports = React.createClass( {
           <table className="table">
             <thead>
               <tr>
-                <th><img src={image} className="img-circle img-thumbnail" />{name}</th>
+                <th colSpan='2'>
+                  <img src={image} className="img-circle img-thumbnail" />
+                  {name}
+                </th>
               </tr>
             </thead>
             <tbody>

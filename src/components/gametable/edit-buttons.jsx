@@ -1,6 +1,7 @@
 import React from 'react';
-import Icon from '../common/icon'
-module.exports = React.createClass( {
+import { Icon } from '../common/icon'
+
+export const EditButtons = React.createClass({
 
   render() {
     return (

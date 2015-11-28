@@ -1,56 +1,72 @@
 import React from 'react';
 import ReactFire from 'reactfire';
 import Firebase from 'firebase';
-import Player from './gametable/player';
-import PlayerCard from './playerdash/player-card';
-import Icon from './common/icon';
+import { PlayerCard } from './playerdash/player-card';
+import { EloGraph } from './playerdash/elo-graph';
+import { History } from 'react-router';
 import conf from '../../app.config.json';
 import _ from 'lodash';
-import { Link } from 'react-router'
+import FirebaseLib from '../utils/FirebaseLib.js';
 
-module.exports = React.createClass({
-
-  mixins: [ ReactFire ],
+export const PlayerDash = React.createClass({
+  mixins: [ ReactFire, History ],
 
   getInitialState() {
     return {
       players: [],
+      graphData: [],
       loaded: false
     }
   },
 
   componentWillMount() {
-    // We are likely to want to read all player data e.g. top adversary, last 10 matches etc
-    // So leaving this here for now. Woould be nicer to have a store where this data is kept without requesting again
-    let fbPath = [conf.firebaseUrl, 'players'].join('/');
-    this.fireBase = new Firebase(fbPath);
-    this.loadData(); // should update to bindAsObject/Array
+    this.firebase = new FirebaseLib();
+    this.loadGraphData();
+    this.loadPlayersData();
+  },
+
+  componentWillUnmount: function() {
+    this.firebase.unload();
   },
 
   render() {
-    // console.log(this.state.players);
-    const player = _.find(this.state.players, p => p.id == this.props.params.playerId);
+    let { players, graphData } = this.state;
+
+    const player = _.find(players, p => p.id == this.props.params.playerId);
+
     return (
       <div className="Player">
-      { player &&
-          <div className="col-md-3">
+        <div className="UtilHeader">
+          <button className="back btn btn-default" onClick={this.history.goBack}>&larr; Back</button>
+        </div>
+
+        { player &&
+          <div className="PlayerCard col-md-3">
             <PlayerCard {...player} />
           </div>
-      }
-      { !player &&
-          "Player not found."
-      }
+        }
+        { !player &&
+          "Player loading..."
+        }
+        { graphData &&
+          <div className="EloGraph col-md-9">
+            <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+          </div>
+        }
+        { !graphData &&
+          "Graph loading..."
+        }
       </div>
-    );
+      );
   },
 
-  loadData() {
-    this.fireBase.on('value', (rawItems) => {
-      var items = [];
-      var sorted = [];
+  loadPlayersData(){
+    this.firebase.dataOn('value', (rawItems) => {
+      let items = [];
+      let sorted = [];
 
       rawItems.forEach( (rawItem) => {
-        var item = rawItem.val();
+        let item = rawItem.val();
         item.id = rawItem.key();
         items.push(item);
       });
@@ -61,6 +77,18 @@ module.exports = React.createClass({
       });
 
     });
+  },
+
+  loadGraphData(){
+    this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value',(rawItems) => {
+
+      this.setState({
+        graphData: rawItems,
+        loaded: true
+      });
+    });
   }
 
 });
+
+

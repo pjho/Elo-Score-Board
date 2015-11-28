@@ -2,7 +2,7 @@ import React from 'react';
 import _validate from '../../utils/validator'
 import _ from 'lodash';
 
-module.exports = React.createClass( {
+export const PlayerForm = React.createClass({
 
   getInitialState(){
     return {

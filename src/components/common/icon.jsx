@@ -1,6 +1,6 @@
 import React from 'react';
 
-module.exports = React.createClass( {
+export const Icon =  React.createClass( {
 
   render() {
     return (
