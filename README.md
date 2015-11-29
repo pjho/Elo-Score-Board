@@ -11,7 +11,9 @@ A simple scoreboard implementing the [Elo ranking system](https://en.wikipedia.o
 3. Copy `app.config.json.sample.txt` to `app.config.json`
 4. Update the `firebaseUrl` setting to point to your new Firebase App's url.
 5. > `npm install`
-6. > `gulp`
+6. > `npm run dev` || `npm run start` to develop
+6b > `npm run build` to build a distribution with minfied files.
+
 
 ### FireBase ###
 To setup serverside validation rules enter firebase.config.json rule set under the `Security & Rules` section of your Firebase dashboard.
