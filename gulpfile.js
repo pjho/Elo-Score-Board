@@ -12,8 +12,10 @@ var watch = require('gulp-watch');
 var uglify = require('gulp-uglify');
 var buffer = require('vinyl-buffer');
 var browserSync = require('browser-sync');
+var historyApiFallback = require('connect-history-api-fallback');
 
 var prod = process.env.NODE_ENV == 'production';
+
 
 var notify = function(error) {
   var message = 'In: ';
@@ -64,8 +66,11 @@ bundler.on('update', bundle);
 gulp.task('js', function() { return bundle(); });
 
 gulp.task('serve', function() {
-    browserSync({
-        server: "./dist",
+    browserSync.init({
+        server: {
+          baseDir: "dist",
+          middleware: [ historyApiFallback() ]
+        },
         open: true,
         notify: false
     });
