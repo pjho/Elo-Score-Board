@@ -45,14 +45,18 @@ var notify = function(error) {
 var bundler = watchify(browserify({
   entries: ['./src/app.jsx'],
   transform: [babelify],
-  extensions: ['.jsx'],
+  extensions: ['.jsx', '.js'],
   debug: !prod,
   cache: {},
   packageCache: {},
   fullPaths: !prod,
 }));
 
+
 function bundle() {
+
+  gutil.log('bundle bitches!');
+
   return bundler.bundle()
     .on('error', notify)
     .pipe(source('main.js'))
@@ -66,14 +70,14 @@ bundler.on('update', bundle);
 gulp.task('js', function() { return bundle(); });
 
 gulp.task('serve', function() {
-    browserSync.init({
-        server: {
-          baseDir: "dist",
-          middleware: [ historyApiFallback() ]
-        },
-        open: true,
-        notify: false
-    });
+  browserSync.init({
+    server: {
+      baseDir: "dist",
+      middleware: [ historyApiFallback() ]
+    },
+    open: true,
+    notify: false
+  });
 });
 
 gulp.task('sass', function () {

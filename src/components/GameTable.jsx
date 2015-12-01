@@ -9,8 +9,6 @@ import { Link } from 'react-router'
 import FirebaseLib from '../utils/FirebaseLib.js';
 
 
-const EloRank = Elo(24);
-
 export const GameTable =  React.createClass({
 
   mixins: [ ReactFire ],
@@ -18,16 +16,21 @@ export const GameTable =  React.createClass({
   getInitialState() {
     return {
       players: [],
-      editMode: false,
       loaded: false,
       winner: null,
       loser: null,
+      authed: false
     }
   },
 
   componentWillMount() {
     this.firebase = new FirebaseLib();
-    this.loadData(); // should update to bindAsObject/Array
+    this.loadData();
+
+    this.setState({
+      authed: this.firebase.authed()
+    })
+
   },
 
   componentWillUnmount: function() {
@@ -35,49 +38,58 @@ export const GameTable =  React.createClass({
   },
 
   render() {
+    let isEditMode = window.location.href.indexOf('edit') > -1;
+    let {params} = this.props;
+    let {authed, players, loaded, winner, loser} = this.state;
+    let currentPath = window.location.pathname.replace(/\/$/, "");
+
+    players = players.filter(this.playerLeagueFilter);
+
     return (
-    <table className={"elo-ranking-table table table-striped " + ( this.state.loaded ? "loaded" : "") }>
+    <table className={"elo-ranking-table table table-striped " + ( loaded ? "loaded" : "") }>
       <thead>
         <tr>
-          <th className="hide_sm">
-            Rank
-          </th>
-          <th>
-            Player
-          </th>
-          <th className="hide_sm">
-            League
-          </th>
-          <th className="tc">
-            Score
-          </th>
-          <th className="tc">
-            Streak
-          </th>
-          <th className="tc">
-            Wins
-          </th>
+          <th className="hide_sm">Rank</th>
+          <th>Player</th>
+          <th className="hide_sm">League</th>
+          <th className="tc">Score</th>
+          <th className="tc">Streak</th>
+          <th className="tc">Wins</th>
           <th className="text-right action-buttons">
-            {!!this.props.params.leagueName &&
+            {!!params.leagueName &&
               <Link to="/" className='btn btn-sm btn-default'>
                 <Icon type="menu-left" /> All Leagues
               </Link>
             }
-            <a className='btn btn-sm btn-default' onClick={this.toggleEditMode}>
-              { this.state.editMode ? "done" : <Icon type="edit" /> }
-            </a>
+            { authed
+              && (isEditMode
+                ? <Link to={ currentPath.slice(0, -5) || '/' } className='btn btn-sm btn-default'>done</Link>
+                : <Link to={ currentPath + '/edit' } className='btn btn-sm btn-default'><Icon type="edit" /></Link>
+              )
+            }
+            { authed
+              ? <a className='btn btn-sm btn-default' onClick={this.doLogout}>logout</a>
+              : <a className='btn btn-sm btn-default' onClick={this.doLogin}>login</a>
+            }
           </th>
         </tr>
       </thead>
       <tbody>
-      { this.state.editMode &&
-        <tr className="warning">
-          <td colSpan="7">
-            <PlayerForm submitCallback={this.addNewPlayer} method="add" />
-          </td>
-        </tr>
-      }
-      { this.state.players.filter(this.playerLeagueFilter).map(this.playerComponentMap) }
+
+        { authed && isEditMode &&
+          <tr className="warning">
+            <td colSpan="7">
+              <PlayerForm submitCallback={this.addNewPlayer} method="add" />
+            </td>
+          </tr>
+        }
+        { players.map( (player,index) => {
+              return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
+                             onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }}
+                             authed={authed} />
+            })
+        }
+
       </tbody>
     </table>
     );
@@ -85,11 +97,6 @@ export const GameTable =  React.createClass({
 
   playerLeagueFilter(player) {
     return ! this.props.params.leagueName || player.league === this.props.params.leagueName;
-  },
-
-  playerComponentMap(player, index) {
-    return <Player key={player.id} {...player} rank={index + 1} editMode={this.state.editMode}
-            onPlay={this.handleGamePlay} currentGame={{winner: this.state.winner, loser: this.state.loser }} />
   },
 
   handleGamePlay(type, player) {
@@ -100,62 +107,62 @@ export const GameTable =  React.createClass({
 
   processGame() {
     // only do the stuff if we have a winner and a loser.
-    if( ! this.state.winner || ! this.state.loser) { return; }
+    if( ! this.state.winner || ! this.state.loser ) { return; }
+
+    if( ! this.state.authed ) {
+      alert("You need to be logged in to perform this action.");
+      return;
+    }
 
     let winner = _.find(this.state.players, (player) => player.id === this.state.winner);
     let loser = _.find(this.state.players, (player) => player.id === this.state.loser);
-    let gameResult = this.scoreGame( winner.score, loser.score );
-    let results = {};
-
-    // Update Winner Statistics
-    results[winner.id] = _.assign( _.omit(winner,'id'), {
-      score: gameResult.winner,
-      wins: winner.wins + 1,
-      streak: ( winner.streak >= 0 ? winner.streak + 1 : 1) || 1,
-      bestStreak: ( Math.max( winner.streak + 1,  winner.bestStreak) ) || 1,
-      topScore: ( Math.max(gameResult.winner, winner.topScore) ) || gameResult.winner
-    });
-
-    // Update Loser Statistics
-    results[loser.id] = _.assign( _.omit(loser,'id'), {
-      score: gameResult.loser,
-      losses: loser.losses + 1,
-      streak: ( loser.streak <= 0 ? loser.streak - 1 : -1 ) || 0,
-      worstStreak: ( Math.min(loser.streak - 1, loser.worstStreak) ) || -1,
-      bottomScore: ( Math.min(gameResult.loser, loser.bottomScore ) ) || gameResult.loser
-    });
-
-    // Update Game Statistics
-    let history = {
-      dateTime: new Date().getTime(),
-      winner: winner.id,
-      winnerOldScore: winner.score,
-      winnerNewScore: results[winner.id].score,
-      loserNewScore: results[loser.id].score,
-      loser: loser.id,
-      loserOldScore: loser.score
-    }
 
     if(winner.league != loser.league) {
       alert('Player\'s leagues do not match.');
-    }
 
-    else if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
-      this.firebase.updateResults(results);
+    } else { // this guy checks out, process the game.
 
-      this.firebase.pushHistory(winner, history);
-      this.firebase.pushHistory(loser, history);
-    }
+      let gameResult = this.scoreGame( winner.score, loser.score );
+      let results = {};
+
+      // Update Winner Statistics
+      results[winner.id] = _.assign( _.omit(winner,'id'), {
+        score: gameResult.winner,
+        wins: winner.wins + 1,
+        streak: ( winner.streak >= 0 ? winner.streak + 1 : 1) || 1,
+        bestStreak: ( Math.max( winner.streak + 1,  winner.bestStreak) ) || 1,
+        topScore: ( Math.max(gameResult.winner, winner.topScore) ) || gameResult.winner
+      });
+
+      // Update Loser Statistics
+      results[loser.id] = _.assign( _.omit(loser,'id'), {
+        score: gameResult.loser,
+        losses: loser.losses + 1,
+        streak: ( loser.streak <= 0 ? loser.streak - 1 : -1 ) || 0,
+        worstStreak: ( Math.min(loser.streak - 1, loser.worstStreak) ) || -1,
+        bottomScore: ( Math.min(gameResult.loser, loser.bottomScore ) ) || gameResult.loser
+      });
+
+      // Update Game Statistics
+      let history = {
+        dateTime: new Date().getTime(),
+        winner: winner.id,
+        winnerOldScore: winner.score,
+        winnerNewScore: results[winner.id].score,
+        loserNewScore: results[loser.id].score,
+        loser: loser.id,
+        loserOldScore: loser.score
+      }
+
+      if(confirm("So you're saying " + winner.name + " beat " + loser.name + "?")) {
+        this.firebase.updateResults(results);
+        this.firebase.pushHistory(winner, history);
+        this.firebase.pushHistory(loser, history);
+      }
+    } // Ends Else
 
     this.setState({ winner: null, loser: null });
 
-  },
-
-  toggleEditMode(e) {
-    e.preventDefault();
-    this.setState({
-      editMode: ! this.state.editMode
-    });
   },
 
   addNewPlayer(newPlayer) {
@@ -189,6 +196,8 @@ export const GameTable =  React.createClass({
     winner = parseInt(winner);
     loser = parseInt(loser);
 
+    const EloRank = Elo(24);
+
     let expectedScoreWinner = EloRank.getExpected(winner, loser);
     let expectedScoreLoser = EloRank.getExpected(loser, winner);
 
@@ -201,5 +210,24 @@ export const GameTable =  React.createClass({
       winnerGain: (expectedScoreWinner - winner.score),
       loserLose: (loser.score - expectedScoreLoser),
     };
+  },
+
+
+  doLogout() {
+    this.firebase.doLogout();
+    this.setState({ authed: false });
+  },
+
+  doLogin() {
+    let user = prompt('Enter your Username/Email address.');
+    let pass = prompt('Enter your password');
+
+    if(!user || !pass) { return; }
+
+    this.firebase.doLogin( user, pass, function(authed, msg) {
+      if (msg) { alert(msg); };
+      this.setState({ authed: authed });
+    }.bind(this) );
   }
+
 });

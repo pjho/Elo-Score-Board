@@ -22,9 +22,8 @@ export const Player = React.createClass({
   displayUser() {
 
     const { rank, name, image, league, score, topScore, wins, losses,
-            id, bottomScore, streak, bestStreak, worstStreak} = this.props;
+            id, bottomScore, streak, bestStreak, worstStreak, authed} = this.props;
 
-    // let streak = this.props.streak || false;
     return (
       <tr>
         <td className="hide_sm">
@@ -56,7 +55,7 @@ export const Player = React.createClass({
             }
         </td>
         <td className="text-right">
-          { this.actionButtons() }
+          { authed ? this.actionButtons() : ""}
         </td>
       </tr>
     );
