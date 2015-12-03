@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "NODE_ENV=development gulp",
+    "dev": "npm run clean && NODE_ENV=development gulp",
     "start": "npm run dev",
-    "build": "NODE_ENV=production gulp build"
+    "build": "npm run clean && NODE_ENV=production gulp build",
+    "clean": "rm -rf dist"
   },
   "author": "Pat Horsley",
   "license": "ISC",
