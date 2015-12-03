@@ -18,6 +18,12 @@ A simple scoreboard implementing the [Elo ranking system](https://en.wikipedia.o
 ### FireBase ###
 To setup serverside validation rules enter firebase.config.json rule set under the `Security & Rules` section of your Firebase dashboard.
 
+### Authentication ###
+The goal with authentication in this app is to prevent vandalism, not to have a robust feature rich auth & permissions model. It is reccomended that a single user account is created with a password that is shared between all players. The user details that a player logs in to the app with have no correlation with players on the board. User account management is handled entirely in the Firebase app UI.
+
+To create an authenticated user account go to the `Login and Auth` section of your Firebase settings panel. Set your session length ideally to 12 months or more so players don't have to auth regularly. Under the `Email & Password` tab check the `Enable Email and Password Authentication` checkbox. Scroll to the bottom of the page and click the green `Add User` button. Enter your user & Bob's your uncle.
+
+
 ---
 
 ### ToDo ###

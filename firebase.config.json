@@ -5,8 +5,9 @@
 
     "history": {
       ".read": true,
-      ".write": true,
-      
+      //".write": true, - Set write to true if not using auth
+      ".write": "auth != null",
+
       "$playersId": {
         "$monthYear" :{
           "$historyId": {
@@ -26,7 +27,8 @@
 
     "players": {
       ".read": true,
-      ".write": true,
+      //".write": true, - Set write to true if not using auth
+      ".write": "auth != null",
 
       "$playersId": {
         ".validate": "newData.hasChildren(['name', 'image', 'league', 'score', 'wins', 'losses'])",
