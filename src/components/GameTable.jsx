@@ -1,52 +1,35 @@
 import React from 'react';
-import ReactFire from 'reactfire';
 import { Player } from './gametable/player';
 import { PlayerForm } from './gametable/player-form';
 import { Icon } from './common/icon';
 import _ from 'lodash';
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
-import FirebaseLib from '../utils/FirebaseLib.js';
 
 
 export const GameTable =  React.createClass({
 
-  mixins: [ ReactFire ],
-
   getInitialState() {
     return {
-      players: [],
-      loaded: false,
       winner: null,
-      loser: null,
-      authed: false
+      loser: null
     }
   },
 
   componentWillMount() {
-    this.firebase = new FirebaseLib();
-    this.loadData();
-
-    this.setState({
-      authed: this.firebase.authed()
-    })
-
-  },
-
-  componentWillUnmount: function() {
-    this.firebase.unload();
+    this.firebase = this.props.firebase;
   },
 
   render() {
+    let {params, authed, players} = this.props;
+    let {winner, loser} = this.state;
     let isEditMode = window.location.href.indexOf('edit') > -1;
-    let {params} = this.props;
-    let {authed, players, loaded, winner, loser} = this.state;
     let currentPath = window.location.pathname.replace(/\/$/, "");
 
     players = players.filter(this.playerLeagueFilter);
 
     return (
-    <table className={"elo-ranking-table table table-striped " + ( loaded ? "loaded" : "") }>
+    <table className={"elo-ranking-table table table-striped"}>
       <thead>
         <tr>
           <th className="hide_sm">Rank</th>
@@ -68,8 +51,8 @@ export const GameTable =  React.createClass({
               )
             }
             { authed
-              ? <a className='btn btn-sm btn-default' onClick={this.doLogout}>logout</a>
-              : <a className='btn btn-sm btn-default' onClick={this.doLogin}>login</a>
+              ? <a className='btn btn-sm btn-default' onClick={this.props.doLogout}>logout</a>
+              : <a className='btn btn-sm btn-default' onClick={this.props.doLogin}>login</a>
             }
           </th>
         </tr>
@@ -109,13 +92,13 @@ export const GameTable =  React.createClass({
     // only do the stuff if we have a winner and a loser.
     if( ! this.state.winner || ! this.state.loser ) { return; }
 
-    if( ! this.state.authed ) {
+    if( ! this.props.authed ) {
       alert("You need to be logged in to perform this action.");
       return;
     }
 
-    let winner = _.find(this.state.players, (player) => player.id === this.state.winner);
-    let loser = _.find(this.state.players, (player) => player.id === this.state.loser);
+    let winner = _.find(this.props.players, (player) => player.id === this.state.winner);
+    let loser = _.find(this.props.players, (player) => player.id === this.state.loser);
 
     if(winner.league != loser.league) {
       alert('Player\'s leagues do not match.');
@@ -169,29 +152,6 @@ export const GameTable =  React.createClass({
     this.firebase.newPlayer(newPlayer);
   },
 
-  loadData() {
-    this.firebase.dataOn('value', (rawItems) => {
-      var items = [];
-      var sorted = [];
-
-      rawItems.forEach( (rawItem) => {
-        var item = rawItem.val();
-        item.id = rawItem.key();
-        items.push(item);
-      });
-
-      sorted = _.sortBy(items, (item) => {
-        return -item.score;
-      });
-
-      this.setState({
-        players: sorted,
-        loaded: true
-      });
-
-    });
-  },
-
   scoreGame(winner, loser) {
     winner = parseInt(winner);
     loser = parseInt(loser);
@@ -210,24 +170,6 @@ export const GameTable =  React.createClass({
       winnerGain: (expectedScoreWinner - winner.score),
       loserLose: (loser.score - expectedScoreLoser),
     };
-  },
-
-
-  doLogout() {
-    this.firebase.doLogout();
-    this.setState({ authed: false });
-  },
-
-  doLogin() {
-    let user = prompt('Enter your Username/Email address.');
-    let pass = prompt('Enter your password');
-
-    if(!user || !pass) { return; }
-
-    this.firebase.doLogin( user, pass, function(authed, msg) {
-      if (msg) { alert(msg); };
-      this.setState({ authed: authed });
-    }.bind(this) );
   }
 
 });

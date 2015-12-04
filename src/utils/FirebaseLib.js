@@ -2,7 +2,8 @@ import React from 'react';
 import Firebase from 'firebase';
 import conf from '../../app.config.json';
 
-function fireBaseWrapper(){
+function fireBaseWrapper() {
+
   let fbPlayersPath = [conf.firebaseUrl, 'players'].join('/');
   let fbHistoryPath = [conf.firebaseUrl, 'history'].join('/');
 
@@ -29,13 +30,22 @@ function fireBaseWrapper(){
     this.fbPlayersRef.on(eventType, callBack);
   };
 
-  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack){
+  /**
+   * Retrieves Game data for a player for the current month
+   * @param  {string}   playerId  The Firebase Id of the player
+   * @param  {string}   eventType Firebase event type
+   * @param  {function} callBack  The function to call when data is received
+   * @return {object}             Returns the Firebase Ref object so we can close the connection on unMount
+   */
+  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack) {
     let now = new Date();
     let date = [now.getFullYear(), now.getMonth()].join('_');
-
     let playerUrl = [conf.firebaseUrl, 'history', playerId, date].join('/');
-    let fireBasePlayerHistory = new Firebase(playerUrl);
-    fireBasePlayerHistory.on(eventType, callBack);
+    let fbPlayerHistoryRef = new Firebase(playerUrl);
+
+    fbPlayerHistoryRef.on(eventType, callBack);
+
+    return fbPlayerHistoryRef;
   };
 
   /**
@@ -44,7 +54,6 @@ function fireBaseWrapper(){
    */
   this.authed = function() {
     let authData = this.fbRootRef.getAuth();
-    // console.log(authData);
     return !!authData;
   };
 

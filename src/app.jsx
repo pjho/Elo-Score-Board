@@ -1,15 +1,12 @@
 import React from 'react';
 import { Router, Route, IndexRoute } from 'react-router';
+import { App } from './components/App';
 import { GameTable } from './components/GameTable';
 import { PlayerDash } from './components/PlayerDash'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 const NoMatch = React.createClass({
   render() { return <div>Route not Found</div>; }
-});
-
-const App = React.createClass({
-  render() { return <div>{this.props.children}</div>; }
 });
 
 React.render(

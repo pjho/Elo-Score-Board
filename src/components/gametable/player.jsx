@@ -64,7 +64,7 @@ export const Player = React.createClass({
   displayEditUserForm () {
     return (
       <tr>
-        <td colSpan="4">
+        <td colSpan="6">
           <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
         </td>
         <td className="text-right">

@@ -1,36 +1,32 @@
 import React from 'react';
-import ReactFire from 'reactfire';
-import Firebase from 'firebase';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
 import { History } from 'react-router';
 import conf from '../../app.config.json';
 import _ from 'lodash';
-import FirebaseLib from '../utils/FirebaseLib.js';
 
 export const PlayerDash = React.createClass({
-  mixins: [ ReactFire, History ],
+  mixins: [ History ],
 
   getInitialState() {
     return {
-      players: [],
-      graphData: [],
-      loaded: false
+      graphData: []
     }
   },
 
   componentWillMount() {
-    this.firebase = new FirebaseLib();
+    this.firebase = this.props.firebase;
     this.loadGraphData();
-    this.loadPlayersData();
   },
 
   componentWillUnmount: function() {
-    this.firebase.unload();
+    // Close the connection to the player game data.
+    this.state.fbDataRef && this.state.fbDataRef.off();
   },
 
   render() {
-    let { players, graphData } = this.state;
+    let { players } = this.props;
+    let { graphData } = this.state;
 
     const player = _.find(players, p => p.id == this.props.params.playerId);
 
@@ -60,31 +56,11 @@ export const PlayerDash = React.createClass({
       );
   },
 
-  loadPlayersData(){
-    this.firebase.dataOn('value', (rawItems) => {
-      let items = [];
-      let sorted = [];
-
-      rawItems.forEach( (rawItem) => {
-        let item = rawItem.val();
-        item.id = rawItem.key();
-        items.push(item);
-      });
-
-      this.setState({
-        players: items,
-        loaded: true
-      });
-
-    });
-  },
-
   loadGraphData(){
-    this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value',(rawItems) => {
-
+    let fbDataRef = this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value', (rawItems) => {
       this.setState({
         graphData: rawItems,
-        loaded: true
+        fbDataRef: fbDataRef
       });
     });
   }
