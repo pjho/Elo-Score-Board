@@ -21,7 +21,7 @@ export const PlayerForm = React.createClass({
 
     let player = {
       name: _.trim(this.refs.name.value),
-      image: _.trim(this.refs.image.value),
+      image: _.trim(this.refs.image.value) || false,
       league: _.trim(this.refs.league.value),
       score: parseInt(this.refs.score.value)
     };
@@ -54,19 +54,18 @@ export const PlayerForm = React.createClass({
 
     let errors = {
       name : _validate.string( player.name, 1, 100 ).messages[0] || null,
-      image : _validate.string( player.image, 1, 300, imgRule ).messages[0] || null,
+      image : player.image === false ? null : _validate.string( player.image, 1, 300, imgRule ).messages[0] || null,
       league : _validate.string( player.league, 1, 100 ).messages[0] || null,
       score : _validate.int(player.score,0,100000).messages[0] || null
     };
 
-    let isValid = errors.name === null  && errors.image === null  && errors.league === null && errors.score === null ;
+    let isValid = [errors.name, errors.image, errors.league, errors.score].every( i => i == null);
+
     this.setState({
       errors: errors,
       valid: isValid
     });
 
-    // isValid needs to be returned to previous function because of the time it
-    // takes to set state & the caller function needs a response immediately
     return isValid;
   },
 

@@ -90,7 +90,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('copy', function () {
-  return gulp.src(['index.html','fonts/**/*'],{base:'./'})
+  return gulp.src(['index.html','fonts/**/*', 'img/**/*'],{base:'./'})
     .pipe(gulp.dest('./dist/'));
 });
 

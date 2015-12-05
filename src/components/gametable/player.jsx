@@ -31,7 +31,7 @@ export const Player = React.createClass({
         </td>
         <td>
           <Link to={`/player/${id}`}>
-            <img src={image} alt={name} className="img-circle img-thumbnail" />
+            <img src={!!image ? image : '/img/avatar.jpg'} alt={name} className="img-circle img-thumbnail" />
             {name}
           </Link>
         </td>
