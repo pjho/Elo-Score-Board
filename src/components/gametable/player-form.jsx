@@ -20,13 +20,13 @@ export const PlayerForm = React.createClass({
     e.preventDefault();
 
     let player = {
-      name: _.trim(this.refs.name.getDOMNode().value),
-      image: _.trim(this.refs.image.getDOMNode().value),
-      league: _.trim(this.refs.league.getDOMNode().value),
-      score: parseInt(this.refs.score.getDOMNode().value)
+      name: _.trim(this.refs.name.value),
+      image: _.trim(this.refs.image.value),
+      league: _.trim(this.refs.league.value),
+      score: parseInt(this.refs.score.value)
     };
 
-    if(this.props.method === 'add'){
+    if(this.props.method === 'add') {
       player.wins = 0;
       player.losses = 0;
       player.streak = 0;
@@ -38,9 +38,9 @@ export const PlayerForm = React.createClass({
 
     let isValid = this.validate(player);
 
-    if(isValid){
+    if(isValid) {
       this.props.submitCallback(player);
-      this.refs.playerForm.getDOMNode().reset();
+      this.refs.playerForm.reset();
     }
   },
 

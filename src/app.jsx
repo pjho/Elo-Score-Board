@@ -1,4 +1,5 @@
 import React from 'react';
+import { render } from 'react-dom';
 import { Router, Route, IndexRoute } from 'react-router';
 import { App } from './components/App';
 import { GameTable } from './components/GameTable';
@@ -9,7 +10,7 @@ const NoMatch = React.createClass({
   render() { return <div>Route not Found</div>; }
 });
 
-React.render(
+render(
   <Router history={createBrowserHistory()}>
     <Route path="/" component={App}>
       <IndexRoute component={GameTable} />

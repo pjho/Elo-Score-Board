@@ -17,8 +17,9 @@
     "firebase": "^2.2.7",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
-    "react": "^0.13.3",
-    "react-google-charts": "^0.1.8",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-google-charts": "^0.1.9",
     "react-router": "^1.0.0",
     "reactfire": "^0.5.1"
   },
