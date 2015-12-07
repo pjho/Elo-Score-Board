@@ -3,7 +3,9 @@ import ReactFire from 'reactfire';
 import _ from 'lodash';
 import { Link } from 'react-router'
 import FirebaseLib from '../utils/FirebaseLib.js';
+import { Icon } from './common/icon';
 
+import { Menu } from './app/menu';
 
 export const App =  React.createClass({
 
@@ -22,22 +24,54 @@ export const App =  React.createClass({
     this.loadPlayerData();
 
     this.setState({
-      authed: this.firebase.authed()
+      authed: this.firebase.authed(),
+      menuOpen: false
     })
   },
 
   render() {
-    let {loaded, authed, players} = this.state;
+    let {loaded, authed, players, menuOpen} = this.state;
+
+    let isEditMode = window.location.href.indexOf('edit') > -1;
+    let currentPath = window.location.pathname.replace(/\/$/, "");
+    let hasLeague = !!this.props.params.leagueName;
+
 
     return (
-      <div className={ `EloApp ${ !loaded ? 'loading' : '' }` }>
-        {this.props.children && React.cloneElement(this.props.children, {
-            authed: authed,
-            players: players,
-            doLogin: this.doLogin,
-            doLogout: this.doLogout,
-            firebase: this.firebase
-          })}
+      <div className={ `${ !loaded ? 'loading' : '' }` }>
+
+        <Menu menuState={menuOpen} toggleMenu={this.toggleMenu}>
+          <Link to={ '/' }><Icon type="home" /> Home</Link>
+          <hr />
+          { authed
+            && (isEditMode
+              ? <Link to={ currentPath.slice(0, -5) || '/' } ><Icon type="edit" /> Finished Editing</Link>
+              : <Link to={ currentPath + '/edit' }><Icon type="edit" /> Edit Players</Link>
+            )
+          }
+          { authed &&
+              <Link to={ currentPath + '/edit' }><Icon type="user" /> Add Player</Link>
+          }
+          { authed && <hr /> }
+          <Link className='menu-item' to="/">All Leagues</Link>
+          <Link className='menu-item' to="/league/Agile">&raquo;&nbsp; Agile</Link>
+          <Link className='menu-item' to="/league/API">&raquo;&nbsp;  Api</Link>
+          <hr />
+          { authed
+            ? <a onClick={this.doLogout}>Logout</a>
+            : <a onClick={this.doLogin}>Login</a>
+          }
+        </Menu>
+
+        <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
+          {this.props.children && React.cloneElement(this.props.children, {
+              authed: authed,
+              players: players,
+              doLogin: this.doLogin,
+              doLogout: this.doLogout,
+              firebase: this.firebase
+            })}
+        </div>
       </div>
     );
   },
@@ -83,6 +117,12 @@ export const App =  React.createClass({
       if (msg) { alert(msg); };
       this.setState({ authed: authed });
     }.bind(this) );
+  },
+
+  toggleMenu() {
+    this.setState({
+      menuOpen: !this.state.menuOpen
+    });
   }
 
 });

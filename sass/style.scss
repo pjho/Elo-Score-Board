@@ -2,5 +2,9 @@
 @import "partials/utils";
 @import "partials/gametable";
 @import "partials/playerdash";
+@import "partials/menu";
 
 
+body.menu-open{
+  overflow:hidden;
+}

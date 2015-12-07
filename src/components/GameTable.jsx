@@ -23,8 +23,8 @@ export const GameTable =  React.createClass({
   render() {
     let {params, authed, players} = this.props;
     let {winner, loser} = this.state;
+
     let isEditMode = window.location.href.indexOf('edit') > -1;
-    let currentPath = window.location.pathname.replace(/\/$/, "");
 
     players = players.filter(this.playerLeagueFilter);
 
@@ -38,23 +38,7 @@ export const GameTable =  React.createClass({
           <th className="tc">Score</th>
           <th className="tc">Streak</th>
           <th className="tc">Wins</th>
-          <th className="text-right action-buttons">
-            {!!params.leagueName &&
-              <Link to="/" className='btn btn-sm btn-default'>
-                <Icon type="menu-left" /> All Leagues
-              </Link>
-            }
-            { authed
-              && (isEditMode
-                ? <Link to={ currentPath.slice(0, -5) || '/' } className='btn btn-sm btn-default'>done</Link>
-                : <Link to={ currentPath + '/edit' } className='btn btn-sm btn-default'><Icon type="edit" /></Link>
-              )
-            }
-            { authed
-              ? <a className='btn btn-sm btn-default' onClick={this.props.doLogout}>logout</a>
-              : <a className='btn btn-sm btn-default' onClick={this.props.doLogin}>login</a>
-            }
-          </th>
+          <th></th>
         </tr>
       </thead>
       <tbody>

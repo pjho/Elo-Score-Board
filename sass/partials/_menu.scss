@@ -1,0 +1,81 @@
+.AppMenu {
+  background-color: rgba(30,30,30,0.9);
+  position: fixed;
+  top: 0;
+  bottom: -100px;
+  right: -350px;
+  width: 300px;
+  padding: 2.5em 1.5em 100px;
+  font-size: 1.15em;
+  z-index: 100;
+  box-shadow: -2px 0px 6px rgba(0,0,0,0.3);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  overflow:auto;
+
+  -webkit-overflow-scrolling: touch;
+
+  ul {
+    padding:0;
+    margin: 0;
+  }
+
+  hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-top: 1px solid #434343;
+    opacity: 0.7;
+  }
+}
+
+.AppMenu__item {
+  list-style-type: none;
+  a{
+    display: block;
+    color: #b8b7ad;
+    padding: 0.8em;
+    cursor:pointer;
+    & > span { margin-right:7px; }
+    &:hover {
+      background-color: rgba(6,6,6,0.3);
+      text-decoration:none;
+    }
+  }
+}
+
+.AppMenuTrigger {
+  width: 32px;
+  height: 34px;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 3px;
+  display: block;
+  text-align: center;
+}
+
+.AppMenuTrigger--open {
+  position: absolute;
+  top: 5px;
+  right: 24px;
+  color: #373a47;
+  &:hover {
+    color:#f7f7f7;
+    background-color: #373a47;
+  }
+}
+
+.AppMenuTrigger--close:hover,
+.AppMenuTrigger--close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color:#f7f7f7;
+  background-color: #373a47;
+}
+
+
+.AppMenuWrapper--open {
+  .AppMenu{
+    right:0px;
+  }
+}
+
