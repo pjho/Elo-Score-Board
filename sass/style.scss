@@ -5,6 +5,16 @@
 @import "partials/menu";
 
 
-body.menu-open{
-  overflow:hidden;
+body.scroll-lock {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
 }
+
+// Fix to make wrapper display properly on iOS Safari
+.AppWrapper {
+  position: relative;
+  min-width:400px;
+}
+

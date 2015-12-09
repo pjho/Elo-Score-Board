@@ -11,8 +11,19 @@ const NoMatch = React.createClass({
   render() { return <div>Route not Found</div>; }
 });
 
+
+var history = createBrowserHistory();
+
+// Fixes ReactRouter issue of maintaining scroll position when switching views
+history.listen(location => {
+  setTimeout(() => {
+    if (location.action === 'POP') { return; }
+    window.scrollTo(0, 0);
+  });
+});
+
 render(
-  <Router history={createBrowserHistory()}>
+  <Router history={history}>
     <Route path="/" component={App}>
       <IndexRoute component={GameTable} />
       <Route path="edit" component={GameTable} />
