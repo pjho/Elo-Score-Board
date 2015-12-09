@@ -4,6 +4,7 @@ import { Router, Route, IndexRoute } from 'react-router';
 import { App } from './components/App';
 import { GameTable } from './components/GameTable';
 import { PlayerDash } from './components/PlayerDash'
+import { AddPlayer } from './components/AddPlayer'
 import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 const NoMatch = React.createClass({
@@ -17,6 +18,7 @@ render(
       <Route path="edit" component={GameTable} />
       <Route path="league/:leagueName" component={GameTable} />
       <Route path="league/:leagueName/edit" component={GameTable} />
+      <Route path="player/add" component={AddPlayer} />
       <Route path="player/:playerId" component={PlayerDash} />
     </Route>
     <Route path="*" component={NoMatch}/>

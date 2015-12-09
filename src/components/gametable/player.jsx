@@ -63,9 +63,9 @@ export const Player = React.createClass({
 
   displayEditUserForm () {
     return (
-      <tr>
+      <tr className="warning">
         <td colSpan="6">
-          <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} />
+          <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} className="form-inline" />
         </td>
         <td className="text-right">
           { this.actionButtons() }

@@ -42,14 +42,6 @@ export const GameTable =  React.createClass({
         </tr>
       </thead>
       <tbody>
-
-        { authed && isEditMode &&
-          <tr className="warning">
-            <td colSpan="7">
-              <PlayerForm submitCallback={this.addNewPlayer} method="add" />
-            </td>
-          </tr>
-        }
         { players.map( (player,index) => {
               return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
                              onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }}
@@ -130,10 +122,6 @@ export const GameTable =  React.createClass({
 
     this.setState({ winner: null, loser: null });
 
-  },
-
-  addNewPlayer(newPlayer) {
-    this.firebase.newPlayer(newPlayer);
   },
 
   scoreGame(winner, loser) {
