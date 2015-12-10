@@ -1,3 +1,8 @@
 {
-  "firebaseUrl" : "https://[YOUR FIREBASE URL].firebaseio.com"
+  // firebaseUrl: Required - the firebase url where your data is stored
+  "firebaseUrl" : "https://[YOUR FIREBASE URL].firebaseio.com",
+
+  // globalUser: Optional - a global username used for auth meaning only a
+  // password is required to login.
+  "globalUser" : "name@domain.com"
 }

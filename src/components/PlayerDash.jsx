@@ -33,7 +33,10 @@ export const PlayerDash = React.createClass({
     return (
       <div className="Player">
         <div className="UtilHeader">
-          <button className="back btn btn-default" onClick={this.history.goBack}>&larr; Back</button>
+          <button className="btn--util-left btn btn-default btn-sm" onClick={this.history.goBack}>&larr; Back</button>
+          { player &&
+              <h4>{ `${ player.name } - ${ player.league } League` }</h4>
+          }
         </div>
 
         { player &&

@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactFire from 'reactfire';
-import _ from 'lodash';
-import { Link } from 'react-router'
 import FirebaseLib from '../utils/FirebaseLib.js';
+import _ from 'lodash';
+import { Icon } from './common/icon';
+
+import conf from '../../app.config.json';
+
+import { Menu } from './app/menu';
 
 
 export const App =  React.createClass({
@@ -12,6 +16,7 @@ export const App =  React.createClass({
   getInitialState() {
     return {
       players: [],
+      leagues: [],
       loaded: false,
       authed: false
     }
@@ -22,22 +27,34 @@ export const App =  React.createClass({
     this.loadPlayerData();
 
     this.setState({
-      authed: this.firebase.authed()
+      authed: this.firebase.authed(),
     })
   },
 
   render() {
-    let {loaded, authed, players} = this.state;
+    let {loaded, authed, players, menuOpen, leagues} = this.state;
+
+    window._ = _;
+    window.players = players;
 
     return (
-      <div className={ `EloApp ${ !loaded ? 'loading' : '' }` }>
-        {this.props.children && React.cloneElement(this.props.children, {
-            authed: authed,
-            players: players,
-            doLogin: this.doLogin,
-            doLogout: this.doLogout,
-            firebase: this.firebase
-          })}
+      <div className={ `AppWrapper ${ !loaded ? 'loading' : '' }` }>
+
+        <Menu authed={authed}
+          leagues={leagues}
+          doLogin={this.doLogin}
+          doLogout={this.doLogout}
+        />
+
+        <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
+          {this.props.children && React.cloneElement(this.props.children, {
+              authed: authed,
+              players: players,
+              doLogin: this.doLogin,
+              doLogout: this.doLogout,
+              firebase: this.firebase
+            })}
+        </div>
       </div>
     );
   },
@@ -46,8 +63,8 @@ export const App =  React.createClass({
     // this.bindAsArray(ref, "items");
 
     this.firebase.dataOn('value', (rawItems) => {
-      var items = [];
-      var sorted = [];
+      let items = [];
+      let sorted = [];
 
       rawItems.forEach( (rawItem) => {
         var item = rawItem.val();
@@ -59,8 +76,11 @@ export const App =  React.createClass({
         return -item.score;
       });
 
+      let leagues = _.uniq( _.pluck( sorted, 'league') );
+
       this.setState({
         players: sorted,
+        leagues: leagues,
         loaded: true
       });
 
@@ -74,7 +94,7 @@ export const App =  React.createClass({
   },
 
   doLogin() {
-    let user = prompt('Enter your Username/Email address.');
+    let user = conf.globalUser || prompt('Enter your Username/Email address.');
     let pass = prompt('Enter your password');
 
     if(!user || !pass) { return; }
@@ -84,5 +104,4 @@ export const App =  React.createClass({
       this.setState({ authed: authed });
     }.bind(this) );
   }
-
 });

@@ -1,13 +1,14 @@
 /* Table Overrides*/
 .table {
-  font-size:1.5em;
+  // font-size:1.5em;
   @include tiny {
-    font-size:1.2em;
+    // font-size:1.2em;
   }
 }
 
 .table>tbody>tr>td{
   vertical-align: middle;
+  background-color: #fff;
 }
 
 .table>thead>tr>th{
@@ -67,7 +68,7 @@ img.img-thumbnail {
 .playerStreak,
 .playerScore {
   sup, sub {
-    font-size:0.6em;
+    font-size:0.8em;
     position: relative;
     top:-2px;
     text-align: center;
@@ -89,7 +90,9 @@ img.img-thumbnail {
   vertical-align: middle;
 }
 
-
+.displayVal {
+  font-size:1.3em;
+}
 
 .tc { text-align: center; }
 

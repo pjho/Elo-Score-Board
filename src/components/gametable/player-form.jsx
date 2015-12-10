@@ -70,8 +70,10 @@ export const PlayerForm = React.createClass({
   },
 
   render() {
+    let classes = this.props.className;
+
     return (
-      <form ref="playerForm" className={"player-form form form-inline " + (!this.state.valid ? "has-errors" : "") } onSubmit={this.handleSubmit}>
+      <form ref="playerForm" className={classes + " player-form form  " + (!this.state.valid ? "has-errors" : "") } onSubmit={this.handleSubmit}>
 
         <div className={ "form-group " + this.errorClass('name') }>
           <label className="control-label" htmlFor="player-name">Name</label>

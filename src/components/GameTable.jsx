@@ -23,58 +23,41 @@ export const GameTable =  React.createClass({
   render() {
     let {params, authed, players} = this.props;
     let {winner, loser} = this.state;
+
     let isEditMode = window.location.href.indexOf('edit') > -1;
-    let currentPath = window.location.pathname.replace(/\/$/, "");
 
     players = players.filter(this.playerLeagueFilter);
 
     return (
-    <table className={"elo-ranking-table table table-striped"}>
-      <thead>
-        <tr>
-          <th className="hide_sm">Rank</th>
-          <th>Player</th>
-          <th className="hide_sm">League</th>
-          <th className="tc">Score</th>
-          <th className="tc">Streak</th>
-          <th className="tc">Wins</th>
-          <th className="text-right action-buttons">
-            {!!params.leagueName &&
-              <Link to="/" className='btn btn-sm btn-default'>
-                <Icon type="menu-left" /> All Leagues
-              </Link>
-            }
-            { authed
-              && (isEditMode
-                ? <Link to={ currentPath.slice(0, -5) || '/' } className='btn btn-sm btn-default'>done</Link>
-                : <Link to={ currentPath + '/edit' } className='btn btn-sm btn-default'><Icon type="edit" /></Link>
-              )
-            }
-            { authed
-              ? <a className='btn btn-sm btn-default' onClick={this.props.doLogout}>logout</a>
-              : <a className='btn btn-sm btn-default' onClick={this.props.doLogin}>login</a>
-            }
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+      <div>
+        <div className="UtilHeader">
+          <h4>
+            { params.leagueName ? params.leagueName + " League" : "All Leagues" }
+          </h4>
+        </div>
 
-        { authed && isEditMode &&
-          <tr className="warning">
-            <td colSpan="7">
-              <PlayerForm submitCallback={this.addNewPlayer} method="add" />
-            </td>
-          </tr>
-        }
-        { players.map( (player,index) => {
-              return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
-                             onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }}
-                             authed={authed} />
-            })
-        }
-
-      </tbody>
-    </table>
+        <table className={"elo-ranking-table table"}>
+          <thead>
+            <tr>
+              <th className="hide_sm">Rank</th>
+              <th>Player</th>
+              <th className="hide_sm">League</th>
+              <th className="tc">Score</th>
+              <th className="tc">Streak</th>
+              <th className="tc">Wins</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            { players.map( (player,index) => {
+                  return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
+                           onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }} authed={authed}
+                         />
+                })
+            }
+          </tbody>
+        </table>
+      </div>
     );
   },
 
@@ -146,10 +129,6 @@ export const GameTable =  React.createClass({
 
     this.setState({ winner: null, loser: null });
 
-  },
-
-  addNewPlayer(newPlayer) {
-    this.firebase.newPlayer(newPlayer);
   },
 
   scoreGame(winner, loser) {
