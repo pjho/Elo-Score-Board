@@ -21,9 +21,10 @@ export const AddPlayer = React.createClass({
     return (
       <div className="AddPlayer">
         <div className="UtilHeader">
-          <button className="back btn btn-default" onClick={this.history.goBack}>
+          <button className="btn--util-left btn-sm btn btn-default" onClick={this.history.goBack}>
            <Icon type="remove" /> Cancel
           </button>
+          <h4>Add New Player</h4>
         </div>
 
         { authed

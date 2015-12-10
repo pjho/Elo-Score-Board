@@ -29,27 +29,35 @@ export const GameTable =  React.createClass({
     players = players.filter(this.playerLeagueFilter);
 
     return (
-    <table className={"elo-ranking-table table table-striped"}>
-      <thead>
-        <tr>
-          <th className="hide_sm">Rank</th>
-          <th>Player</th>
-          <th className="hide_sm">League</th>
-          <th className="tc">Score</th>
-          <th className="tc">Streak</th>
-          <th className="tc">Wins</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        { players.map( (player,index) => {
-              return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
-                       onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }} authed={authed}
-                     />
-            })
-        }
-      </tbody>
-    </table>
+      <div>
+        <div className="UtilHeader">
+          <h4>
+            { params.leagueName ? params.leagueName + " League" : "All Leagues" }
+          </h4>
+        </div>
+
+        <table className={"elo-ranking-table table"}>
+          <thead>
+            <tr>
+              <th className="hide_sm">Rank</th>
+              <th>Player</th>
+              <th className="hide_sm">League</th>
+              <th className="tc">Score</th>
+              <th className="tc">Streak</th>
+              <th className="tc">Wins</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            { players.map( (player,index) => {
+                  return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
+                           onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }} authed={authed}
+                         />
+                })
+            }
+          </tbody>
+        </table>
+      </div>
     );
   },
 

@@ -22,8 +22,8 @@ export const Menu =  React.createClass({
       <div id="AppMenuWrapper" className={`AppMenuWrapper AppMenuWrapper--${ open ? "open" : "closed" }`}>
 
         { isEditMode &&
-          <Link to={ currentPath.slice(0, -5) || '/' } className="closeEditBtn btn btn-default">
-            <Icon type="remove" /> Done
+          <Link to={ currentPath.slice(0, -5) || '/' } className="closeEditBtn btn btn-default btn-sm">
+            <Icon type="remove" /> Done Editing
           </Link>
         }
 
@@ -91,7 +91,7 @@ export const Menu =  React.createClass({
   },
 
   toggleMenu() {
-    document.body.classList.toggle("scroll-lock");
+    // document.body.classList.toggle("scroll-lock");
     this.setState({
       open: !this.state.open
     });

@@ -1,16 +1,21 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic);
+
 @import "partials/bootstrap";
 @import "partials/utils";
 @import "partials/gametable";
 @import "partials/playerdash";
 @import "partials/menu";
 
-
-body.scroll-lock {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  overflow: hidden;
+body {
+  font-family: 'Open Sans', sans-serif;
 }
+
+// body.scroll-lock {
+//   height: 100%;
+//   width: 100%;
+//   position: relative;
+//   overflow-y: hidden;
+// }
 
 // Fix to make wrapper display properly on iOS Safari
 .AppWrapper {
@@ -18,3 +23,6 @@ body.scroll-lock {
   min-width:400px;
 }
 
+a {
+  color:#4177AB;
+}

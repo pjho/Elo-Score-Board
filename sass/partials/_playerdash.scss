@@ -1,9 +1,36 @@
 .UtilHeader {
-  background-color: #ffffff;
-  margin: 0 0 15px -15px;
+  // background-color: #34495E;
+  background-color: #45474D;
+  color:#dadadb;
+  margin: 0 0 5px -15px;
   padding: 6px 20px;
   border-bottom: 2px solid #ddd;
   width: calc(100% + 30px);
+  height:53px;
+
+  h4{
+    font-weight:200;
+    text-align:center;
+    line-height:39px;
+    padding:0;
+    margin:0;
+    @include small() {
+      text-align:left;
+      max-width:70%;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .btn--util-left {
+    position: absolute;
+    top: 10px;
+    @include small() {
+      // On mobile these need to be right aligned do to UtilHeader title being left & not center.
+      right:60px;
+    }
+  }
 }
 
 .EloGraph {

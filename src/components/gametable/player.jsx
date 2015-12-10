@@ -40,17 +40,17 @@ export const Player = React.createClass({
         </td>
         <td className="playerScore tc">
           <sup>{topScore}</sup>
-          <span>{score}</span>
+          <span className="displayVal">{score}</span>
           <sub>{bottomScore}</sub>
         </td>
         <td className={ "playerStreak tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
           <sup>{bestStreak ? "+" + bestStreak : ''}</sup>
-          <span>{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
+          <span className="displayVal">{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
           <sub>{worstStreak ? worstStreak : ''}</sub>
         </td>
         <td className="playerRatio tc">
             { wins + losses > 9
-              ? <span>{ Math.round(wins / (wins + losses) * 100) || 0 }</span>
+              ? <span className="displayVal">{ Math.round(wins / (wins + losses) * 100) || 0 }</span>
               : '-'
             }
         </td>

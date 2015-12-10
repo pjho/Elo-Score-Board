@@ -1,12 +1,11 @@
 .AppMenu {
-  background-color: rgba(30,30,30,0.9);
+  background-color: rgba(77, 80, 87,.93);
   position: fixed;
   top: 0;
   bottom: -100px;
   right: -350px;
   width: 300px;
   padding: 2.5em 1.5em 100px;
-  font-size: 1.15em;
   z-index: 100;
   box-shadow: -2px 0px 6px rgba(0,0,0,0.3);
   transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -31,7 +30,8 @@
   list-style-type: none;
   a{
     display: block;
-    color: #b8b7ad;
+    color: #cfd0d1;
+    font-weight:200;
     padding: 0.8em;
     cursor:pointer;
     & > span { margin-right:7px; }
@@ -44,7 +44,7 @@
 
 .AppMenuTrigger {
   width: 32px;
-  height: 34px;
+  height: 35px;
   font-size: 24px;
   cursor: pointer;
   padding: 3px;
@@ -54,12 +54,14 @@
 
 .AppMenuTrigger--open {
   position: absolute;
-  top: 5px;
+  top: 7px;
   right: 24px;
-  color: #373a47;
+  color: #fff;
+  // color: #373a47;
+  border-radius:1px;
   &:hover {
-    color:#f7f7f7;
-    background-color: #373a47;
+    color:#373a47;
+    background-color: #fff;
   }
 }
 
@@ -82,5 +84,5 @@
 .closeEditBtn {
   position: absolute;
   right:70px;
-  top:6px;
+  top:10px;
 }
