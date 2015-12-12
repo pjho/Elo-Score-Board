@@ -6,7 +6,6 @@ import _ from 'lodash';
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
 
-
 export const GameTable =  React.createClass({
 
   getInitialState() {
@@ -24,13 +23,24 @@ export const GameTable =  React.createClass({
     let {params, authed, players} = this.props;
     let {winner, loser} = this.state;
 
-    let isEditMode = window.location.href.indexOf('edit') > -1;
+    let isEditMode = authed && window.location.href.indexOf('edit') > -1;
+    let currentPath = window.location.pathname.replace(/\/$/, "");
 
     players = players.filter(this.playerLeagueFilter);
 
     return (
       <div>
         <div className="UtilHeader">
+          { isEditMode &&
+            <Link to={ currentPath.slice(0, -5) || '/' } className="btn--util-left btn-sm btn btn-default">
+              <Icon type="remove" /> Done Editing
+            </Link>
+          }
+          { !isEditMode && this.props.params.leagueName &&
+            <Link to="/" className="btn--util-left btn-sm btn btn-default">
+               &larr; All Leagues
+            </Link>
+          }
           <h4>
             { params.leagueName ? params.leagueName + " League" : "All Leagues" }
           </h4>

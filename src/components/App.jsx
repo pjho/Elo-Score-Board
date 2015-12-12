@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactFire from 'reactfire';
 import FirebaseLib from '../utils/FirebaseLib.js';
-import _ from 'lodash';
 import { Icon } from './common/icon';
-
-import conf from '../../firebase.json';
-
 import { Menu } from './app/menu';
+import _ from 'lodash';
+import conf from '../../firebase.json';
 
 
 export const App =  React.createClass({
@@ -18,7 +16,8 @@ export const App =  React.createClass({
       players: [],
       leagues: [],
       loaded: false,
-      authed: false
+      authed: false,
+      menuOpen: false
     }
   },
 
@@ -34,9 +33,6 @@ export const App =  React.createClass({
   render() {
     let {loaded, authed, players, menuOpen, leagues} = this.state;
 
-    window._ = _;
-    window.players = players;
-
     return (
       <div className={ `AppWrapper ${ !loaded ? 'loading' : '' }` }>
 
@@ -44,6 +40,8 @@ export const App =  React.createClass({
           leagues={leagues}
           doLogin={this.doLogin}
           doLogout={this.doLogout}
+          toggleMenu={this.toggleMenu}
+          open={menuOpen}
         />
 
         <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
@@ -103,5 +101,12 @@ export const App =  React.createClass({
       if (msg) { alert(msg); };
       this.setState({ authed: authed });
     }.bind(this) );
+  },
+
+  toggleMenu() {
+    // document.body.classList.toggle("scroll-lock");
+    this.setState({
+      menuOpen: !this.state.menuOpen
+    });
   }
 });

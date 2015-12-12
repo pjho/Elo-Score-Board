@@ -4,28 +4,14 @@ import { Link } from 'react-router';
 
 export const Menu =  React.createClass({
 
-  getInitialState() {
-    return {
-      open: false
-    }
-  },
-
   render() {
-    let { authed, leagues, doLogin, doLogout } = this.props;
-    let { open } = this.state;
+    let { authed, leagues, doLogin, doLogout, open, toggleMenu } = this.props;
 
-    let toggleMenu = this.toggleMenu;
     let isEditMode = authed && window.location.href.indexOf('edit') > -1;
     let currentPath = window.location.pathname.replace(/\/$/, "");
 
     return (
       <div id="AppMenuWrapper" className={`AppMenuWrapper AppMenuWrapper--${ open ? "open" : "closed" }`}>
-
-        { isEditMode &&
-          <Link to={ currentPath.slice(0, -5) || '/' } className="closeEditBtn btn btn-default btn-sm">
-            <Icon type="remove" /> Done Editing
-          </Link>
-        }
 
         <a className="AppMenuTrigger AppMenuTrigger--open" onClick={toggleMenu}>
           <Icon type="menu-hamburger" />
@@ -90,11 +76,6 @@ export const Menu =  React.createClass({
     );
   },
 
-  toggleMenu() {
-    // document.body.classList.toggle("scroll-lock");
-    this.setState({
-      open: !this.state.open
-    });
-  }
+
 
 });
