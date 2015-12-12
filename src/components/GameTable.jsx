@@ -51,7 +51,8 @@ export const GameTable =  React.createClass({
           <tbody>
             { players.map( (player,index) => {
                   return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
-                           onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }} authed={authed}
+                           onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }}
+                           authed={authed} firebase={this.firebase}
                          />
                 })
             }

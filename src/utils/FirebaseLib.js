@@ -89,6 +89,31 @@ function fireBaseWrapper(firebaseRoot) {
   this.unload = function() {
     this.fbPlayersRef.off();
   };
+
+  /**
+   * Deletes a player from firebase
+   * @param  {String} player The ID for the firebase player object
+   */
+  this.deletePlayer = function(player) {
+    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${player}` );
+    fbPlayerRef.remove(() => fbPlayerRef.off());
+  };
+
+  /**
+   * Updates a player's information
+   * @param  {String}   playerId The ID for the firebase player object
+   * @param  {Object}   newData  An object with the key:value data to be updated on the player
+   * @param  {Function} cb       The function to be called on complete.
+   */
+  this.updatePlayer = function(playerId, newData, cb) {
+    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${playerId}` );
+    fbPlayerRef.update(newData, () => {
+      fbPlayerRef.off();
+      cb();
+    });
+  };
+
+
 }
 
 module.exports = fireBaseWrapper;
