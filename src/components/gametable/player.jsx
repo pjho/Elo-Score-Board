@@ -3,9 +3,9 @@ import Firebase from 'firebase';
 import { PlayButtons } from './play-buttons';
 import { EditButtons } from './edit-buttons';
 import { PlayerForm } from './player-form';
-import conf from '../../../app.config.json';
-
 import { Link } from 'react-router';
+
+import conf from '../../../firebase.json';
 
 export const Player = React.createClass({
 
@@ -89,7 +89,7 @@ export const Player = React.createClass({
   },
 
   deleteUser() {
-    let fbPath = [conf.firebaseUrl, 'players', this.props.id].join('/');
+    let fbPath = [`https://${conf.firebase}.firebaseio.com`, 'players', this.props.id].join('/');
     let fireBase = new Firebase( fbPath );
     if( confirm('Do you really want to delete ' + this.props.name + '?') ) {
       fireBase.remove();
@@ -97,7 +97,7 @@ export const Player = React.createClass({
   },
 
   updateUser(user) {
-    let fbPath = [conf.firebaseUrl, 'players', this.props.id].join('/');
+    let fbPath = [`https://${conf.firebase}.firebaseio.com`, 'players', this.props.id].join('/');
     let fireBase = new Firebase( fbPath );
     fireBase.update(user);
     this.setState({ editPlayerMode: false })

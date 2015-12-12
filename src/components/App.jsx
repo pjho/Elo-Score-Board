@@ -4,7 +4,7 @@ import FirebaseLib from '../utils/FirebaseLib.js';
 import _ from 'lodash';
 import { Icon } from './common/icon';
 
-import conf from '../../app.config.json';
+import conf from '../../firebase.json';
 
 import { Menu } from './app/menu';
 
@@ -23,7 +23,7 @@ export const App =  React.createClass({
   },
 
   componentWillMount() {
-    this.firebase = new FirebaseLib();
+    this.firebase = new FirebaseLib(conf.firebase);
     this.loadPlayerData();
 
     this.setState({

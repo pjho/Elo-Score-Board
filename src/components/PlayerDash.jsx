@@ -2,7 +2,6 @@ import React from 'react';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
 import { History } from 'react-router';
-import conf from '../../app.config.json';
 import _ from 'lodash';
 
 export const PlayerDash = React.createClass({

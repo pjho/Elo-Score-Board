@@ -1,14 +1,14 @@
 import React from 'react';
 import Firebase from 'firebase';
-import conf from '../../app.config.json';
 
-function fireBaseWrapper() {
+function fireBaseWrapper(firebaseRoot) {
 
-  let fbPlayersPath = [conf.firebaseUrl, 'players'].join('/');
-  let fbHistoryPath = [conf.firebaseUrl, 'history'].join('/');
+  this.fbUrl = `https://${firebaseRoot}.firebaseio.com`;
 
-  this.fbRootRef = new Firebase(conf.firebaseUrl);
-  this.fbPlayersRef = new Firebase(fbPlayersPath);
+  let fbHistoryPath = this.fbUrl + "/history";
+
+  this.fbRootRef = new Firebase(this.fbUrl);
+  this.fbPlayersRef = new Firebase( this.fbUrl + "/players" );
 
   this.updateResults = function(results){
     this.fbPlayersRef.update(results);
@@ -40,7 +40,7 @@ function fireBaseWrapper() {
   this.getEloDataForCurrentMonth = function(playerId, eventType, callBack) {
     let now = new Date();
     let date = [now.getFullYear(), now.getMonth()].join('_');
-    let playerUrl = [conf.firebaseUrl, 'history', playerId, date].join('/');
+    let playerUrl = [this.fbUrl, 'history', playerId, date].join('/');
     let fbPlayerHistoryRef = new Firebase(playerUrl);
 
     fbPlayerHistoryRef.on(eventType, callBack);
