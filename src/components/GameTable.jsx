@@ -20,7 +20,7 @@ export const GameTable =  React.createClass({
   },
 
   render() {
-    let {params, authed, players} = this.props;
+    let {params, authed, players, leagues} = this.props;
     let {winner, loser} = this.state;
 
     let isEditMode = authed && window.location.href.indexOf('edit') > -1;
@@ -60,9 +60,15 @@ export const GameTable =  React.createClass({
           </thead>
           <tbody>
             { players.map( (player,index) => {
-                  return <Player {...player} key={player.id} rank={index + 1} editMode={isEditMode}
-                           onPlay={this.handleGamePlay} currentGame={{winner: winner, loser: loser }}
-                           authed={authed} firebase={this.firebase}
+                  return <Player {...player}
+                           key={player.id}
+                           rank={index + 1}
+                           editMode={isEditMode}
+                           onPlay={this.handleGamePlay}
+                           currentGame={{winner: winner, loser: loser }}
+                           authed={authed}
+                           firebase={this.firebase}
+                           leagues={leagues}
                          />
                 })
             }

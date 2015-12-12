@@ -99,6 +99,23 @@ img.img-thumbnail {
 .playerStreak--positive { @extend .text-success; }
 .playerStreak--negative { @extend .text-danger; }
 
+.cancelableInput{
+  position: relative;
+  display: block;
+  a {
+    position: absolute;
+    right:0px;
+    top:4px;
+  }
+}
+
+.form-inline {
+  .cancelableInput {
+    display: inline-block;
+    a { top:3px; }
+}
+}
+
 /* Small Screen Override */
 @include small {
   .hide_sm { display:none; }

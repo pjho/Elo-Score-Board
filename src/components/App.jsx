@@ -48,9 +48,10 @@ export const App =  React.createClass({
           {this.props.children && React.cloneElement(this.props.children, {
               authed: authed,
               players: players,
-              doLogin: this.doLogin,
-              doLogout: this.doLogout,
+              leagues: leagues,
               firebase: this.firebase
+              // doLogin: this.doLogin,
+              // doLogout: this.doLogout,
             })}
         </div>
       </div>
@@ -74,7 +75,7 @@ export const App =  React.createClass({
         return -item.score;
       });
 
-      let leagues = _.uniq( _.pluck( sorted, 'league') );
+      let leagues = _.uniq( _.pluck( sorted, 'league') ).sort();
 
       this.setState({
         players: sorted,

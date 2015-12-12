@@ -1,5 +1,7 @@
 import React from 'react';
-import _validate from '../../utils/validator'
+import ReactDOM from 'react-dom';
+import {Icon} from '../common/icon';
+import _validate from '../../utils/validator';
 import _ from 'lodash';
 
 export const PlayerForm = React.createClass({
@@ -12,7 +14,8 @@ export const PlayerForm = React.createClass({
         league: null,
         score: null
       },
-      valid: true
+      valid: true,
+      inputLeague: false
     }
   },
 
@@ -63,49 +66,73 @@ export const PlayerForm = React.createClass({
 
     this.setState({
       errors: errors,
-      valid: isValid
+      valid: isValid,
+      inputLeague: false
     });
 
     return isValid;
   },
 
   render() {
-    let classes = this.props.className;
+    let { className: classes, name, image, score, league, method, leagues} = this.props;
 
     return (
       <form ref="playerForm" className={classes + " player-form form  " + (!this.state.valid ? "has-errors" : "") } onSubmit={this.handleSubmit}>
 
         <div className={ "form-group " + this.errorClass('name') }>
           <label className="control-label" htmlFor="player-name">Name</label>
-          <input ref="name" type="text" className="form-control" id="player-name"  defaultValue={this.props.name || ''} />
+          <input ref="name" type="text" className="form-control" id="player-name"  defaultValue={name || ''} />
           { this.errorMessage('name') }
         </div>
 
         <div className={ "form-group " + this.errorClass('image') }>
           <label className="control-label" htmlFor="player-name">Image Url</label>
-          <input ref="image" type="text" className="form-control" id="player-image" placeholder="http://..."  defaultValue={this.props.image || ''}/>
+          <input ref="image" type="text" className="form-control" id="player-image" placeholder="http://..."  defaultValue={image || ''}/>
           { this.errorMessage('image') }
         </div>
 
         <div className={ "form-group " + this.errorClass('league') }>
           <label className="control-label" htmlFor="player-name">League</label>
-          <input ref="league" type="text" className="form-control" id="player-league"  defaultValue={this.props.league || ''} />
+          { this.state.inputLeague
+              ? <span className="cancelableInput">
+                  <input ref="league" type="text" className="form-control" id="player-league"  defaultValue={league || ''} />
+                  <a className="btn btn-sm" onClick={() => this.setState({inputLeague:false})}>
+                    <Icon type="remove"/>
+                  </a>
+                </span>
+              : <select ref="league" type="text" className="form-control" id="player-league"  defaultValue={league || ''} onChange={this.handleLeagueSelect}>
+                  <option value=""> - Select League - </option>
+                  <optgroup label="Leagues">
+                    { leagues.map( (league, i) => <option key={i} value={league}>{league}</option> ) }
+                  </optgroup>
+                    <option value="addNew"> - Add New - </option>
+                </select>
+          }
+
           { this.errorMessage('league') }
         </div>
 
         <div className={ "form-group " + this.errorClass('score') }>
           <label className="control-label" htmlFor="player-name">Initial Score</label>
-          <input ref="score" type="text" className="form-control" id="player-score" defaultValue={this.props.score || '1600'} />
+          <input ref="score" type="text" className="form-control" id="player-score" defaultValue={score || '1600'} />
           { this.errorMessage('score') }
         </div>
 
         <div className="form-group">
           <button type="submit" className="btn btn-primary">
-            {_.capitalize(this.props.method) + " Player"}
+            {_.capitalize(method) + " Player"}
           </button>
         </div>
       </form>
     );
+  },
+
+  handleLeagueSelect(){
+    if(this.refs.league.value == "addNew") {
+      this.setState({inputLeague: true},
+        () => ReactDOM.findDOMNode(this.refs.league).focus()
+      );
+    }
   },
 
   errorClass(type) {
