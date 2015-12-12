@@ -1,11 +1,9 @@
 import React from 'react';
-import Firebase from 'firebase';
 import { PlayButtons } from './play-buttons';
 import { EditButtons } from './edit-buttons';
 import { PlayerForm } from './player-form';
 import { Link } from 'react-router';
 
-import conf from '../../../firebase.json';
 
 export const Player = React.createClass({
 
@@ -15,14 +13,18 @@ export const Player = React.createClass({
     }
   },
 
-  render() {
-    return this.state.editPlayerMode ? this.displayEditUserForm() : this.displayUser();
+  componentWillMount() {
+    this.firebase = this.props.firebase;
   },
 
-  displayUser() {
+  render() {
+    return this.state.editPlayerMode ? this.displayEditPlayerForm() : this.displayPlayer();
+  },
+
+  displayPlayer() {
 
     const { rank, name, image, league, score, topScore, wins, losses,
-            id, bottomScore, streak, bestStreak, worstStreak, authed} = this.props;
+            id, bottomScore, streak, bestStreak, worstStreak, authed } = this.props;
 
     return (
       <tr>
@@ -61,11 +63,11 @@ export const Player = React.createClass({
     );
   },
 
-  displayEditUserForm () {
+  displayEditPlayerForm () {
     return (
       <tr className="warning">
         <td colSpan="6">
-          <PlayerForm {...this.props} method="update" submitCallback={this.updateUser} className="form-inline" />
+          <PlayerForm {...this.props} method="update" submitCallback={this.handleUpdatePlayer} className="form-inline" />
         </td>
         <td className="text-right">
           { this.actionButtons() }
@@ -77,29 +79,32 @@ export const Player = React.createClass({
   actionButtons() {
     return (
       this.props.editMode
-        ? <EditButtons id={this.props.id} active={this.state.editPlayerMode} handleDelete={this.deleteUser} handleEdit ={this.handleEditMode} />
+        ? <EditButtons id={this.props.id}
+            active={this.state.editPlayerMode}
+            handleDelete={this.handleDeletePlayer}
+            handleEditMode ={this.handleEditMode}
+          />
         : <PlayButtons  onPlay={this.props.onPlay} id={this.props.id} currentGame={this.props.currentGame} />
      );
+  },
+
+  handleDeletePlayer() {
+    if( confirm('Do you really want to delete ' + this.props.name + '?') ) {
+      this.firebase.deletePlayer(this.props.id)
+    }
+  },
+
+  handleUpdatePlayer(player) {
+    this.firebase.updatePlayer(this.props.id, player, () => {
+      this.setState({ editPlayerMode: false });
+    });
   },
 
   handleEditMode() {
     this.setState({
       editPlayerMode: ! this.state.editPlayerMode
     });
-  },
-
-  deleteUser() {
-    let fbPath = [`https://${conf.firebase}.firebaseio.com`, 'players', this.props.id].join('/');
-    let fireBase = new Firebase( fbPath );
-    if( confirm('Do you really want to delete ' + this.props.name + '?') ) {
-      fireBase.remove();
-    }
-  },
-
-  updateUser(user) {
-    let fbPath = [`https://${conf.firebase}.firebaseio.com`, 'players', this.props.id].join('/');
-    let fireBase = new Firebase( fbPath );
-    fireBase.update(user);
-    this.setState({ editPlayerMode: false })
   }
+
+
 });
