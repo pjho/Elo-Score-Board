@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development gulp",
     "start": "npm run dev",
-    "build": "npm run clean && NODE_ENV=production gulp build",
-    "clean": "rm -rf dist"
+    "build": "npm run clean && NODE_ENV=production gulp build && npm run favicon",
+    "clean": "rm -rf dist",
+    "favicon": "mv dist/img/icons/favicon.ico dist/favicon.ico"
   },
   "author": "Pat Horsley",
   "license": "ISC",
