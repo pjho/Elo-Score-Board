@@ -37,7 +37,7 @@ export const GameTable =  React.createClass({
             </Link>
           }
           { !isEditMode && this.props.params.leagueName &&
-            <Link to="/" className="btn--util-left btn-sm btn btn-default">
+            <Link to="/" className="btn--util-left hide_sm btn-sm btn btn-default">
                &larr; All Leagues
             </Link>
           }

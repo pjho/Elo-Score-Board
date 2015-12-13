@@ -11,6 +11,8 @@ export const PlayButtons = React.createClass({
     let hasOtherWinner = !isWinner && this.props.currentGame.winner !== null;
     let hasOtherLoser = !isLoser && this.props.currentGame.loser !== null;
 
+    let btnText = window.innerWidth > 800 ? ["Winner","Loser"] : ["Win","Lose"];
+
     // Set classes for win button.
     // If it's a winner give it color.
     let winClasses = "btn" + (isWinner ? ' btn-success ': ' btn-default ');
@@ -29,8 +31,8 @@ export const PlayButtons = React.createClass({
 
     return (
       <div className="action-buttons play-buttons">
-        <a className={winClasses} onClick={ this.handleWin.bind(this, isWinner) }>Winner</a>
-        <a className={loseClasses} onClick={ this.handleLose.bind(this, isLoser) }>Loser</a>
+        <a className={winClasses} onClick={ this.handleWin.bind(this, isWinner) }>{ btnText[0] }</a>
+        <a className={loseClasses} onClick={ this.handleLose.bind(this, isLoser) }>{ btnText[1] }</a>
       </div>
     );
   },

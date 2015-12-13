@@ -66,7 +66,7 @@ export const Player = React.createClass({
   displayEditPlayerForm () {
     return (
       <tr className="warning">
-        <td colSpan="6">
+        <td colSpan={ window.innerWidth > 800 ? 6 : 4 }>
           <PlayerForm {...this.props} method="update" submitCallback={this.handleUpdatePlayer} className="form-inline" />
         </td>
         <td className="text-right">
