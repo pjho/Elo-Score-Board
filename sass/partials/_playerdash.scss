@@ -28,7 +28,7 @@
     top: 10px;
     @include small() {
       // On mobile these need to be right aligned do to UtilHeader title being left & not center.
-      right:60px;
+      right:45px;
     }
   }
 }
@@ -36,4 +36,8 @@
 .EloGraph {
   margin-top: 10px;
   margin-bottom: 30px;
+}
+
+.google-visualization-atl.container {
+  padding:0;
 }

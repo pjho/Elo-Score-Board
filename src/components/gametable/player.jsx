@@ -24,7 +24,7 @@ export const Player = React.createClass({
   displayPlayer() {
 
     const { rank, name, image, league, score, topScore, wins, losses,
-            id, bottomScore, streak, bestStreak, worstStreak, authed } = this.props;
+            id, bottomScore, streak, bestStreak, worstStreak, authed, leagues } = this.props;
 
     return (
       <tr>
@@ -66,7 +66,7 @@ export const Player = React.createClass({
   displayEditPlayerForm () {
     return (
       <tr className="warning">
-        <td colSpan="6">
+        <td colSpan={ window.innerWidth > 800 ? 6 : 4 }>
           <PlayerForm {...this.props} method="update" submitCallback={this.handleUpdatePlayer} className="form-inline" />
         </td>
         <td className="text-right">
@@ -96,7 +96,10 @@ export const Player = React.createClass({
 
   handleUpdatePlayer(player) {
     this.firebase.updatePlayer(this.props.id, player, () => {
-      this.setState({ editPlayerMode: false });
+      // If a league is changed this player may not be mounted
+      if (this.isMounted()) {
+        this.setState({ editPlayerMode: false });
+      }
     });
   },
 

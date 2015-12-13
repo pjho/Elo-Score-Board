@@ -17,7 +17,7 @@ export const AddPlayer = React.createClass({
   },
 
   render() {
-    let { authed } = this.props;
+    let { authed, leagues } = this.props;
     return (
       <div className="AddPlayer">
         <div className="UtilHeader">
@@ -29,7 +29,7 @@ export const AddPlayer = React.createClass({
 
         { authed
           ? <div className="col-md-4 col-md-offset-4">
-              <PlayerForm submitCallback={this.addNewPlayer} method="add" />
+              <PlayerForm submitCallback={this.addNewPlayer} method="add" leagues={leagues} />
             </div>
           : <p>Yo gotta login essay.</p>
         }

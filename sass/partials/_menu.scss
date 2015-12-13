@@ -55,13 +55,16 @@
 .AppMenuTrigger--open {
   position: absolute;
   top: 7px;
-  right: 24px;
+  right: 15px;
   color: #fff;
-  // color: #373a47;
   border-radius:1px;
   &:hover {
     color:#373a47;
     background-color: #fff;
+  }
+  @include retina-sm() {
+    // iphone being a dick. need to check other devices
+    right:3px;
   }
 }
 

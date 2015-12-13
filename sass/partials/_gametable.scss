@@ -1,17 +1,24 @@
 /* Table Overrides*/
 .table {
-  // font-size:1.5em;
-  @include tiny {
-    // font-size:1.2em;
+  @include small {
+    table-layout: fixed;
+    // min-width:100%;
   }
 }
 
-.table>tbody>tr>td{
+// ugly bootstrap selector override
+.table > tbody > tr > td {
   vertical-align: middle;
   background-color: #fff;
+  // outline:1px solid orange;
+  padding:7px 1px;
+
+  @include small() {
+    font-size:13px;
+  }
 }
 
-.table>thead>tr>th{
+.table > thead > tr > th {
   font-weight:normal;
 }
 
@@ -32,6 +39,9 @@ img.img-thumbnail {
     &:first-child{
       margin-left: 0;
     }
+    @include tiny() {
+      margin-bottom: 10px;
+    }
   }
 }
 
@@ -40,6 +50,15 @@ img.img-thumbnail {
     &:first-child {
       @include tiny {
         margin-bottom: 5px;
+      }
+    }
+    @include small {
+      min-width:0px;
+      width:56px;
+      overflow: hidden;
+      padding:5px 0;
+      &:first-child {
+        margin-left: 0;
       }
     }
 }
@@ -99,8 +118,37 @@ img.img-thumbnail {
 .playerStreak--positive { @extend .text-success; }
 .playerStreak--negative { @extend .text-danger; }
 
+.cancelableInput{
+  position: relative;
+  display: block;
+  a {
+    position: absolute;
+    right:0px;
+    top:4px;
+  }
+}
+
+.form-inline {
+  .cancelableInput {
+    display: inline-block;
+    a { top:3px; }
+  }
+}
+
 /* Small Screen Override */
 @include small {
   .hide_sm { display:none; }
-  // body { font-size:12px; }
+  .container-fluid {
+    padding-left:5px;
+    padding-right:5px;
+  }
+}
+
+// Stop ios safari from zooming in :/
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
 }

@@ -9,7 +9,7 @@ export const PlayerDash = React.createClass({
 
   getInitialState() {
     return {
-      graphData: []
+      graphData: false
     }
   },
 
@@ -38,22 +38,16 @@ export const PlayerDash = React.createClass({
           }
         </div>
 
-        { player &&
-          <div className="PlayerCard col-md-3">
-            <PlayerCard {...player} />
-          </div>
-        }
-        { !player &&
-          "Player loading..."
-        }
-        { graphData &&
-          <div className="EloGraph col-md-9">
-            <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
-          </div>
-        }
-        { !graphData &&
-          "Graph loading..."
-        }
+        <div className="PlayerCard col-md-3">
+          { !!player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
+        </div>
+
+        <div className="EloGraph col-md-9">
+          { !!graphData
+            ? <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+            : <p>Loading Player Graph...</p>
+          }
+        </div>
       </div>
       );
   },

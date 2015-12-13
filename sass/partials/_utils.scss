@@ -5,7 +5,13 @@
 }
 
 @mixin tiny {
-  @media screen and (max-width: 485px) {
+  @media screen and (max-width: 600px) {
+    @content;
+  }
+}
+
+@mixin retina-sm {
+  @media screen and (max-width: 800px) and (-webkit-min-device-pixel-ratio: 2) {
     @content;
   }
 }
