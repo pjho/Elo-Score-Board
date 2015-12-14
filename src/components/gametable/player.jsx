@@ -15,10 +15,15 @@ export const Player = React.createClass({
 
   componentWillMount() {
     this.firebase = this.props.firebase;
+    this.setState({ editPlayerMode: false });
   },
 
   render() {
-    return this.state.editPlayerMode ? this.displayEditPlayerForm() : this.displayPlayer();
+    return this.state.editPlayerMode && this.props.editMode ? this.displayEditPlayerForm() : this.displayPlayer();
+  },
+
+  componentWillReceiveProps(nextProps) {
+    !nextProps.editMode && this.setState({editPlayerMode: false});
   },
 
   displayPlayer() {
@@ -31,31 +36,37 @@ export const Player = React.createClass({
         <td className="hide_sm">
           {rank}
         </td>
+
         <td>
           <Link to={`/player/${id}`}>
             <img src={!!image ? image : '/img/avatar.jpg'} alt={name} className="img-circle img-thumbnail" />
             {name}
           </Link>
         </td>
+
         <td className="hide_sm">
           <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
         </td>
+
         <td className="playerScore tc">
           <sup>{topScore}</sup>
           <span className="displayVal">{score}</span>
           <sub>{bottomScore}</sub>
         </td>
+
         <td className={ "playerStreak tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
           <sup>{bestStreak ? "+" + bestStreak : ''}</sup>
           <span className="displayVal">{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
           <sub>{worstStreak ? worstStreak : ''}</sub>
         </td>
+
         <td className="playerRatio tc">
             { wins + losses > 9
               ? <span className="displayVal">{ Math.round(wins / (wins + losses) * 100) || 0 }</span>
               : '-'
             }
         </td>
+
         <td className="text-right">
           { authed ? this.actionButtons() : ""}
         </td>
@@ -69,6 +80,7 @@ export const Player = React.createClass({
         <td colSpan={ window.innerWidth > 800 ? 6 : 4 }>
           <PlayerForm {...this.props} method="update" submitCallback={this.handleUpdatePlayer} className="form-inline" />
         </td>
+
         <td className="text-right">
           { this.actionButtons() }
         </td>
@@ -105,7 +117,7 @@ export const Player = React.createClass({
 
   handleEditMode() {
     this.setState({
-      editPlayerMode: ! this.state.editPlayerMode
+      editPlayerMode: !this.state.editPlayerMode
     });
   }
 

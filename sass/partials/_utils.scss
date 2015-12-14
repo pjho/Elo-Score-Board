@@ -15,3 +15,13 @@
     @content;
   }
 }
+
+.border-success {
+  border:1px solid #26A65B;
+}
+
+.alert {
+  border-radius:3px;
+  padding:8px 5px;
+  margin: 15px 0 20px;
+}

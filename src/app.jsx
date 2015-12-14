@@ -27,9 +27,10 @@ render(
     <Route path="/" component={App}>
       <IndexRoute component={GameTable} />
       <Route path="edit" component={GameTable} />
+      <Route path="add" component={AddPlayer} />
       <Route path="league/:leagueName" component={GameTable} />
       <Route path="league/:leagueName/edit" component={GameTable} />
-      <Route path="player/add" component={AddPlayer} />
+      <Route path="league/:leagueName/add" component={AddPlayer} />
       <Route path="player/:playerId" component={PlayerDash} />
     </Route>
     <Route path="*" component={NoMatch}/>

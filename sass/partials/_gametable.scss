@@ -22,12 +22,14 @@
   font-weight:normal;
 }
 
-img.img-thumbnail {
+.img-thumbnail {
   margin-right: 5px;
   width:48px;
   height:48px;
+}
 
-  @include small {
+@include small {
+  .elo-ranking-table .img-thumbnail {
     display:block;
   }
 }
@@ -70,8 +72,8 @@ img.img-thumbnail {
     font-size:0.8em;
     margin-right: 10px;
   }
-  .form-group {
-    margin-right: 20px;
+  &.form-inline .form-group {
+    margin: 0 10px;
   }
   .help-block{
     font-size:13px;

@@ -15,7 +15,9 @@ export const PlayerForm = React.createClass({
         score: null
       },
       valid: true,
-      inputLeague: false
+      inputLeague: false,
+      prevLeague: this.props.league || "",
+      league: this.props.league || ""
     }
   },
 
@@ -47,7 +49,6 @@ export const PlayerForm = React.createClass({
     }
   },
 
-
   validate(player) {
 
     let imgRule = {
@@ -74,7 +75,8 @@ export const PlayerForm = React.createClass({
   },
 
   render() {
-    let { className: classes, name, image, score, league, method, leagues} = this.props;
+    let { className: classes, name, image, score, method, leagues} = this.props;
+    let { league, prevLeague } = this.state;
 
     return (
       <form ref="playerForm" className={classes + " player-form form  " + (!this.state.valid ? "has-errors" : "") } onSubmit={this.handleSubmit}>
@@ -96,16 +98,16 @@ export const PlayerForm = React.createClass({
           { this.state.inputLeague
               ? <span className="cancelableInput">
                   <input ref="league" type="text" className="form-control" id="player-league"  defaultValue={league || ''} />
-                  <a className="btn btn-sm" onClick={() => this.setState({inputLeague:false})}>
+                  <a className="btn btn-sm" onClick={() => this.setState({inputLeague:false, league: prevLeague})}>
                     <Icon type="remove"/>
                   </a>
                 </span>
-              : <select ref="league" type="text" className="form-control" id="player-league"  defaultValue={league || ''} onChange={this.handleLeagueSelect}>
+              : <select ref="league" className="form-control" id="player-league"  value={league || ''} onChange={this.handleLeagueSelect}>
                   <option value=""> - Select League - </option>
                   <optgroup label="Leagues">
-                    { leagues.map( (league, i) => <option key={i} value={league}>{league}</option> ) }
+                    { leagues.map( (_league, i) => <option key={i} value={_league}>{_league}</option> ) }
                   </optgroup>
-                    <option value="addNew"> - Add New - </option>
+                  <option value="addNew"> - Add New - </option>
                 </select>
           }
 
@@ -127,11 +129,19 @@ export const PlayerForm = React.createClass({
     );
   },
 
-  handleLeagueSelect(){
+  handleLeagueSelect(e) {
     if(this.refs.league.value == "addNew") {
-      this.setState({inputLeague: true},
-        () => ReactDOM.findDOMNode(this.refs.league).focus()
+      this.setState({
+          inputLeague: true,
+          league: ""
+        },
+        () => setTimeout(ReactDOM.findDOMNode(this.refs.league).focus(), 300)
       );
+    } else {
+      this.setState({
+        prevLeague: this.refs.league.value,
+        league: this.refs.league.value
+      });
     }
   },
 

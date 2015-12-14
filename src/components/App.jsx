@@ -32,6 +32,7 @@ export const App =  React.createClass({
 
   render() {
     let {loaded, authed, players, menuOpen, leagues} = this.state;
+    let {leagueName} = this.props.params;
 
     return (
       <div className={ `AppWrapper ${ !loaded ? 'loading' : '' }` }>
@@ -42,6 +43,7 @@ export const App =  React.createClass({
           doLogout={this.doLogout}
           toggleMenu={this.toggleMenu}
           open={menuOpen}
+          leagueName={leagueName}
         />
 
         <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
