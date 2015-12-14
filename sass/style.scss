@@ -10,14 +10,16 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-// body.scroll-lock {
-//   height: 100%;
-//   width: 100%;
-//   position: relative;
-//   overflow-y: hidden;
-// }
-
-
 a {
   color:#4177AB;
 }
+
+.AppWrapper {
+  opacity:1;
+  position: relative;
+  transition: opacity 0.3s ease-in;
+  &.loading {
+    opacity:0.05;
+  }
+}
+

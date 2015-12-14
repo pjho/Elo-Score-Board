@@ -22,8 +22,10 @@ function fireBaseWrapper(firebaseRoot) {
     fbPlayerHistory.push(history);
   };
 
-  this.newPlayer = function(player){
-    this.fbPlayersRef.push(player);
+  this.newPlayer = function(player, callback){
+    this.fbPlayersRef.push(player, (error) => {
+      callback(!error);
+    });
   };
 
   this.dataOn = function(eventType, callBack){
