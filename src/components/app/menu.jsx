@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 export const Menu =  React.createClass({
 
   render() {
-    let { authed, leagues, doLogin, doLogout, open, toggleMenu, leagueName } = this.props;
+    let { authed, leagues, doLogin, doLogout, open, toggleMenu, leagueName, rootComponent } = this.props;
 
     let isEditMode = authed && window.location.href.indexOf('edit') > -1;
     let currentPath = window.location.pathname.replace(/\/$/, "");
@@ -30,7 +30,7 @@ export const Menu =  React.createClass({
               <hr />
             </li>
 
-            { authed &&
+            { authed && rootComponent !== "AddPlayer" &&
               <li className="AppMenu__item" onClick={toggleMenu}>
                 { isEditMode
                   ? <Link to={ currentPath.slice(0, -5) || '/' } ><Icon type="edit" /> Finished Editing</Link>

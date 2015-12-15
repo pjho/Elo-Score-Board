@@ -24,4 +24,12 @@
   border-radius:3px;
   padding:8px 5px;
   margin: 15px 0 20px;
+  position: relative;
+}
+.alert-remove {
+  color:#45474D;
+  position: absolute;
+  right:3px;
+  top:3px;
+  cursor:pointer;
 }

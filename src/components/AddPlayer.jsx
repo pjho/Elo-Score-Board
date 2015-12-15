@@ -27,14 +27,18 @@ export const AddPlayer = React.createClass({
     let { player, playerAdded, error } = this.state;
     let league = this.props.params.leagueName;
 
+    let goTo = player.league || league || false;
+
     return (
       <div className="AddPlayer">
         <div className="UtilHeader">
-          <button className="btn--util-left btn-sm btn btn-default" onClick={this.history.goBack}>
-           <Icon type="remove" /> Cancel
-          </button>
+          <Link to={ goTo ? `/league/${goTo}` : '/' } className="btn--util-left btn-sm btn btn-default">
+           <Icon type="remove" />
+            { this.state.playerAdded ? " Done" : " Cancel" }
+          </Link>
           <h4>Add New Player</h4>
         </div>
+
         { authed
           ? <div className="col-md-4 col-md-offset-4">
 
@@ -44,10 +48,11 @@ export const AddPlayer = React.createClass({
                 </div>
               }
 
-              { playerAdded &&
+              { player &&
                 <div className="alert border-success">
                   <img src={!!player.image ? player.image : '/img/avatar.jpg'} className="img-circle img-thumbnail" />
                   {player.name} has been added to <Link to={`/league/${player.league}`}>{player.league} league</Link>.
+                  <a className="alert-remove" onClick={() => this.setState({player:false})}><Icon type="remove" /></a>
                 </div>
               }
 
