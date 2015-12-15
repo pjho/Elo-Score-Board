@@ -44,6 +44,7 @@ export const App =  React.createClass({
           toggleMenu={this.toggleMenu}
           open={menuOpen}
           leagueName={leagueName}
+          rootComponent={this.props.children.type.displayName}
         />
 
         <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
