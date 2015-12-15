@@ -1,90 +1,62 @@
 import React from 'react';
-import ReactFire from 'reactfire';
-import Firebase from 'firebase';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
 import { History } from 'react-router';
-import conf from '../../app.config.json';
 import _ from 'lodash';
-import FirebaseLib from '../utils/FirebaseLib.js';
 
 export const PlayerDash = React.createClass({
-  mixins: [ ReactFire, History ],
+  mixins: [ History ],
 
   getInitialState() {
     return {
-      players: [],
-      graphData: [],
-      loaded: false
+      graphData: false
     }
   },
 
   componentWillMount() {
-    this.firebase = new FirebaseLib();
+    this.firebase = this.props.firebase;
     this.loadGraphData();
-    this.loadPlayersData();
   },
 
   componentWillUnmount: function() {
-    this.firebase.unload();
+    // Close the connection to the player game data.
+    this.state.fbDataRef && this.state.fbDataRef.off();
   },
 
   render() {
-    let { players, graphData } = this.state;
+    let { players } = this.props;
+    let { graphData } = this.state;
 
     const player = _.find(players, p => p.id == this.props.params.playerId);
 
     return (
       <div className="Player">
         <div className="UtilHeader">
-          <button className="back btn btn-default" onClick={this.history.goBack}>&larr; Back</button>
+          <button className="btn--util-left btn btn-default btn-sm" onClick={this.history.goBack}>&larr; Back</button>
+          { player &&
+              <h4>{ `${ player.name } - ${ player.league } League` }</h4>
+          }
         </div>
 
-        { player &&
-          <div className="PlayerCard col-md-3">
-            <PlayerCard {...player} />
-          </div>
-        }
-        { !player &&
-          "Player loading..."
-        }
-        { graphData &&
-          <div className="EloGraph col-md-9">
-            <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
-          </div>
-        }
-        { !graphData &&
-          "Graph loading..."
-        }
+        <div className="PlayerCard col-md-3">
+          { !!player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
+        </div>
+
+        <div className="EloGraph col-md-9">
+          { !!graphData
+            ? <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+            : <p>Loading Player Graph...</p>
+          }
+        </div>
       </div>
       );
   },
 
-  loadPlayersData(){
-    this.firebase.dataOn('value', (rawItems) => {
-      let items = [];
-      let sorted = [];
-
-      rawItems.forEach( (rawItem) => {
-        let item = rawItem.val();
-        item.id = rawItem.key();
-        items.push(item);
-      });
-
-      this.setState({
-        players: items,
-        loaded: true
-      });
-
-    });
-  },
-
   loadGraphData(){
-    this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value',(rawItems) => {
-
+    let fbDataRef = this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value', (rawItems) => {
       this.setState({
         graphData: rawItems,
-        loaded: true
+        fbDataRef: fbDataRef
       });
     });
   }

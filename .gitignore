@@ -1,5 +1,6 @@
 node_modules/
 dist/
-app.config.json
+firebase.json
+img/avatars
 
 .DS_Store

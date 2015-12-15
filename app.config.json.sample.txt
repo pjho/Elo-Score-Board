@@ -1,3 +1,0 @@
-{
-  "firebaseUrl" : "https://[YOUR FIREBASE URL].firebaseio.com"
-}

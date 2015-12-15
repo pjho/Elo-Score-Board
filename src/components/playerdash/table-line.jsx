@@ -6,10 +6,10 @@ export const TableLine = React.createClass({
 
   render() {
     return (
-              <tr>
-                <td>{this.props.title}</td>
-                <td>{this.props.value}</td>
-              </tr>
+      <tr>
+        <td>{this.props.title}</td>
+        <td>{this.props.value}</td>
+      </tr>
     );
   }
 });

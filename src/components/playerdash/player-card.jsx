@@ -14,7 +14,7 @@ export const PlayerCard = React.createClass({
             <thead>
               <tr>
                 <th colSpan='2'>
-                  <img src={image} className="img-circle img-thumbnail" />
+                  <img src={!!image ? image : '/img/avatar.jpg'} className="img-circle img-thumbnail" />
                   {name}
                 </th>
               </tr>

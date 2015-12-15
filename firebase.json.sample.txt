@@ -1,0 +1,17 @@
+{
+  //firebase - required - the firebase app name where your data is stored
+  "firebase": "[YOUR FIREBASE APP NAME]",
+  "public": "dist",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ],
+  "rewrites": [{
+    "source": "**",
+    "destination": "/index.html"
+  }],
+  // globalUser: Optional - a global username used for auth meaning only a password is required to login.
+  // This is not a Firebase Hosting variable but used in this app only.
+  "globalUser" : "elo@xero.com"
+}

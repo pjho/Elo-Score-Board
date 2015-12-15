@@ -1,6 +1,25 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic);
+
 @import "partials/bootstrap";
 @import "partials/utils";
 @import "partials/gametable";
 @import "partials/playerdash";
+@import "partials/menu";
 
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+a {
+  color:#4177AB;
+}
+
+.AppWrapper {
+  opacity:1;
+  position: relative;
+  transition: opacity 0.3s ease-in;
+  &.loading {
+    opacity:0.05;
+  }
+}
 

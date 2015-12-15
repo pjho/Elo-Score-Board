@@ -5,7 +5,31 @@
 }
 
 @mixin tiny {
-  @media screen and (max-width: 485px) {
+  @media screen and (max-width: 600px) {
     @content;
   }
+}
+
+@mixin retina-sm {
+  @media screen and (max-width: 800px) and (-webkit-min-device-pixel-ratio: 2) {
+    @content;
+  }
+}
+
+.border-success {
+  border:1px solid #26A65B;
+}
+
+.alert {
+  border-radius:3px;
+  padding:8px 5px;
+  margin: 15px 0 20px;
+  position: relative;
+}
+.alert-remove {
+  color:#45474D;
+  position: absolute;
+  right:3px;
+  top:3px;
+  cursor:pointer;
 }

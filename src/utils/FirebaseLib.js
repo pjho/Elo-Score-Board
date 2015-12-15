@@ -1,46 +1,121 @@
 import React from 'react';
 import Firebase from 'firebase';
-import conf from '../../app.config.json';
 
-function fireBaseWrapper(){
-  let fbPath = [conf.firebaseUrl, 'players'].join('/');
-  let fbPathHistory = [conf.firebaseUrl, 'history'].join('/');
-  this.fireBaseHistory = new Firebase(fbPathHistory);
-  this.fireBase = new Firebase(fbPath);
+function fireBaseWrapper(firebaseRoot) {
+
+  this.fbUrl = `https://${firebaseRoot}.firebaseio.com`;
+
+  let fbHistoryPath = this.fbUrl + "/history";
+
+  this.fbRootRef = new Firebase(this.fbUrl);
+  this.fbPlayersRef = new Firebase( this.fbUrl + "/players" );
 
   this.updateResults = function(results){
-    this.fireBase.update(results);
+    this.fbPlayersRef.update(results);
   };
 
   this.pushHistory = function(player, history){
-    let date = [new Date().getFullYear(), new Date().getMonth()].join('_');
-
-    let playerUrl = [conf.firebaseUrl, 'history', player.id, date].join('/');
-    let fireBasePlayerHistory = new Firebase(playerUrl);
-    fireBasePlayerHistory.push(history);
+    let now = new Date();
+    let date = [now.getFullYear(), now.getMonth()].join('_');
+    let playerHistoryUrl = [fbHistoryPath, player.id, date].join('/');
+    let fbPlayerHistory = new Firebase(playerHistoryUrl);
+    fbPlayerHistory.push(history);
   };
 
-  this.newPlayer = function(player){
-    this.fireBase.push(player);
+  this.newPlayer = function(player, callback){
+    this.fbPlayersRef.push(player, (error) => {
+      callback(!error);
+    });
   };
 
   this.dataOn = function(eventType, callBack){
-    this.fireBase.on(eventType, callBack);
+    this.fbPlayersRef.on(eventType, callBack);
   };
 
-  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack){
+  /**
+   * Retrieves Game data for a player for the current month
+   * @param  {string}   playerId  The Firebase Id of the player
+   * @param  {string}   eventType Firebase event type
+   * @param  {function} callBack  The function to call when data is received
+   * @return {object}             Returns the Firebase Ref object so we can close the connection on unMount
+   */
+  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack) {
     let now = new Date();
     let date = [now.getFullYear(), now.getMonth()].join('_');
+    let playerUrl = [this.fbUrl, 'history', playerId, date].join('/');
+    let fbPlayerHistoryRef = new Firebase(playerUrl);
 
-    let playerUrl = [conf.firebaseUrl, 'history', playerId, date].join('/');
-    let fireBasePlayerHistory = new Firebase(playerUrl);
-    fireBasePlayerHistory.on(eventType, callBack);
+    fbPlayerHistoryRef.on(eventType, callBack);
+
+    return fbPlayerHistoryRef;
   };
 
+  /**
+   * Checks auth status of current user.
+   * @return {boolean} returns true if logged in
+   */
+  this.authed = function() {
+    let authData = this.fbRootRef.getAuth();
+    return !!authData;
+  };
+
+  /**
+  * Async Auth with Firebase Logs user in to the system
+  * @param  {Function} cb Callback to tell caller model when acync test is complete or errored.
+  */
+  this.doLogin = function(user, pass, cb) {
+
+    this.fbRootRef.authWithPassword({
+      email    : user,
+      password : pass
+    }, function(error, authData) {
+      if (error) {
+        cb(false, error);
+      } else {
+        cb(true);
+      }
+    });
+
+  };
+
+  /**
+   * Ends a user session
+   */
+  this.doLogout = function() {
+    this.fbRootRef.unauth();
+  };
+
+  /**
+   * Destroys firbase refs. Used on componentWillUnmount
+   */
   this.unload = function() {
-    this.fireBase.off();
-    this.fireBaseHistory.off();
+    this.fbPlayersRef.off();
   };
+
+  /**
+   * Deletes a player from firebase
+   * @param  {String} player The ID for the firebase player object
+   */
+  this.deletePlayer = function(player) {
+    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${player}` );
+    fbPlayerRef.remove(() => fbPlayerRef.off());
+  };
+
+  /**
+   * Updates a player's information
+   * @param  {String}   playerId The ID for the firebase player object
+   * @param  {Object}   newData  An object with the key:value data to be updated on the player
+   * @param  {Function} cb       The function to be called on complete.
+   */
+  this.updatePlayer = function(playerId, newData, cb) {
+    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${playerId}` );
+    fbPlayerRef.update(newData, () => {
+      fbPlayerRef.off();
+      cb();
+    });
+  };
+
+
 }
 
 module.exports = fireBaseWrapper;

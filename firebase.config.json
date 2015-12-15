@@ -5,8 +5,8 @@
 
     "history": {
       ".read": true,
-      ".write": true,
-      
+      ".write": "auth != null",
+
       "$playersId": {
         "$monthYear" :{
           "$historyId": {
@@ -26,13 +26,13 @@
 
     "players": {
       ".read": true,
-      ".write": true,
+      ".write": "auth != null",
 
       "$playersId": {
         ".validate": "newData.hasChildren(['name', 'image', 'league', 'score', 'wins', 'losses'])",
         "$other":       { ".validate": false },
         "name":         { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
-        "image":        { ".validate": "newData.isString() && newData.val().matches(/^https?:\\/\\/.+\\.(png|jpg|jpeg|gif)$/i) && newData.val().length < 300" },
+        "image":        { ".validate": "newData.val() === false || newData.isString()  && newData.val().matches(/^https?:\\/\\/.+\\.(png|jpg|jpeg|gif)$/i) && newData.val().length < 300" },
         "league":       { ".validate": "newData.isString() && newData.val().length > 1 && newData.val().length < 100" },
         "score":        { ".validate": "newData.isNumber()" },
         "topScore":     { ".validate": "newData.isNumber()" },

@@ -1,20 +1,27 @@
 {
   "name": "EloScoreBoard",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "npm run clean && NODE_ENV=development gulp",
+    "start": "npm run dev",
+    "build": "npm run clean && NODE_ENV=production gulp build && npm run favicon",
+    "clean": "rm -rf dist",
+    "favicon": "mv dist/img/icons/favicon.ico dist/favicon.ico"
   },
   "author": "Pat Horsley",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^9.0.3",
+    "browserify": "^12.0.0",
+    "connect-history-api-fallback": "^1.1.0",
     "elo-rank": "^0.2.2",
     "firebase": "^2.2.7",
+    "history": "^1.13.1",
     "lodash": "^3.10.1",
-    "react-google-charts": "^0.1.8",
-    "react": "^0.13.3",
-    "react-router": "^1.0.0-rc3",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-google-charts": "^0.1.9",
+    "react-router": "^1.0.0",
     "reactfire": "^0.5.1"
   },
   "devDependencies": {
@@ -31,6 +38,6 @@
     "node-notifier": "^4.2.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
-    "watchify": "^2.4.0"
+    "watchify": "^3.6.1"
   }
 }
