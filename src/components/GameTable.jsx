@@ -55,7 +55,7 @@ export const GameTable =  React.createClass({
               <th className="tc">Score</th>
               <th className="tc">Streak</th>
               <th className="tc">Wins</th>
-              <th></th>
+              { authed && <th></th> }
             </tr>
           </thead>
           <tbody>
