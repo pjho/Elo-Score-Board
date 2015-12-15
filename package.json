@@ -1,6 +1,6 @@
 {
   "name": "EloScoreBoard",
-  "version": "1.0.0",
+  "version": "0.6.0",
   "main": "index.js",
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development gulp",
