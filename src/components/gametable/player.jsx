@@ -66,10 +66,11 @@ export const Player = React.createClass({
               : '-'
             }
         </td>
-
-        <td className="text-right">
-          { authed ? this.actionButtons() : ""}
-        </td>
+        { authed &&
+          <td className="text-right">
+            { this.actionButtons() }
+          </td>
+         }
       </tr>
     );
   },
@@ -120,6 +121,4 @@ export const Player = React.createClass({
       editPlayerMode: !this.state.editPlayerMode
     });
   }
-
-
 });
