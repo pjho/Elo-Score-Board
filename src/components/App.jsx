@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactFire from 'reactfire';
 import FirebaseLib from '../utils/FirebaseLib.js';
+import attachFastClick from "fastclick";
 import { Icon } from './common/icon';
 import { Loader } from './common/loader';
 import { Menu } from './app/menu';
 import _ from 'lodash';
 import conf from '../../firebase.json';
-
 
 export const App =  React.createClass({
 
@@ -25,6 +25,9 @@ export const App =  React.createClass({
   componentWillMount() {
     this.firebase = new FirebaseLib(conf.firebase);
     this.loadPlayerData();
+
+
+    attachFastClick(document.body);
 
     this.setState({
       authed: this.firebase.authed(),
@@ -56,8 +59,6 @@ export const App =  React.createClass({
               players: players,
               leagues: leagues,
               firebase: this.firebase
-              // doLogin: this.doLogin,
-              // doLogout: this.doLogout,
             })}
         </div>
       </div>
@@ -103,10 +104,10 @@ export const App =  React.createClass({
     let pass = prompt('Enter your password');
 
     if(!user || !pass) { return; }
-
+    this.setState({loaded:false});
     this.firebase.doLogin( user, pass, function(authed, msg) {
       if (msg) { alert(msg); };
-      this.setState({ authed: authed });
+      this.setState({ authed: authed, loaded:true });
     }.bind(this) );
   },
 

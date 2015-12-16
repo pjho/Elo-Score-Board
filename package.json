@@ -1,6 +1,6 @@
 {
   "name": "EloScoreBoard",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "main": "index.js",
   "scripts": {
     "dev": "npm run clean && NODE_ENV=development gulp",
@@ -15,6 +15,7 @@
     "browserify": "^12.0.0",
     "connect-history-api-fallback": "^1.1.0",
     "elo-rank": "^0.2.2",
+    "fastclick": "^1.0.6",
     "firebase": "^2.2.7",
     "history": "^1.13.1",
     "lodash": "^3.10.1",
