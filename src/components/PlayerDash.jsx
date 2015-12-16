@@ -2,6 +2,8 @@ import React from 'react';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
 import { History } from 'react-router';
+import { Loader } from './common/loader';
+
 import _ from 'lodash';
 
 export const PlayerDash = React.createClass({
@@ -31,6 +33,9 @@ export const PlayerDash = React.createClass({
 
     return (
       <div className="Player">
+
+        { !player || !graphData && <Loader /> }
+
         <div className="UtilHeader">
           <button className="btn--util-left btn btn-default btn-sm" onClick={this.history.goBack}>&larr; Back</button>
           { player &&
