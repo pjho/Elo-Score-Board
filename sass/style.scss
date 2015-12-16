@@ -5,6 +5,7 @@
 @import "partials/gametable";
 @import "partials/playerdash";
 @import "partials/menu";
+@import "partials/loader";
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -13,13 +14,3 @@ body {
 a {
   color:#4177AB;
 }
-
-.AppWrapper {
-  opacity:1;
-  position: relative;
-  transition: opacity 0.3s ease-in;
-  &.loading {
-    opacity:0.05;
-  }
-}
-

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactFire from 'reactfire';
 import FirebaseLib from '../utils/FirebaseLib.js';
 import { Icon } from './common/icon';
+import { Loader } from './common/loader';
 import { Menu } from './app/menu';
 import _ from 'lodash';
 import conf from '../../firebase.json';
@@ -35,7 +36,9 @@ export const App =  React.createClass({
     let {leagueName} = this.props.params;
 
     return (
+
       <div className={ `AppWrapper ${ !loaded ? 'loading' : '' }` }>
+        { !loaded && <Loader /> }
 
         <Menu authed={authed}
           leagues={leagues}
