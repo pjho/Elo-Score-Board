@@ -38,7 +38,7 @@ export const Player = React.createClass({
         </td>
 
         <td>
-          <Link to={`/player/${id}`}>
+          <Link to={`/league/${league}/player/${id}`}>
             <img src={!!image ? image : '/img/avatar.jpg'} alt={name} className="img-circle img-thumbnail" />
             {name}
           </Link>
@@ -48,13 +48,13 @@ export const Player = React.createClass({
           <Link to={`/league/${encodeURI(league)}`}>{league}</Link>
         </td>
 
-        <td className="playerScore tc">
+        <td className="rangeDisplay playerScore tc">
           <sup>{topScore}</sup>
           <span className="displayVal">{score}</span>
           <sub>{bottomScore}</sub>
         </td>
 
-        <td className={ "playerStreak tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
+        <td className={ "rangeDisplay playerStreak tc playerStreak--" + (streak && (streak > 0 ? "positive" : "negative" ))}>
           <sup>{bestStreak ? "+" + bestStreak : ''}</sup>
           <span className="displayVal">{streak ? (streak > 0 &&  '+') + streak : '-' }</span>
           <sub>{worstStreak ? worstStreak : ''}</sub>
