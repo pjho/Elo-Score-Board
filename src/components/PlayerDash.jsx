@@ -18,7 +18,7 @@ export const PlayerDash = React.createClass({
 
   componentWillMount() {
     this.firebase = this.props.firebase;
-    this.loadGameData(50);
+    this.loadGameData(30);
   },
 
   componentWillUnmount: function() {
@@ -46,9 +46,9 @@ export const PlayerDash = React.createClass({
           { !!player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
         </div>
 
-        <div className="EloGraph col-md-6">
+        <div id="EloGraphWrapper" className="EloGraph col-md-6">
           { !!gameData
-            ? <EloGraph graph={gameData} playerId={this.props.params.playerId}/>
+            ? <EloGraph graph={gameData} playerId={this.props.params.playerId} days={30} />
             : <p>Loading Player Graph...</p>
           }
         </div>
