@@ -2,8 +2,11 @@ import React from 'react';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
 import { OpponentStats } from './playerdash/opponent-stats';
+import { RecentGames } from './playerdash/recent-games';
 import { History } from 'react-router';
 import { Loader } from './common/loader';
+import 'date-format-lite';
+
 
 import _ from 'lodash';
 
@@ -29,11 +32,12 @@ export const PlayerDash = React.createClass({
   render() {
     let { players } = this.props;
     let { gameData } = this.state;
-    const player = this.playerById(this.props.params.playerId);
+    let playerId = this.props.params.playerId;
+    const player = this.playerById(playerId);
 
     return (
-      <div className="Player">
-        { !player || !gameData && <Loader /> }
+      <div className="PlayerDash">
+        { !player || !gameData.length && <Loader /> }
 
         <div className="UtilHeader">
           <button className="btn--util-left btn btn-default btn-sm" onClick={this.history.goBack}>&larr; Back</button>
@@ -42,23 +46,32 @@ export const PlayerDash = React.createClass({
           }
         </div>
 
-        <div className="PlayerCard col-md-3">
-          { !!player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
+        <div className="col-md-3">
+          { player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
+
+          <hr />
+
+          <h5>Recent Games</h5>
+          { gameData.length && player
+            ? <RecentGames games={gameData} player={player} playerById={this.playerById} number="5" />
+            : <p>Loading Games...</p>
+          }
         </div>
 
-        <div id="EloGraphWrapper" className="EloGraph col-md-6">
-          { !!gameData
-            ? <EloGraph graph={gameData} playerId={this.props.params.playerId} days={30} />
-            : <p>Loading Player Graph...</p>
+        <div id="EloGraphWrapper" className="col-md-6">
+          { gameData.length
+            ? <EloGraph graph={gameData} playerId={playerId} days={30} />
+            : <p>Loading Graph...</p>
           }
         </div>
 
         <div className="col-md-3">
-        { gameData && player
+         { gameData.length && player
             ? <OpponentStats games={gameData} player={player} playerById={this.playerById} />
             : <p>Loading Opponents...</p>
-          }
+         }
         </div>
+
       </div>
       );
   },
@@ -71,7 +84,7 @@ export const PlayerDash = React.createClass({
     let player = this.props.params.playerId;
     let fbGameDataRef = this.firebase.playerDataForNumDays( player, days, (games) => {
       this.setState({
-        gameData: games,
+        gameData: _.sortBy(games, (g) => -g.dateTime),
         fbGameDataRef: fbGameDataRef,
       });
     });
