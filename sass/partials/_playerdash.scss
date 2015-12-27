@@ -6,3 +6,48 @@
 .google-visualization-atl.container {
   padding:0;
 }
+
+
+.OpponentStats {
+  margin-top: 26px;
+  table-layout: fixed;
+
+  .img-thumbnail {
+    width:40px;
+    height: 40px;
+    &.img-tiny {
+      width:20px;
+      height:20px;
+      padding:1px;
+      border-radius:70%;
+    }
+  }
+}
+
+.os_metricGroup {
+  display:flex;
+  justify-content: center;
+  align-items:center;
+}
+
+.os_fullMetric {
+  text-align: center;
+  display: inline-block;
+  border:1px solid #ddd;
+  margin-right: 5px;
+  font-size:15px;
+  border-radius:50%;
+  width:2.4em;
+  height:2.4em;
+  line-height:2.2em;
+  padding: 0;
+}
+
+.os_splitMetric {
+  display:flex;
+  justify-content: space-around;
+}
+
+.os_splitMetric_value {
+  min-width:3em;
+}

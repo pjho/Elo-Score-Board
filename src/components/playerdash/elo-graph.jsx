@@ -4,19 +4,15 @@ import {Chart} from 'react-google-charts';
 export const EloGraph = React.createClass({
 
   render() {
-    let items = [];
 
-    this.props.graph.forEach( (rawItem) => {
-      let item = rawItem.val();
-      item.id = rawItem.key();
-      items.push(item);
-    });
-
-    let data = items.map( (item) => {
+    let data = this.props.graph.map( (item) => {
       let score = item.winner == this.props.playerId ? item.winnerNewScore : item.loserNewScore;
       let date = new Date(item.dateTime)
       return [date, score];
     });
+
+    let winWidth = window.innerWidth;
+    let graphHeight = winWidth > 800 ? 600 : winWidth > 485 ? 350 : 260;
 
     let AnnotationChart =  {
       rows : data,
@@ -35,17 +31,18 @@ export const EloGraph = React.createClass({
         vAxis: {title: 'Elo Rating',
         format:'####'}
       },
-      chartType : "AnnotationChart",
+      // chartType : "AnnotationChart",
+      chartType : false ? "AnnotationChart" : "LineChart",
       div_id: "elo_line_graph"
     };
 
-    let winWidth = window.innerWidth;
-    let graphHeight = winWidth > 800 ? 600 : winWidth > 485 ? 350 : 260;
+
 
     return (
       <Chart chartType={AnnotationChart.chartType}
         width={"100%"}
-        height={graphHeight + "px"}
+        height={"470px"}
+        // height={graphHeight + "px"}
         rows={AnnotationChart.rows}
         columns={AnnotationChart.columns}
         options = {AnnotationChart.options}

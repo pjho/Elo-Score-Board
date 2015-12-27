@@ -1,6 +1,7 @@
 import React from 'react';
 import { PlayerCard } from './playerdash/player-card';
 import { EloGraph } from './playerdash/elo-graph';
+import { OpponentStats } from './playerdash/opponent-stats';
 import { History } from 'react-router';
 import { Loader } from './common/loader';
 
@@ -11,30 +12,28 @@ export const PlayerDash = React.createClass({
 
   getInitialState() {
     return {
-      graphData: false
+      gameData: [],
     }
   },
 
   componentWillMount() {
     this.firebase = this.props.firebase;
-    this.loadGraphData();
+    this.loadGameData(50);
   },
 
   componentWillUnmount: function() {
     // Close the connection to the player game data.
-    this.state.fbDataRef && this.state.fbDataRef.off();
+    this.state.fbGameDataRef && this.state.fbGameDataRef.off();
   },
 
   render() {
     let { players } = this.props;
-    let { graphData } = this.state;
-
-    const player = _.find(players, p => p.id == this.props.params.playerId);
+    let { gameData } = this.state;
+    const player = this.playerById(this.props.params.playerId);
 
     return (
       <div className="Player">
-
-        { !player || !graphData && <Loader /> }
+        { !player || !gameData && <Loader /> }
 
         <div className="UtilHeader">
           <button className="btn--util-left btn btn-default btn-sm" onClick={this.history.goBack}>&larr; Back</button>
@@ -47,25 +46,35 @@ export const PlayerDash = React.createClass({
           { !!player ? <PlayerCard {...player} /> : <p>Loading Player Stats...</p> }
         </div>
 
-        <div className="EloGraph col-md-9">
-          { !!graphData
-            ? <EloGraph graph={graphData} playerId={this.props.params.playerId}/>
+        <div className="EloGraph col-md-6">
+          { !!gameData
+            ? <EloGraph graph={gameData} playerId={this.props.params.playerId}/>
             : <p>Loading Player Graph...</p>
+          }
+        </div>
+
+        <div className="col-md-3">
+        { gameData && player
+            ? <OpponentStats games={gameData} player={player} playerById={this.playerById} />
+            : <p>Loading Opponents...</p>
           }
         </div>
       </div>
       );
   },
 
-  loadGraphData(){
-    let fbDataRef = this.firebase.getEloDataForCurrentMonth(this.props.params.playerId, 'value', (rawItems) => {
+  playerById(id) {
+    return _.find(this.props.players, (p) => p.id == id);
+  },
+
+  loadGameData(days) {
+    let player = this.props.params.playerId;
+    let fbGameDataRef = this.firebase.playerDataForNumDays( player, days, (games) => {
       this.setState({
-        graphData: rawItems,
-        fbDataRef: fbDataRef
+        gameData: games,
+        fbGameDataRef: fbGameDataRef,
       });
     });
   }
 
 });
-
-
