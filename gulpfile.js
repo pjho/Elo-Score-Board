@@ -55,8 +55,6 @@ var bundler = watchify(browserify({
 
 function bundle() {
 
-  gutil.log('bundle bitches!');
-
   return bundler.bundle()
     .on('error', notify)
     .pipe(source('main.js'))
