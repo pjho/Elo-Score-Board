@@ -2,20 +2,37 @@ import React from 'react';
 import _u from '../../utils/utilities.js';
 import { TableLine as CardLine } from './table-line';
 import { Avatar } from '../common/avatar';
+import { Link } from 'react-router'
 
 export const PlayerCard = React.createClass({
 
   render() {
     const { name, image, league, score, topScore, wins, losses,
-                id, bottomScore, streak, bestStreak, worstStreak} = this.props;
+                id, bottomScore, streak, bestStreak, worstStreak, days } = this.props;
+
+    let rootPath = window.location.pathname.replace(/\/(?:days\/[0-9]*)?\/?$/,'');
 
     return (
         <div className="PlayerCard panel panel-default">
           <table className="table">
             <thead>
               <tr>
-                <th colSpan='2'>
-                  <Avatar src={image} /> {name}
+                <th colSpan="2">
+                  <div className="flex flex-between">
+                    <div>
+                      <Avatar src={image} /> {name}
+                    </div>
+                    <div className="dayLinks">
+                      <small>Days:</small>
+                      { [3, 7, 14, 30, 90, 365].map( (item) => {
+                          return (
+                            <Link key={item} to={[ rootPath, 'days', item].join('/')} className={item == days && 'active' }>
+                              {item}
+                            </Link>
+                          )
+                      })}
+                    </div>
+                  </div>
                 </th>
               </tr>
             </thead>
