@@ -32,8 +32,7 @@ render(
       <Route path="league/:leagueName/edit" component={GameTable} />
       <Route path="league/:leagueName/add" component={AddPlayer} />
       <Route path="league/:league/player/:playerId" component={PlayerDash} />
-      <Route path="league/:league/:playerId/:time" component={PlayerDash} />
-      <Route path="player/:playerId" component={PlayerDash} />
+      <Route path="league/:league/player/:playerId/days/:days" component={PlayerDash} />
     </Route>
     <Route path="*" component={NoMatch}/>
   </Router>

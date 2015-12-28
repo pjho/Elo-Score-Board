@@ -5,8 +5,7 @@ import { Link } from 'react-router';
 export const OpponentStats = React.createClass({
 
   render() {
-    const {games, player} = this.props;
-
+    const {games, player, days} = this.props;
     let gamesByPlayer = _.groupBy(games, (game) => player.id == game.loser ? game.winner : game.loser );
         gamesByPlayer = _.map( gamesByPlayer, this.mapGamesToOpponentStats);
         gamesByPlayer = _.sortBy( _.compact(gamesByPlayer), (i) => -i.games.count);
@@ -25,7 +24,7 @@ export const OpponentStats = React.createClass({
                  return (
                    <tr key={opponent.id}>
                      <td>
-                        <Link to={`/league/${opponent.league}/player/${opponent.id}`}>
+                        <Link to={`/league/${opponent.details.league}/player/${opponent.id}` + (days ? `/days/${days}` : '') }>
                           <img className="img-circle img-thumbnail" src={ opponent.details.image || '/img/avatar.jpg' } />
                           { opponent.details.name }
                         </Link>

@@ -25,6 +25,27 @@
 
 }
 
+.flex {
+  display: flex;
+  align-items:center;
+  justify-content: space-around;
+}
+.flex.flex-between { justify-content: space-between; }
+
+.dayLinks {
+  text-align:right;
+  font-size:0.8em;
+  vertical-align: middle;
+  small { color:#919191; }
+  a {
+    display: inline-block;
+    padding-left:10px;
+    &.active {
+      text-decoration:underline;
+    }
+  }
+}
+
 .EloGraph {
   margin: 0 20px 30px 20px;
 }
