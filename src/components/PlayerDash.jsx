@@ -73,7 +73,7 @@ export const PlayerDash = React.createClass({
         <div className="col-md-3">
           { player
             ? <PlayerCard {...player}  days={days} />
-            : <p>{ fetching ? 'Loading Player Stats...' : 'No games found.'} </p>
+            : <p>{ fetching ? 'Loading Player Stats...' : 'Player not found.'} </p>
           }
           <hr />
           <h5>Recent Games</h5>

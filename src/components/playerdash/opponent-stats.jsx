@@ -1,6 +1,7 @@
 import React from 'react';
-import _ from 'lodash';
 import { Link } from 'react-router';
+import { Avatar } from '../common/avatar'
+import _ from 'lodash';
 
 export const OpponentStats = React.createClass({
 
@@ -25,7 +26,7 @@ export const OpponentStats = React.createClass({
                    <tr key={opponent.id}>
                      <td>
                         <Link to={`/league/${opponent.details.league}/player/${opponent.id}` + (days ? `/days/${days}` : '') }>
-                          <img className="img-circle img-thumbnail" src={ opponent.details.image || '/img/avatar.jpg' } />
+                          <Avatar src={ opponent.details.image } />
                           { opponent.details.name }
                         </Link>
                      </td>
@@ -37,11 +38,11 @@ export const OpponentStats = React.createClass({
                          </span>
                          <div>
                            <span className="os_splitMetric">
-                             <img className="img-circle img-thumbnail img-tiny" src={ opponent.details.image || '/img/avatar.jpg' } title={opponent.details.name} />
+                             <Avatar className="img-tiny" src={ opponent.details.image } title={opponent.details.name} />
                              <span className="os_splitMetric_value">{opponent.games.wins}</span>
                            </span>
                            <span className="os_splitMetric">
-                             <img className="img-circle img-thumbnail img-tiny" src={ player.image || '/img/avatar.jpg' } title={player.name} />
+                             <Avatar className="img-tiny" src={ player.image } title={player.name} />
                              <span className="os_splitMetric_value">{opponent.games.losses}</span>
                            </span>
                          </div>
@@ -51,16 +52,16 @@ export const OpponentStats = React.createClass({
                     <td>
                       <div className="os_metricGroup">
                         <span className="os_fullMetric">
-                          {opponent.games.pointsLost - opponent.games.pointsWon}
+                          {opponent.games.pointsGiven - opponent.games.pointsTaken}
                         </span>
                         <div>
                           <span className="os_splitMetric">
-                            <img className="img-circle img-thumbnail img-tiny" src={ opponent.details.image || '/img/avatar.jpg' } title={opponent.details.name} />
-                            <span className="os_splitMetric_value">{opponent.games.pointsWon}</span>
+                            <Avatar className="img-tiny" src={ opponent.details.image } title={opponent.details.name} />
+                            <span className="os_splitMetric_value">{opponent.games.pointsTaken}</span>
                           </span>
                           <span className="os_splitMetric">
-                            <img className="img-circle img-thumbnail img-tiny" src={ player.image || '/img/avatar.jpg' } title={player.name} />
-                            <span className="os_splitMetric_value">{opponent.games.pointsLost}</span>
+                            <Avatar className="img-tiny" src={ player.image } title={player.name} />
+                            <span className="os_splitMetric_value">{opponent.games.pointsGiven}</span>
                           </span>
                         </div>
                       </div>
@@ -78,16 +79,21 @@ export const OpponentStats = React.createClass({
     let opponentInfo = this.props.playerById(opponent);
     if (!opponentInfo) { return null; }
 
-    let emptyStats = { count: 0, wins: 0, losses: 0, pointsWon: 0, pointsLost: 0 }
+    let emptyStats = { count: 0, wins: 0, losses: 0, pointsTaken: 0, pointsGiven: 0 }
     let gameStats = games.reduce( function(total, current) {
+
+
       let {winner, loserNewScore, loserOldScore, winnerNewScore, winnerOldScore} = current;
       let opponentIsWinner = opponent == current.winner;
+      let winnerGain = winnerNewScore - winnerOldScore;
+      let loserLoss = loserOldScore - loserNewScore;
+
       return {
         count: total.count + 1,
         wins: total.wins + (opponentIsWinner ? 1 : 0),
         losses: total.losses + (opponentIsWinner ? 0 : 1),
-        pointsWon: total.pointsWon + (opponentIsWinner ? (winnerNewScore - winnerOldScore) : 0),
-        pointsLost: total.pointsLost + (!opponentIsWinner ? (loserOldScore - loserNewScore) : 0),
+        pointsTaken: total.pointsTaken + (opponentIsWinner ? loserLoss : 0),
+        pointsGiven: total.pointsGiven + (!opponentIsWinner ? winnerGain : 0),
       }
     }, emptyStats );
 
