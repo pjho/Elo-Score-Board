@@ -13,6 +13,7 @@ export const EloGraph = React.createClass({
 
     let graphContainer = document.getElementById('EloGraphWrapper');
     let graphHeight = graphContainer ? graphContainer.offsetWidth * 0.65 : 0;
+    let graphWidth = graphContainer.offsetWidth < 650 ? '98%' : '85%';
 
     let chart =  {
       rows : data,
@@ -26,7 +27,7 @@ export const EloGraph = React.createClass({
         title: `${this.props.days} Day Elo Rating`,
         hAxis: {title: '', format: 'MMM d' },
         vAxis: {title: 'Elo Rating', format:'####'},
-        chartArea: {'width': '83%', 'height': '78%'},
+        chartArea: {'width': graphWidth, 'height': '78%'},
         trendlines: { 0: {color: '#AEAEAE', opacity: 1} },
         series: {
             0: { pointSize: 3 },

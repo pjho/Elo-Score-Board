@@ -30,13 +30,17 @@ export const PlayerDash = React.createClass({
   },
 
   render() {
+    let col3 = document.querySelector('.col-md-3');
+    let col3w = col3 ? col3.offsetWidth : 0;
+    let constrained = col3w < 334;
+
     let { players } = this.props;
     let { gameData } = this.state;
     let playerId = this.props.params.playerId;
     const player = this.playerById(playerId);
 
     return (
-      <div className="PlayerDash">
+      <div className={"PlayerDash " + (constrained ? ' constrained' : 'yo momma')}>
         { !player || !gameData.length && <Loader /> }
 
         <div className="UtilHeader">
@@ -59,6 +63,7 @@ export const PlayerDash = React.createClass({
         </div>
 
         <div id="EloGraphWrapper" className="col-md-6">
+          <h5 className="sep">Elo Graph</h5>
           { gameData.length
             ? <EloGraph graph={gameData} playerId={playerId} days={30} />
             : <p>Loading Graph...</p>
@@ -66,6 +71,7 @@ export const PlayerDash = React.createClass({
         </div>
 
         <div className="col-md-3">
+          <h5 className="sep">Opponents</h5>
          { gameData.length && player
             ? <OpponentStats games={gameData} player={player} playerById={this.playerById} />
             : <p>Loading Opponents...</p>

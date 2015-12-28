@@ -30,7 +30,7 @@ export const Menu =  React.createClass({
               <hr />
             </li>
 
-            { authed && rootComponent !== "AddPlayer" &&
+            { authed && ["AddPlayer", "PlayerDash"].indexOf(rootComponent) == -1  &&
               <li className="AppMenu__item" onClick={toggleMenu}>
                 { isEditMode
                   ? <Link to={ currentPath.slice(0, -5) || '/' } ><Icon type="edit" /> Finished Editing</Link>

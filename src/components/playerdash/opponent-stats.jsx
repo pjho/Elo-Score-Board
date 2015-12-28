@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { Link } from 'react-router';
 
 export const OpponentStats = React.createClass({
 
@@ -24,8 +25,10 @@ export const OpponentStats = React.createClass({
                  return (
                    <tr key={opponent.id}>
                      <td>
-                        <img className="img-circle img-thumbnail" src={ opponent.details.image || '/img/avatar.jpg' } />
-                        { opponent.details.name }
+                        <Link to={`/league/${opponent.league}/player/${opponent.id}`}>
+                          <img className="img-circle img-thumbnail" src={ opponent.details.image || '/img/avatar.jpg' } />
+                          { opponent.details.name }
+                        </Link>
                      </td>
 
                      <td>
