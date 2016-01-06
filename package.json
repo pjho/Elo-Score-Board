@@ -14,6 +14,7 @@
   "dependencies": {
     "browserify": "^12.0.0",
     "connect-history-api-fallback": "^1.1.0",
+    "date-format-lite": "^0.7.4",
     "elo-rank": "^0.2.2",
     "fastclick": "^1.0.6",
     "firebase": "^2.2.7",
@@ -21,7 +22,7 @@
     "lodash": "^3.10.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "react-google-charts": "^0.1.9",
+    "react-google-charts": "^0.2.0",
     "react-router": "^1.0.0",
     "reactfire": "^0.5.1"
   },

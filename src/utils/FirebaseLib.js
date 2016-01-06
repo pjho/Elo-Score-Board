@@ -15,9 +15,7 @@ function fireBaseWrapper(firebaseRoot) {
   };
 
   this.pushHistory = function(player, history){
-    let now = new Date();
-    let date = [now.getFullYear(), now.getMonth()].join('_');
-    let playerHistoryUrl = [fbHistoryPath, player.id, date].join('/');
+    let playerHistoryUrl = [fbHistoryPath, player.id].join('/');
     let fbPlayerHistory = new Firebase(playerHistoryUrl);
     fbPlayerHistory.push(history);
   };
@@ -49,6 +47,50 @@ function fireBaseWrapper(firebaseRoot) {
 
     return fbPlayerHistoryRef;
   };
+
+
+  /**
+   * Fetches Game data for a given player
+   * @param  {string}   playerId  The players Id
+   * @param  {Int}      days      The number of days data to fetch
+   * @param  {Function} cb        Callback function to run once data is fetched
+   * @return {Object}             Firebase reference so it can be turned off when unmounting component.
+   */
+  this.playerDataForNumDays = function(playerId, days, cb) {
+    let now = new Date();
+    let timeNow = now.getTime();
+    let then = new Date(now.setDate(now.getDate() - days));
+    let timeThen = then.getTime();
+
+    var fbRef = new Firebase(this.fbUrl + '/history/' + playerId);
+
+    fbRef.orderByChild("dateTime")
+      .startAt(timeThen)
+      .endAt(timeNow)
+      .on("value", function(data) {
+        var games = this.bindAsArray(data);
+        cb(games);
+      }.bind(this));
+
+    return fbRef;
+  };
+
+
+  /**
+   * Binds a collection of firebase items to an array
+   * @param  {Object} snapshot Raw firebase return object
+   * @return {Array}           Firebase data processed into an array
+   */
+  this.bindAsArray = function(snapshot) {
+    var arr = [];
+    snapshot.forEach(function(item) {
+      var obj = item.val();
+      obj.id = item.key();
+      arr.push(obj);
+    });
+    return arr;
+  };
+
 
   /**
    * Checks auth status of current user.

@@ -1,8 +1,147 @@
+.PlayerDash {
+  .img-thumbnail {
+    width:40px;
+    height: 40px;
+    &.img-tiny {
+      width:20px;
+      height:20px;
+      padding:1px;
+      border-radius:70%;
+    }
+  }
+
+  &.constrained {
+    font-size:0.7rem;
+    td {
+      font-size:0.7rem;
+    }
+  }
+
+  .sep {
+     @extend .visible-xs;
+     @extend .visible-sm;
+     margin:30px 0 20px;
+  }
+
+}
+
+.flex {
+  display: flex;
+  align-items:center;
+  justify-content: space-around;
+}
+.flex.flex-between { justify-content: space-between; }
+
+.dayLinks {
+  text-align:right;
+  font-size:0.8em;
+  vertical-align: middle;
+  small { color:#919191; }
+  a {
+    display: inline-block;
+    padding-left:10px;
+    &.active {
+      text-decoration:underline;
+    }
+  }
+}
+
 .EloGraph {
-  margin-top: 10px;
-  margin-bottom: 30px;
+  margin: 0 20px 30px 20px;
 }
 
 .google-visualization-atl.container {
   padding:0;
 }
+
+
+.OpponentStats {
+  margin-top: 26px;
+  table-layout: fixed;
+
+  .img-thumbnail {
+    width:40px;
+    height: 40px;
+    &.img-tiny {
+      width:20px; min-width:20px;
+      height:20px;
+      padding:1px;
+      border-radius:70%;
+    }
+  }
+}
+
+.os_metricGroup {
+  display:flex;
+  justify-content: center;
+  align-items:center;
+}
+
+.os_fullMetric {
+  text-align: center;
+  display: inline-block;
+  border:1px solid #ddd;
+  margin-right: 5px;
+  // font-size:15px;
+  border-radius:50%;
+  padding: 0;
+
+  width:2.4rem; min-width:2.4rem;
+  height:2.4rem; min-height:2.4rem;
+  line-height:2.2rem;
+}
+
+.constrained {
+  .os_fullMetric {
+    width:2rem; min-width:2rem;
+    height:2rem; min-height:2rem;
+    line-height:1.9rem;
+  }
+}
+
+.os_splitMetric {
+  display:flex;
+  justify-content: space-around;
+}
+
+.os_splitMetric_value {
+  min-width:3em;
+}
+
+
+.RecentGames {
+  ul, li {
+    padding:0;
+    margin:0;
+    list-style-type:none;
+  }
+
+  .rg_game{
+    border-bottom: 1px solid #ddd;
+    padding: 5px 2px 7px;
+  }
+
+  .rg_date {
+    font-size:0.7em;
+    opacity: 0.7;
+    margin-bottom:0px;
+    display:flex;
+    justify-content: space-between;
+  }
+
+  .rg_gameStats {
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    // font-size:0.8em;
+  }
+  .seperator {
+    color: #ddd;
+    font-size: 10px;
+    display: inline-block;
+    padding: 0 8px;
+    position: relative;
+    top: -4px;
+  }
+}
+
