@@ -1,6 +1,7 @@
 {
   //firebase - required - the firebase app name where your data is stored
   "firebase": "[YOUR FIREBASE APP NAME]",
+  "apiKey" : "[YOUR API KEY]",
   "public": "dist",
   "ignore": [
     "firebase.json",

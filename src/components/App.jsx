@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactFire from 'reactfire';
 import FirebaseLib from '../utils/FirebaseLib.js';
 import attachFastClick from "fastclick";
 import { Icon } from './common/icon';
@@ -9,8 +8,6 @@ import _ from 'lodash';
 import conf from '../../firebase.json';
 
 export const App =  React.createClass({
-
-  mixins: [ ReactFire ],
 
   getInitialState() {
     return {
@@ -23,15 +20,14 @@ export const App =  React.createClass({
   },
 
   componentWillMount() {
-    this.firebase = new FirebaseLib(conf.firebase);
+    this.firebase = new FirebaseLib(conf);
     this.loadPlayerData();
 
+    this.firebase.checkAuth((authed) => {
+      this.setState({ authed: authed })
+    });
 
     attachFastClick(document.body);
-
-    this.setState({
-      authed: this.firebase.authed(),
-    })
   },
 
   render() {
@@ -66,23 +62,17 @@ export const App =  React.createClass({
   },
 
   loadPlayerData() {
-    // this.bindAsArray(ref, "items");
 
-    this.firebase.dataOn('value', (rawItems) => {
-      let items = [];
-      let sorted = [];
+    this.firebase.getPlayers((rawItems) => {
 
-      rawItems.forEach( (rawItem) => {
-        var item = rawItem.val();
-        item.id = rawItem.key();
-        items.push(item);
+      let items = _.map(rawItems.val(), (item, k) => {
+        item.id = k;
+        return item;
       });
 
-      sorted = _.sortBy(items, (item) => {
-        return -item.score;
-      });
+      const sorted = _.sortBy(items, (item) => -item.score );
 
-      let leagues = _.uniq( _.pluck( sorted, 'league') ).sort();
+      let leagues = _.uniq( _.map( sorted, 'league') ).sort();
 
       this.setState({
         players: sorted,

@@ -1,51 +1,35 @@
-import React from 'react';
-import Firebase from 'firebase';
+import firebase from 'firebase';
 
-function fireBaseWrapper(firebaseRoot) {
+function fireBaseWrapper(conf) {
 
-  this.fbUrl = `https://${firebaseRoot}.firebaseio.com`;
+  firebase.initializeApp({
+    apiKey: conf.apiKey,
+    authDomain: `${conf.firebase}.firebaseapp.com`,
+    databaseURL: `https://${conf.firebase}.firebaseio.com`,
+    storageBucket: `firebase-${conf.firebase}.appspot.com`,
+  });
 
-  let fbHistoryPath = this.fbUrl + "/history";
+  this.auth = firebase.auth();
+  this.rootRef = firebase.database();
+  this.history = this.rootRef.ref('history');
+  this.players = this.rootRef.ref('players');
 
-  this.fbRootRef = new Firebase(this.fbUrl);
-  this.fbPlayersRef = new Firebase( this.fbUrl + "/players" );
-
-  this.updateResults = function(results){
-    this.fbPlayersRef.update(results);
+  this.updateResults = function(results) {
+    this.players.update(results);
   };
 
-  this.pushHistory = function(player, history){
-    let playerHistoryUrl = [fbHistoryPath, player.id].join('/');
-    let fbPlayerHistory = new Firebase(playerHistoryUrl);
-    fbPlayerHistory.push(history);
+  this.pushHistory = function(player, history) {
+    this.history.child(player.id).push(history);
   };
 
-  this.newPlayer = function(player, callback){
-    this.fbPlayersRef.push(player, (error) => {
+  this.newPlayer = function(player, callback) {
+    this.players.push(player, (error) => {
       callback(!error);
     });
   };
 
-  this.dataOn = function(eventType, callBack){
-    this.fbPlayersRef.on(eventType, callBack);
-  };
-
-  /**
-   * Retrieves Game data for a player for the current month
-   * @param  {string}   playerId  The Firebase Id of the player
-   * @param  {string}   eventType Firebase event type
-   * @param  {function} callBack  The function to call when data is received
-   * @return {object}             Returns the Firebase Ref object so we can close the connection on unMount
-   */
-  this.getEloDataForCurrentMonth = function(playerId, eventType, callBack) {
-    let now = new Date();
-    let date = [now.getFullYear(), now.getMonth()].join('_');
-    let playerUrl = [this.fbUrl, 'history', playerId, date].join('/');
-    let fbPlayerHistoryRef = new Firebase(playerUrl);
-
-    fbPlayerHistoryRef.on(eventType, callBack);
-
-    return fbPlayerHistoryRef;
+  this.getPlayers = function(callBack) {
+    this.players.on('value', callBack);
   };
 
 
@@ -57,81 +41,58 @@ function fireBaseWrapper(firebaseRoot) {
    * @return {Object}             Firebase reference so it can be turned off when unmounting component.
    */
   this.playerDataForNumDays = function(playerId, days, cb) {
-    let now = new Date();
-    let timeNow = now.getTime();
-    let then = new Date(now.setDate(now.getDate() - days));
-    let timeThen = then.getTime();
+    const now = new Date();
+    const timeNow = now.getTime();
+    const then = new Date(now.setDate(now.getDate() - days));
+    const timeThen = then.getTime();
 
-    var fbRef = new Firebase(this.fbUrl + '/history/' + playerId);
+    const playerHistory = this.history.child(playerId);
 
-    fbRef.orderByChild("dateTime")
+    playerHistory.orderByChild("dateTime")
       .startAt(timeThen)
       .endAt(timeNow)
       .on("value", function(data) {
-        var games = this.bindAsArray(data);
-        cb(games);
+        cb(data.val());
       }.bind(this));
 
-    return fbRef;
+    return playerHistory;
   };
 
-
   /**
-   * Binds a collection of firebase items to an array
-   * @param  {Object} snapshot Raw firebase return object
-   * @return {Array}           Firebase data processed into an array
-   */
-  this.bindAsArray = function(snapshot) {
-    var arr = [];
-    snapshot.forEach(function(item) {
-      var obj = item.val();
-      obj.id = item.key();
-      arr.push(obj);
-    });
-    return arr;
-  };
-
-
-  /**
-   * Checks auth status of current user.
+   * Checks auth status of current user. Auth is async so needs to respond with a callback
    * @return {boolean} returns true if logged in
    */
-  this.authed = function() {
-    let authData = this.fbRootRef.getAuth();
-    return !!authData;
+  this.checkAuth = function checkAuth(cb) {
+    this.auth.onAuthStateChanged((user) => {
+      cb(user);
+    });
   };
+
 
   /**
   * Async Auth with Firebase Logs user in to the system
   * @param  {Function} cb Callback to tell caller model when acync test is complete or errored.
   */
   this.doLogin = function(user, pass, cb) {
-
-    this.fbRootRef.authWithPassword({
-      email    : user,
-      password : pass
-    }, function(error, authData) {
-      if (error) {
-        cb(false, error);
-      } else {
-        cb(true);
-      }
-    });
-
+    const auth = this.auth;
+    this.auth.signInWithEmailAndPassword(user, pass)
+      .then( () => cb(true) )
+      .catch( (error) => cb(false, error) );
   };
 
   /**
    * Ends a user session
    */
   this.doLogout = function() {
-    this.fbRootRef.unauth();
+    this.auth.signOut();
+    // .then(() => { /* Sign-out successful.*/ }, (error) => { /* An error happened. */ });
   };
 
   /**
    * Destroys firbase refs. Used on componentWillUnmount
    */
   this.unload = function() {
-    this.fbPlayersRef.off();
+    this.players.off();
   };
 
   /**
@@ -139,8 +100,8 @@ function fireBaseWrapper(firebaseRoot) {
    * @param  {String} player The ID for the firebase player object
    */
   this.deletePlayer = function(player) {
-    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${player}` );
-    fbPlayerRef.remove(() => fbPlayerRef.off());
+    const ref = this.players.child(player);
+    ref.remove(() => ref.off());
   };
 
   /**
@@ -149,10 +110,10 @@ function fireBaseWrapper(firebaseRoot) {
    * @param  {Object}   newData  An object with the key:value data to be updated on the player
    * @param  {Function} cb       The function to be called on complete.
    */
-  this.updatePlayer = function(playerId, newData, cb) {
-    let fbPlayerRef = new Firebase( `${this.fbUrl}/players/${playerId}` );
-    fbPlayerRef.update(newData, () => {
-      fbPlayerRef.off();
+  this.updatePlayer = function(player, newData, cb) {
+    const ref = this.players.child(player);
+    ref.update(newData, () => {
+      ref.off();
       cb();
     });
   };

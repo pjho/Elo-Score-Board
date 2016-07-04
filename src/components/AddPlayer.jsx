@@ -1,11 +1,11 @@
 import React from 'react';
-import { History, Link } from 'react-router';
+import { Link } from 'react-router';
 import { Icon } from './common/icon';
 import { PlayerForm } from './gametable/player-form';
 import _ from 'lodash';
 
+
 export const AddPlayer = React.createClass({
-  mixins: [ History ],
 
   getInitialState() {
     return ({
@@ -17,9 +17,6 @@ export const AddPlayer = React.createClass({
 
   componentWillMount() {
     this.firebase = this.props.firebase;
-  },
-
-  componentWillUnmount: function() {
   },
 
   render() {
@@ -71,8 +68,4 @@ export const AddPlayer = React.createClass({
       this.setState(newState);
     });
   },
-
-
 });
-
-

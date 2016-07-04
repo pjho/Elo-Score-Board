@@ -1,29 +1,16 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route, IndexRoute, applyRouterMiddleware, browserHistory } from 'react-router';
+import useScroll from 'react-router-scroll';
 import { App } from './components/App';
 import { GameTable } from './components/GameTable';
-import { PlayerDash } from './components/PlayerDash'
-import { AddPlayer } from './components/AddPlayer'
-import createBrowserHistory from 'history/lib/createBrowserHistory'
+import { PlayerDash } from './components/PlayerDash';
+import { AddPlayer } from './components/AddPlayer';
 
-const NoMatch = React.createClass({
-  render() { return <div>Route not Found</div>; }
-});
-
-
-var history = createBrowserHistory();
-
-// Fixes ReactRouter issue of maintaining scroll position when switching views
-history.listen(location => {
-  setTimeout(() => {
-    if (location.action === 'POP') { return; }
-    window.scrollTo(0, 0);
-  });
-});
+const NoMatch = () => (<div>Route not Found</div>);
 
 render(
-  <Router history={history}>
+  <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
     <Route path="/" component={App}>
       <IndexRoute component={GameTable} />
       <Route path="edit" component={GameTable} />
