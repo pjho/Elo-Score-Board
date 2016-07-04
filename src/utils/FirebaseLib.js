@@ -4,9 +4,9 @@ function fireBaseWrapper(conf) {
 
   firebase.initializeApp({
     apiKey: conf.apiKey,
-    authDomain: `${conf.firebase}.firebaseapp.com`,
-    databaseURL: `https://${conf.firebase}.firebaseio.com`,
-    storageBucket: `firebase-${conf.firebase}.appspot.com`,
+    authDomain: `${conf.firebaseApp}.firebaseapp.com`,
+    databaseURL: `https://${conf.firebaseApp}.firebaseio.com`,
+    storageBucket: `firebase-${conf.firebaseApp}.appspot.com`,
   });
 
   this.auth = firebase.auth();

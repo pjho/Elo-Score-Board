@@ -30,6 +30,9 @@ In your `firebase.json` you can add a setting for `globalUser`. Doing so means t
 This app can be hosted anywhere, the only special requirement is that the server routes all requests to index.html. That said, Firebase has an excellent hosting service and since we are already using Firebase for our data storage it makes sense to host it there also. The additional settings in firebase.json are for this purpose.
 
 **Hosting Instructions**  
+
+Firebase Hosting docs can be [viewed here](https://firebase.google.com/docs/hosting/)  
+
 1. `> npm install -g firebase-tools` to install firebase command line tools  
 2. `> firebase login` to login to firebase in your terminal  
 3. `> npm run build` to compile your application if you haven't done so already  

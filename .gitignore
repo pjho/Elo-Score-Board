@@ -4,3 +4,5 @@ firebase.json
 img/avatars
 
 .DS_Store
+
+.firebaserc
