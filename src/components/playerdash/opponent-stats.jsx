@@ -1,15 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Avatar } from '../common/avatar'
-import _ from 'lodash';
+
+import _groupBy from 'lodash.groupby';
+import _map from 'lodash.map';
+import _sortBy from 'lodash.sortby';
+import _compact from 'lodash.compact';
 
 export const OpponentStats = React.createClass({
 
   render() {
     const {games, player, days} = this.props;
-    let gamesByPlayer = _.groupBy(games, (game) => player.id == game.loser ? game.winner : game.loser );
-        gamesByPlayer = _.map( gamesByPlayer, this.mapGamesToOpponentStats);
-        gamesByPlayer = _.sortBy( _.compact(gamesByPlayer), (i) => -i.games.count);
+    let gamesByPlayer = _groupBy(games, (game) => player.id == game.loser ? game.winner : game.loser );
+        gamesByPlayer = _map( gamesByPlayer, this.mapGamesToOpponentStats);
+        gamesByPlayer = _sortBy( _compact(gamesByPlayer), (i) => -i.games.count);
 
     return (
           <table className="OpponentStats table">

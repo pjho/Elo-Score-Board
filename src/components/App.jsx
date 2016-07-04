@@ -4,7 +4,9 @@ import attachFastClick from "fastclick";
 import { Icon } from './common/icon';
 import { Loader } from './common/loader';
 import { Menu } from './app/menu';
-import _ from 'lodash';
+import _map from 'lodash.map';
+import _sortBy from 'lodash.sortby';
+import _uniq from 'lodash.uniq';
 import conf from '../../firebase.json';
 
 export const App =  React.createClass({
@@ -65,14 +67,14 @@ export const App =  React.createClass({
 
     this.firebase.getPlayers((rawItems) => {
 
-      let items = _.map(rawItems.val(), (item, k) => {
+      let items = _map(rawItems.val(), (item, k) => {
         item.id = k;
         return item;
       });
 
-      const sorted = _.sortBy(items, (item) => -item.score );
+      const sorted = _sortBy(items, (item) => -item.score );
 
-      let leagues = _.uniq( _.map( sorted, 'league') ).sort();
+      let leagues = _uniq( _map( sorted, 'league') ).sort();
 
       this.setState({
         players: sorted,

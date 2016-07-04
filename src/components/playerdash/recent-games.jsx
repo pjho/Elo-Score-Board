@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from '../common/avatar';
-import _ from 'lodash';
+import _compact from 'lodash.compact';
 
 export const RecentGames = React.createClass({
 
@@ -11,7 +11,7 @@ export const RecentGames = React.createClass({
      return (
       <div className="RecentGames">
         <ul>
-        { _.compact(games.map( (game, i) => {
+        { _compact(games.map( (game, i) => {
             let playerWon = game.winner == playerId;
             let opponent = playerId == game.winner ? playerById(game.loser) : playerById(game.winner);
 

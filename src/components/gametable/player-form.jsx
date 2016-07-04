@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Icon} from '../common/icon';
 import _validate from '../../utils/validator';
-import _ from 'lodash';
+import _trim from 'lodash.trim';
+import _capitalize from 'lodash.capitalize';
 
 export const PlayerForm = React.createClass({
 
@@ -25,9 +26,9 @@ export const PlayerForm = React.createClass({
     e.preventDefault();
 
     let player = {
-      name: _.trim(this.refs.name.value),
-      image: _.trim(this.refs.image.value) || false,
-      league: _.trim(this.refs.league.value),
+      name: _trim(this.refs.name.value),
+      image: _trim(this.refs.image.value) || false,
+      league: _trim(this.refs.league.value),
       score: parseInt(this.refs.score.value)
     };
 
@@ -122,7 +123,7 @@ export const PlayerForm = React.createClass({
 
         <div className="form-group">
           <button type="submit" className="btn btn-primary">
-            {_.capitalize(method) + " Player"}
+            {_capitalize(method) + " Player"}
           </button>
         </div>
       </form>
@@ -151,7 +152,7 @@ export const PlayerForm = React.createClass({
 
   errorMessage(type){
     if(this.state.errors[type] !== null){
-      return <span className="help-block">{_.capitalize(type) + ' ' + this.state.errors[type] }</span>
+      return <span className="help-block">{_capitalize(type) + ' ' + this.state.errors[type] }</span>
     }
   }
 });

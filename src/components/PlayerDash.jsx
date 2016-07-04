@@ -7,7 +7,8 @@ import { RecentGames } from './playerdash/recent-games';
 import { Loader } from './common/loader';
 import 'date-format-lite';
 
-import _ from 'lodash';
+import _find from 'lodash.find';
+import _sortBy from 'lodash.sortby';
 
 export const PlayerDash = React.createClass({
 
@@ -104,14 +105,14 @@ export const PlayerDash = React.createClass({
   },
 
   playerById(id) {
-    return _.find(this.props.players, (p) => p.id == id);
+    return _find(this.props.players, (p) => p.id == id);
   },
 
   loadGameData(playerId, days=30) {
     let fbGameDataRef = this.firebase.playerDataForNumDays( playerId, days, (games) => {
       this.setState({
         fetching: false,
-        gameData: _.sortBy(games, (g) => -g.dateTime),
+        gameData: _sortBy(games, (g) => -g.dateTime),
         fbGameDataRef: fbGameDataRef,
       });
     });

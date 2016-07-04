@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Icon } from './common/icon';
 import { PlayerForm } from './gametable/player-form';
-import _ from 'lodash';
-
 
 export const AddPlayer = React.createClass({
 

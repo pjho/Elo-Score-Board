@@ -2,7 +2,11 @@ import React from 'react';
 import { Player } from './gametable/player';
 import { PlayerForm } from './gametable/player-form';
 import { Icon } from './common/icon';
-import _ from 'lodash';
+
+import _assign from 'lodash.assign';
+import _omit from 'lodash.omit';
+import _find from 'lodash.find';
+
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
 
@@ -97,8 +101,8 @@ export const GameTable =  React.createClass({
       return;
     }
 
-    let winner = _.find(this.props.players, (player) => player.id === this.state.winner);
-    let loser = _.find(this.props.players, (player) => player.id === this.state.loser);
+    let winner = _find(this.props.players, (player) => player.id === this.state.winner);
+    let loser = _find(this.props.players, (player) => player.id === this.state.loser);
 
     if(winner.league != loser.league) {
       alert('Player\'s leagues do not match.');
@@ -109,7 +113,7 @@ export const GameTable =  React.createClass({
       let results = {};
 
       // Update Winner Statistics
-      results[winner.id] = _.assign( _.omit(winner,'id'), {
+      results[winner.id] = _assign( _omit(winner,'id'), {
         score: gameResult.winner,
         wins: winner.wins + 1,
         streak: ( winner.streak >= 0 ? winner.streak + 1 : 1) || 1,
@@ -118,7 +122,7 @@ export const GameTable =  React.createClass({
       });
 
       // Update Loser Statistics
-      results[loser.id] = _.assign( _.omit(loser,'id'), {
+      results[loser.id] = _assign( _omit(loser,'id'), {
         score: gameResult.loser,
         losses: loser.losses + 1,
         streak: ( loser.streak <= 0 ? loser.streak - 1 : -1 ) || 0,
