@@ -100,8 +100,11 @@ function fireBaseWrapper(conf) {
    * @param  {String} player The ID for the firebase player object
    */
   this.deletePlayer = function(player) {
-    const ref = this.players.child(player);
-    ref.remove(() => ref.off());
+    const playerRef = this.players.child(player);
+    const historyRef = this.history.child(player);
+
+    playerRef.remove(() => playerRef.off());
+    historyRef.remove(() => historyRef.off());
   };
 
   /**
