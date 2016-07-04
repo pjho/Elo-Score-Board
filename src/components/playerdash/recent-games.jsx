@@ -22,9 +22,6 @@ export const RecentGames = React.createClass({
               <li key={i} className="rg_game">
                 <p className="rg_date">
                   <span>{ new Date(game.dateTime).format("MMM DD - HH.mmA") }</span>
-                  { i == 9999990 &&
-                    <a href="#">remove</a>
-                  }
                 </p>
 
                 <div className="rg_gameStats">

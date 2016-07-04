@@ -111,6 +111,7 @@ export const GameTable =  React.createClass({
 
       let gameResult = this.scoreGame( winner.score, loser.score );
       let results = {};
+      let now = new Date().getTime();
 
       // Update Winner Statistics
       results[winner.id] = _assign( _omit(winner,'id'), {
@@ -118,7 +119,8 @@ export const GameTable =  React.createClass({
         wins: winner.wins + 1,
         streak: ( winner.streak >= 0 ? winner.streak + 1 : 1) || 1,
         bestStreak: ( Math.max( winner.streak + 1,  winner.bestStreak) ) || 1,
-        topScore: ( Math.max(gameResult.winner, winner.topScore) ) || gameResult.winner
+        topScore: ( Math.max(gameResult.winner, winner.topScore) ) || gameResult.winner,
+        lastPlayed: now
       });
 
       // Update Loser Statistics
@@ -127,12 +129,13 @@ export const GameTable =  React.createClass({
         losses: loser.losses + 1,
         streak: ( loser.streak <= 0 ? loser.streak - 1 : -1 ) || 0,
         worstStreak: ( Math.min(loser.streak - 1, loser.worstStreak) ) || -1,
-        bottomScore: ( Math.min(gameResult.loser, loser.bottomScore ) ) || gameResult.loser
+        bottomScore: ( Math.min(gameResult.loser, loser.bottomScore ) ) || gameResult.loser,
+        lastPlayed: now
       });
 
       // Update Game Statistics
       let history = {
-        dateTime: new Date().getTime(),
+        dateTime: now,
         winner: winner.id,
         winnerOldScore: winner.score,
         winnerNewScore: results[winner.id].score,
@@ -152,23 +155,17 @@ export const GameTable =  React.createClass({
 
   },
 
-  scoreGame(winner, loser) {
-    winner = parseInt(winner);
-    loser = parseInt(loser);
-
+  scoreGame(winnerScore, loserScore) {
+    winnerScore = parseInt(winnerScore);
+    loserScore = parseInt(loserScore);
     const EloRank = Elo(24);
 
-    let expectedScoreWinner = EloRank.getExpected(winner, loser);
-    let expectedScoreLoser = EloRank.getExpected(loser, winner);
-
-    winner = EloRank.updateRating(expectedScoreWinner, 1, winner);
-    loser = EloRank.updateRating(expectedScoreLoser, 0, loser);
+    let expectedScoreWinner = EloRank.getExpected(winnerScore, loserScore);
+    let expectedScoreLoser = EloRank.getExpected(loserScore, winnerScore);
 
     return {
-      winner: winner,
-      loser: loser,
-      winnerGain: (expectedScoreWinner - winner.score),
-      loserLose: (loser.score - expectedScoreLoser),
+      winner: EloRank.updateRating(expectedScoreWinner, 1, winnerScore),
+      loser: EloRank.updateRating(expectedScoreLoser, 0, loserScore)
     };
   }
 

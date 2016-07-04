@@ -3,12 +3,13 @@ import _u from '../../utils/utilities.js';
 import { TableLine as CardLine } from './table-line';
 import { Avatar } from '../common/avatar';
 import { Link } from 'react-router'
+import 'date-format-lite';
 
 export const PlayerCard = React.createClass({
 
   render() {
     const { name, image, league, score, topScore, wins, losses,
-                id, bottomScore, streak, bestStreak, worstStreak, days } = this.props;
+                id, bottomScore, streak, bestStreak, worstStreak, days, lastPlayed } = this.props;
 
     let rootPath = window.location.pathname.replace(/\/(?:days\/[0-9]*)?\/?$/,'');
 
@@ -41,6 +42,7 @@ export const PlayerCard = React.createClass({
               <CardLine title='Streak' value={streak} high={bestStreak} low={worstStreak} />
               <CardLine title='Games' value={wins + losses} high={wins} low={losses} />
               <CardLine title='Win Percent' value={_u.percentOfPlayerWins(wins, losses)} />
+              { lastPlayed && <CardLine title='Last Game' value={ new Date(lastPlayed).format("MMM DD - HH.mmA") } /> }
             </tbody>
           </table>
       </div>
