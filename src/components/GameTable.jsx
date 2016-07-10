@@ -26,25 +26,25 @@ export const GameTable =  React.createClass({
   },
 
   render() {
-    const isActive = ({lastPlayed}) => daysSince(lastPlayed) < 16;
+    const isActive = ({lastPlayed}) => lastPlayed == null || daysSince(lastPlayed) < 16;
 
     const { params: { leagueName }, authed, leagues, _url } = this.props;
-    let { players } = this.props;
     const { winner, loser } = this.state;
+    const isEditMode = authed && _url.edit
+
+    let { players } = this.props;
 
     players = !!leagueName
       ? this.props.players.filter( player => player.league === leagueName )
       : this.props.players;
 
     const leaguePlayerCount = players.length;
+    const activePlayers = players.filter(isActive);
+    const hasInactive = leaguePlayerCount !== activePlayers.length;
 
     if (_url.all === false) {
-      players = players.filter(isActive)
+      players = activePlayers;
     }
-
-    const hasInactive = leaguePlayerCount !== players.length;
-
-    const isEditMode = authed && _url.edit
 
     return (
       <div>
