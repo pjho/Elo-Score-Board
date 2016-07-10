@@ -8,6 +8,9 @@ let percentOfPlayerWins = function(wins, losses){
   return total > 9 && !!winPercent && isFinite(winPercent) ? winPercent + '%' : '-'; // Ensures we have a sensible result
 }
 
+const daysSince = (timestamp) => Math.floor((Date.now() - timestamp) / 1000 / 60 / 60 / 24);
+
 module.exports = {
-  percentOfPlayerWins
+  percentOfPlayerWins,
+  daysSince
 };

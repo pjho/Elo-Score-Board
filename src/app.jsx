@@ -13,14 +13,23 @@ render(
   <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
     <Route path="/" component={App}>
       <IndexRoute component={GameTable} />
-      <Route path="edit" component={GameTable} />
       <Route path="add" component={AddPlayer} />
+      <Route path="all" component={GameTable} />
+      <Route path="all/edit" component={GameTable} />
+      <Route path="edit" component={GameTable} />
+      <Route path="edit/all" component={GameTable} />
       <Route path="league/:leagueName" component={GameTable} />
-      <Route path="league/:leagueName/edit" component={GameTable} />
+      <Route path="league/:leagueName/all" component={GameTable} />
       <Route path="league/:leagueName/add" component={AddPlayer} />
+      <Route path="league/:leagueName/edit" component={GameTable} />
+      <Route path="league/:leagueName/all/edit" component={GameTable} />
+      <Route path="league/:leagueName/edit/all" component={GameTable} />
       <Route path="league/:league/player/:playerId" component={PlayerDash} />
       <Route path="league/:league/player/:playerId/days/:days" component={PlayerDash} />
+      <Route path="*" component={NoMatch}/>
     </Route>
-    <Route path="*" component={NoMatch}/>
   </Router>
 , document.getElementById('app-container'));
+
+
+

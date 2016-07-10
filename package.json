@@ -32,7 +32,8 @@
     "react-dom": "^15.2.0",
     "react-google-charts": "^1.0.2",
     "react-router": "^2.5.2",
-    "react-router-scroll": "^0.2.0"
+    "react-router-scroll": "^0.2.0",
+    "vague-time": "^2.4.0"
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",

@@ -5,6 +5,8 @@ import { Avatar } from '../common/avatar';
 import { Link } from 'react-router'
 import 'date-format-lite';
 
+import _time from 'vague-time';
+
 export const PlayerCard = React.createClass({
 
   render() {
@@ -42,7 +44,9 @@ export const PlayerCard = React.createClass({
               <CardLine title='Streak' value={streak} high={bestStreak} low={worstStreak} />
               <CardLine title='Games' value={wins + losses} high={wins} low={losses} />
               <CardLine title='Win Percent' value={_u.percentOfPlayerWins(wins, losses)} />
-              { lastPlayed && <CardLine title='Last Game' value={ new Date(lastPlayed).format("MMM DD - HH.mmA") } /> }
+              { lastPlayed &&
+                  <CardLine title='Last Game' value={ _time.get({ to: lastPlayed }) } className='last-played' />
+              }
             </tbody>
           </table>
       </div>

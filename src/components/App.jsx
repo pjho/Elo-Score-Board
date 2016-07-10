@@ -9,7 +9,20 @@ import _sortBy from 'lodash.sortby';
 import _uniq from 'lodash.uniq';
 import conf from '../../firebase.json';
 
+const urlHelper = () => {
+  const path = window.location.pathname.replace(/^\/|\/$/g, '');
+  const fragments = path.split('/').filter(it => !!it);
+
+  return {
+    all: fragments.indexOf('all') > -1,
+    edit: fragments.indexOf('edit') > -1,
+    with: (frag, after) => '/' + [...fragments, frag].join('/'),
+    without: (frag) => '/' + fragments.filter((it) => it !== frag).join('/')
+  }
+}
+
 export const App =  React.createClass({
+  urlHelper: urlHelper(),
 
   getInitialState() {
     return {
@@ -21,8 +34,13 @@ export const App =  React.createClass({
     }
   },
 
+  componentWillReceiveProps(nextProps) {
+    this.urlHelper = urlHelper();
+  },
+
   componentWillMount() {
     this.firebase = new FirebaseLib(conf);
+
     this.loadPlayerData();
 
     this.firebase.checkAuth((authed) => {
@@ -37,7 +55,6 @@ export const App =  React.createClass({
     let {leagueName} = this.props.params;
 
     return (
-
       <div className={ `AppWrapper ${ !loaded ? 'loading' : '' }` }>
         { !loaded && <Loader /> }
 
@@ -49,6 +66,7 @@ export const App =  React.createClass({
           open={menuOpen}
           leagueName={leagueName}
           rootComponent={this.props.children.type.displayName}
+          _url={this.urlHelper}
         />
 
         <div id="EloApp" className={`EloApp container-fluid ${ menuOpen  && "menu-open"}`}>
@@ -56,15 +74,16 @@ export const App =  React.createClass({
               authed: authed,
               players: players,
               leagues: leagues,
-              firebase: this.firebase
+              firebase: this.firebase,
+              _url: this.urlHelper
             })}
         </div>
       </div>
     );
   },
 
-  loadPlayerData() {
 
+  loadPlayerData() {
     this.firebase.getPlayers((rawItems) => {
 
       let items = _map(rawItems.val(), (item, k) => {
@@ -84,7 +103,6 @@ export const App =  React.createClass({
 
     });
   },
-
 
   doLogout() {
     this.firebase.doLogout();

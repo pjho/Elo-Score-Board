@@ -5,9 +5,10 @@ import { Link } from 'react-router';
 export const Menu =  React.createClass({
 
   render() {
-    let { authed, leagues, doLogin, doLogout, open, toggleMenu, leagueName, rootComponent } = this.props;
+    let { authed, leagues, doLogin, doLogout, open,
+          toggleMenu, leagueName, rootComponent, _url } = this.props;
 
-    let isEditMode = authed && window.location.href.indexOf('edit') > -1;
+    let isEditMode = authed && _url.edit;
     let currentPath = window.location.pathname.replace(/\/$/, "");
 
     return (
@@ -33,8 +34,8 @@ export const Menu =  React.createClass({
             { authed && ["AddPlayer", "PlayerDash"].indexOf(rootComponent) == -1  &&
               <li className="AppMenu__item" onClick={toggleMenu}>
                 { isEditMode
-                  ? <Link to={ currentPath.slice(0, -5) || '/' } ><Icon type="edit" /> Finished Editing</Link>
-                  : <Link to={ currentPath + '/edit' }><Icon type="edit" /> Edit Players</Link>
+                  ? <Link to={ _url.without('edit') } ><Icon type="edit" /> Finished Editing</Link>
+                  : <Link to={ _url.with('edit') }><Icon type="edit" /> Edit Players</Link>
                 }
               </li>
             }

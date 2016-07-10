@@ -3,6 +3,7 @@ import { PlayButtons } from './play-buttons';
 import { EditButtons } from './edit-buttons';
 import { PlayerForm } from './player-form';
 import { Link } from 'react-router';
+import { daysSince } from '../../utils/utilities';
 
 
 export const Player = React.createClass({
@@ -27,12 +28,12 @@ export const Player = React.createClass({
   },
 
   displayPlayer() {
+    const { rank, name, image, league, score, topScore, wins, losses, lastPlayed,
+            showAll, id, bottomScore, streak, bestStreak, worstStreak, authed, leagues } = this.props;
 
-    const { rank, name, image, league, score, topScore, wins, losses,
-            id, bottomScore, streak, bestStreak, worstStreak, authed, leagues } = this.props;
 
     return (
-      <tr>
+      <tr className={ showAll ? '' : this.getOpacityClass(daysSince(lastPlayed)) }>
         <td className="hide_sm">
           {rank}
         </td>
@@ -120,5 +121,14 @@ export const Player = React.createClass({
     this.setState({
       editPlayerMode: !this.state.editPlayerMode
     });
+  },
+
+  getOpacityClass (days) {
+    if ( days <= 7 || days > 16 || isNaN(days) ) { return '' }
+    else if (days > 16) { return 'opacity-0' }
+
+    // I wish I could math.
+    return `opacity-${[9, 8, 7, 6, 5, 4, 3, 2, 1][days - 8]}`;
   }
+
 });

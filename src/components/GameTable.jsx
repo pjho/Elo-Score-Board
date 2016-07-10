@@ -9,6 +9,8 @@ import _find from 'lodash.find';
 
 import Elo from 'elo-rank';
 import { Link } from 'react-router'
+import { daysSince } from '../utils/utilities';
+
 
 export const GameTable =  React.createClass({
 
@@ -24,29 +26,41 @@ export const GameTable =  React.createClass({
   },
 
   render() {
-    let {params, authed, players, leagues} = this.props;
-    let {winner, loser} = this.state;
+    const isActive = ({lastPlayed}) => daysSince(lastPlayed) < 16;
 
-    let isEditMode = authed && window.location.href.indexOf('edit') > -1;
-    let currentPath = window.location.pathname.replace(/\/$/, "");
+    const { params: { leagueName }, authed, leagues, _url } = this.props;
+    let { players } = this.props;
+    const { winner, loser } = this.state;
 
-    players = players.filter(this.playerLeagueFilter);
+    players = !!leagueName
+      ? this.props.players.filter( player => player.league === leagueName )
+      : this.props.players;
+
+    const leaguePlayerCount = players.length;
+
+    if (_url.all === false) {
+      players = players.filter(isActive)
+    }
+
+    const hasInactive = leaguePlayerCount !== players.length;
+
+    const isEditMode = authed && _url.edit
 
     return (
       <div>
         <div className="UtilHeader">
           { isEditMode &&
-            <Link to={ currentPath.slice(0, -5) || '/' } className="btn--util-left btn-sm btn btn-default">
+            <Link to={ _url.without('edit') || '/' } className="btn--util-left btn-sm btn btn-default">
               <Icon type="remove" /> Done Editing
             </Link>
           }
-          { !isEditMode && this.props.params.leagueName &&
+          { !isEditMode && leagueName &&
             <Link to="/" className="btn--util-left hide_sm btn-sm btn btn-default">
                &larr; All Leagues
             </Link>
           }
           <h4>
-            { params.leagueName ? params.leagueName + " League" : "All Leagues" }
+            { leagueName ? leagueName + " League" : "All Leagues" }
           </h4>
         </div>
 
@@ -64,27 +78,36 @@ export const GameTable =  React.createClass({
           </thead>
           <tbody>
             { players.map( (player,index) => {
-                  return <Player {...player}
-                           key={player.id}
-                           rank={index + 1}
-                           editMode={isEditMode}
-                           onPlay={this.handleGamePlay}
-                           currentGame={{winner: winner, loser: loser }}
-                           authed={authed}
-                           firebase={this.firebase}
-                           leagues={leagues}
-                         />
-                })
+              return (
+                <Player {...player}
+                  key={player.id}
+                  rank={index + 1}
+                  editMode={isEditMode}
+                  showAll={_url.all}
+                  onPlay={this.handleGamePlay}
+                  currentGame={{winner: winner, loser: loser }}
+                  authed={authed}
+                  firebase={this.firebase}
+                  leagues={leagues}
+                />)
+              })
             }
           </tbody>
         </table>
+
+        { hasInactive && this.showAllButton(_url) }
+
       </div>
     );
   },
 
-  playerLeagueFilter(player) {
-    return ! this.props.params.leagueName || player.league === this.props.params.leagueName;
-  },
+  showAllButton: (url) => (
+    <div className="text-center" style={{margin:'20px 0 40px'}}>
+      <Link to={ url.all ? url.without('all') : url.with('all') } className={`btn btn-${url.all ? 'default' : 'warning'}`}>
+        { url.all ? 'Hide Inactive Players' : 'Show Hidden Players' }
+      </Link>
+    </div>
+  ),
 
   handleGamePlay(type, player) {
     let newState = {};
