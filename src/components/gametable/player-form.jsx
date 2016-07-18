@@ -40,6 +40,8 @@ export const PlayerForm = React.createClass({
       player.bottomScore = player.score;
       player.bestStreak = 0;
       player.worstStreak = 0;
+      player.created = Date.now();
+      player.lastPlayed = null;
     }
 
     let isValid = this.validate(player);

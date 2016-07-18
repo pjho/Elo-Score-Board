@@ -26,7 +26,7 @@ export const GameTable =  React.createClass({
   },
 
   render() {
-    const isActive = ({lastPlayed}) => lastPlayed == null || daysSince(lastPlayed) < 16;
+    const isActive = ({lastPlayed, created}) => lastPlayed && daysSince(lastPlayed) < 16 || created && daysSince(created) < 16;
 
     const { params: { leagueName }, authed, leagues, _url } = this.props;
     const { winner, loser } = this.state;

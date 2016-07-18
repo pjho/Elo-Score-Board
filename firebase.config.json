@@ -42,7 +42,8 @@
         "worstStreak":  { ".validate": "newData.isNumber()" },
         "wins":         { ".validate": "newData.isNumber()" },
         "losses":       { ".validate": "newData.isNumber()" },
-        "lastPlayed":   { ".validate": "newData.isNumber()" }
+        "lastPlayed":   { ".validate": "newData.isNumber()" },
+        "created":      { ".validate": "newData.isNumber()" }
       }
     }
   }
